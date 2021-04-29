@@ -1,14 +1,16 @@
-package com.hkshopu.hk.ui.main.product.adapter
+package com.hkshopu.hk.ui.main.adapter
 
 import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MotionEvent.*
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.hkshopu.hk.Base.BaseActivity
 
 import com.hkshopu.hk.R
 import com.hkshopu.hk.data.bean.ItemShippingFare
@@ -30,7 +32,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
         //資料變數宣告
         lateinit var value_shipping_name : String
         var value_shipping_fare : String = ""
-        var value_shipping_isChecked : Boolean = false
+        var value_shipping_isChecked : String = "off"
 
         //把layout檔的元件們拉進來，指派給當地變數
         val editText_shipping_name = itemView.findViewById<EditText>(R.id.editText_value_shipping_name)
@@ -43,17 +45,27 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
         init {
 
             //僅監控editText_shipping_name是否為空值而disable switchView
-            val textWatcher = object : TextWatcher {
+            val textWatcher_editText_shipping_name = object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 }
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 }
                 override fun afterTextChanged(s: Editable?) {
-
+                    value_shipping_name = editText_shipping_name.text.toString()
                 }
             }
-            editText_shipping_name.addTextChangedListener(textWatcher)
-            editText_shipping_fare.addTextChangedListener(textWatcher)
+            editText_shipping_name.addTextChangedListener(textWatcher_editText_shipping_name)
+
+            val textWatcher_editText_shipping_fare = object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+                override fun afterTextChanged(s: Editable?) {
+                    value_shipping_fare = editText_shipping_fare.text.toString()
+                }
+            }
+            editText_shipping_fare.addTextChangedListener(textWatcher_editText_shipping_fare)
 
             //editText_shipping_name編輯鍵盤監控
             editText_shipping_name.singleLine = true
@@ -65,7 +77,12 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
 
                         value_shipping_name = editText_shipping_name.text.toString()
                         value_shipping_fare = editText_shipping_fare.text.toString()
-                        value_shipping_isChecked = switch_view.isOpened()
+                        if(switch_view.isOpened()){
+                            value_shipping_isChecked = "on"
+                        }else{
+                            value_shipping_isChecked = "off"
+                        }
+
 
                         //檢查名稱是否重複
                         var check_duplicate = 0
@@ -103,11 +120,14 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
 
-//                        storeStatus()
-
                         value_shipping_name = editText_shipping_name.text.toString()
                         value_shipping_fare = editText_shipping_fare.text.toString()
-                        value_shipping_isChecked = switch_view.isOpened()
+                        if( switch_view.isOpened()){
+                            value_shipping_isChecked = "on"
+                        }else{
+                            value_shipping_isChecked = "off"
+                        }
+
 
                         if (value_shipping_fare == "") {
                             value_shipping_fare = "0"
@@ -154,7 +174,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                             switch_view.closeSwitcher()
                         } else {
 
-                            value_shipping_isChecked = true
+                            value_shipping_isChecked = "on"
 
                             onItemUpdate(
                                 value_shipping_name,
@@ -172,7 +192,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                         value_shipping_name = editText_shipping_name.text.toString()
                         value_shipping_fare = editText_shipping_fare.text.toString()
 
-                        value_shipping_isChecked = false
+                        value_shipping_isChecked = "off"
 
                         onItemUpdate(
                             value_shipping_name,
@@ -200,13 +220,13 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
             editText_shipping_name.setText(item.shipment_desc)
             editText_shipping_fare.setText(item.price.toString())
 
-            if(item.onoff==true) {
+            if(item.onoff == "on") {
                 switch_view.openSwitcher()
             }else{
                 switch_view.closeSwitcher()
             }
 
-            if(item.onoff){
+            if(item.onoff == "on"){
 
                 textView_HKdolors.setTextColor(itemView.context.resources.getColor(R.color.hkshop_color))
                 editText_shipping_fare.setTextColor(itemView.context.resources.getColor(R.color.hkshop_color))
@@ -229,7 +249,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): mViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):mViewHolder {
 
         //載入項目模板
         val inflater = LayoutInflater.from(parent.context)
@@ -267,8 +287,8 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                     "",
                     0,
                     R.drawable.custom_unit_transparent,
-                    false,
-                0
+                    "off",
+                    0
                 )
             )
 
@@ -298,7 +318,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                     "",
                     0,
                     R.drawable.custom_unit_transparent,
-                    false,
+                    "off",
                     0
                 )
             )
@@ -318,7 +338,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
     }
 
 
-    fun onItemUpdate(update_txt: String, update_fare: Int, is_checked: Boolean, position: Int) {
+    fun onItemUpdate(update_txt: String, update_fare: Int, is_checked: String, position: Int) {
 
         mutableList_shipMethod[position] = ItemShippingFare(
             update_txt,

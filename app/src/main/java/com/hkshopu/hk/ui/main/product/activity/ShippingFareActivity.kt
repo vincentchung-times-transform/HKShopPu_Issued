@@ -5,22 +5,33 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.ArrayMap
 import android.util.Log
 import android.view.View
+import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.hkshopu.hk.R
+import com.hkshopu.hk.data.bean.InventoryItemSize
+import com.hkshopu.hk.data.bean.InventoryItemSpec
 import com.hkshopu.hk.data.bean.ItemShippingFare
 import com.hkshopu.hk.data.bean.ItemShippingFare_Certained
+import com.hkshopu.hk.databinding.ActivityMerchandiseBinding
 import com.hkshopu.hk.databinding.ActivityShippingFareBinding
 import com.hkshopu.hk.net.GsonProvider
-import com.hkshopu.hk.ui.main.product.adapter.ShippingFareAdapter
+import com.hkshopu.hk.ui.main.product.adapter.InventoryAndPriceSpecAdapter
+import com.hkshopu.hk.ui.main.adapter.ShippingFareAdapter
 import com.tencent.mmkv.MMKV
 import org.jetbrains.anko.singleLine
 
@@ -41,7 +52,7 @@ class ShippingFareActivity : AppCompatActivity(){
     var height_check = false
 
     //資料變數宣告
-    var datas_packagesWeights : Int = 0
+    var datas_packagesWeights : String = ""
     var datas_lenght : String = ""
     var datas_width : String = ""
     var datas_height : String = ""
@@ -145,7 +156,7 @@ class ShippingFareActivity : AppCompatActivity(){
 
             //篩選所有已勾選的運費方式
             for (i in 0..datas_ship_method_and_fare.size-1!!) {
-                if(datas_ship_method_and_fare[i].onoff ==true ){
+                if(datas_ship_method_and_fare[i].onoff == "on" ){
                     mutableList_itemShipingFare_filtered.add(
                         datas_ship_method_and_fare[i]
                     )
@@ -198,13 +209,12 @@ class ShippingFareActivity : AppCompatActivity(){
 
     fun initEdit() {
 
-
         binding.editPackageWeight.singleLine = true
         binding.editPackageWeight.setOnEditorActionListener() { v, actionId, event ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
 
-                    datas_packagesWeights = binding.editPackageWeight.text.toString().toInt()
+                    datas_packagesWeights = binding.editPackageWeight.text.toString()
 
                     v.hideKeyboard()
                     binding.editPackageWeight.clearFocus()
@@ -214,22 +224,43 @@ class ShippingFareActivity : AppCompatActivity(){
                 else -> false
             }
         }
+        val textWatcher_datas_packagesWeights = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+            override fun afterTextChanged(s: Editable?) {
+                datas_packagesWeights = binding.editPackageWeight.text.toString()
+            }
+        }
+        binding.editPackageWeight.addTextChangedListener(textWatcher_datas_packagesWeights)
+
+
 
         binding.editPackageLength.singleLine = true
         binding.editPackageLength.setOnEditorActionListener() { v, actionId, event ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
-
                     datas_lenght = binding.editPackageLength.text.toString()
-
                     v.hideKeyboard()
                     binding.editPackageLength.clearFocus()
-
                     true
                 }
                 else -> false
             }
         }
+        val textWatcher_editPackageLength = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+            override fun afterTextChanged(s: Editable?) {
+                datas_lenght = binding.editPackageLength.text.toString()
+            }
+        }
+        binding.editPackageLength.addTextChangedListener(textWatcher_editPackageLength)
+
+
 
 
         binding.editPackageWidth.singleLine = true
@@ -247,23 +278,40 @@ class ShippingFareActivity : AppCompatActivity(){
                 else -> false
             }
         }
+        val textWatcher_editPackageWidth = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+            override fun afterTextChanged(s: Editable?) {
+                datas_width = binding.editPackageWidth.text.toString()
+            }
+        }
+        binding.editPackageWidth.addTextChangedListener(textWatcher_editPackageWidth)
 
 
         binding.editPackageHeight.singleLine = true
         binding.editPackageHeight.setOnEditorActionListener() { v, actionId, event ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
-
                     datas_height = binding.editPackageHeight.text.toString()
-
                     v.hideKeyboard()
                     binding.editPackageHeight.clearFocus()
-
                     true
                 }
                 else -> false
             }
         }
+        val textWatcher_editPackageHeight = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+            override fun afterTextChanged(s: Editable?) {
+                datas_width = binding.editPackageHeight.text.toString()
+            }
+        }
+        binding.editPackageHeight.addTextChangedListener(textWatcher_editPackageHeight)
 
     }
 
@@ -281,9 +329,9 @@ class ShippingFareActivity : AppCompatActivity(){
 
     fun initFareDatas() {
 
-        mutableList_itemShipingFare.add(ItemShippingFare("郵局", 0, R.drawable.custom_unit_transparent, false, 0))
-        mutableList_itemShipingFare.add(ItemShippingFare("順豐速運", 0, R.drawable.custom_unit_transparent, false, 0))
-        mutableList_itemShipingFare.add(ItemShippingFare("", 0, R.drawable.custom_unit_transparent, false, 0))
+        mutableList_itemShipingFare.add(ItemShippingFare("郵局", 0, R.drawable.custom_unit_transparent, "off", 0))
+        mutableList_itemShipingFare.add(ItemShippingFare("順豐速運", 0, R.drawable.custom_unit_transparent, "off", 0))
+        mutableList_itemShipingFare.add(ItemShippingFare("", 0, R.drawable.custom_unit_transparent, "off", 0))
 
     }
 
