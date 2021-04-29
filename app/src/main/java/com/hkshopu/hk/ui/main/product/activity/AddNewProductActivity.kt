@@ -208,8 +208,10 @@ class AddNewProductActivity : BaseActivity() {
 
         if(value_editMoreTimeInput.isNotEmpty() && value_editMoreTimeInput.toInt()>0){
             binding.editMoreTimeInput.isVisible = true
+            binding.needMoreTimeToStockUp.isChecked = true
         }else{
             binding.editMoreTimeInput.isVisible = false
+            binding.needMoreTimeToStockUp.isChecked = false
         }
 
     }
@@ -342,6 +344,13 @@ class AddNewProductActivity : BaseActivity() {
                     "value_editTextMerchanPrice",
                     value_editTextMerchanPrice
                 )
+                if(!s.toString().equals("")){
+                    binding.textViewMerchanPriceUnit.isVisible = true
+                    binding.textViewMerchanPriceUnit.setText("HKD$ ")
+                }else{
+                    binding.textViewMerchanPriceUnit.isVisible = false
+                    binding.textViewMerchanPriceUnit.setText("")
+                }
             }
         }
         binding.editTextMerchanPrice.addTextChangedListener(textWatcher_editTextMerchanPrice)
@@ -452,6 +461,7 @@ class AddNewProductActivity : BaseActivity() {
                                     if(MMKV_value_txtViewFareRange.isNotEmpty()){
 
                                         var inven_switch_off_json = "{ \"product_spec_list\" : [{\"price\": ${value_editTextMerchanPrice}, \"quantity\": ${value_editTextMerchanQunt}, \"spec_dec_1_items\":\"\",\"spec_dec_2_items\":\"\",\"spec_desc_1\":\"\",\"spec_desc_2\":\"\"}]}"
+                                        Log.d("inven_switch_off_json", inven_switch_off_json.toString())
 
                                         if(value_editMoreTimeInput.equals("")){
                                             value_editMoreTimeInput = "0"
@@ -459,7 +469,7 @@ class AddNewProductActivity : BaseActivity() {
 
                                         //quantity and product_price is discarded
                                         doAddProduct( MMKV_shop_id, MMKV_proCate_id.toInt(), MMKV_proSubCate_id.toInt(), value_editTextEntryProductName, value_editTextMerchanQunt.toInt(), value_editTextEntryProductDiscription, value_editTextMerchanPrice.toInt(), 0, MMKV_weight.toInt(), value_checked_brandNew, pic_list.size.toInt(), pic_list,  inven_switch_off_json, MMKV_user_id, MMKV_length.toInt(), MMKV_width.toInt(), MMKV_height.toInt(), MMKV_jsonTutList_fare, value_editMoreTimeInput.toInt(), "launched")
-                                        Log.d("MMKV_shop_id" , "MMKV_shop_id: ${MMKV_shop_id} ; "+"MMKV_proCate_id: ${MMKV_proCate_id} ; "+"MMKV_proSubCate_id: ${MMKV_proSubCate_id} ; "+"value_editTextEntryProductName: ${value_editTextEntryProductName} ; "+"value_editTextMerchanQunt: ${value_editTextMerchanQunt} ; "+"value_editTextEntryProductDiscription: ${value_editTextEntryProductDiscription} ; "+"value_editTextMerchanPrice: ${value_editTextMerchanPrice} ; "+"MMKV_weight: ${MMKV_weight} ; "+"value_checked_brandNew: ${value_checked_brandNew} ; "+"pic_list.size: ${pic_list.size} ; "+"pic_list: ${pic_list} ; "+"${"{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }"} ; "+"MMKV_user_id: ${MMKV_user_id} ; "+"MMKV_length: ${MMKV_length} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_height: ${MMKV_height} ; "+"jsonTutList_fare: ${MMKV_jsonTutList_fare}"+"value_editMoreTimeInput: ${value_editMoreTimeInput}")
+                                        Log.d("MMKV_shop_id" , "MMKV_shop_id: ${MMKV_shop_id} ; "+"MMKV_proCate_id: ${MMKV_proCate_id} ; "+"MMKV_proSubCate_id: ${MMKV_proSubCate_id} ; "+"value_editTextEntryProductName: ${value_editTextEntryProductName} ; "+"value_editTextMerchanQunt: ${value_editTextMerchanQunt} ; "+"value_editTextEntryProductDiscription: ${value_editTextEntryProductDiscription} ; "+"value_editTextMerchanPrice: ${value_editTextMerchanPrice} ; "+"MMKV_weight: ${MMKV_weight} ; "+"value_checked_brandNew: ${value_checked_brandNew} ; "+"pic_list.size: ${pic_list.size} ; "+"pic_list: ${pic_list} ; "+"product_spec_list : ${inven_switch_off_json}  ; "+"MMKV_user_id: ${MMKV_user_id} ; "+"MMKV_length: ${MMKV_length} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_height: ${MMKV_height} ; "+"jsonTutList_fare: ${MMKV_jsonTutList_fare} ; "+"value_editMoreTimeInput: ${value_editMoreTimeInput}")
 
                                     }else{
                                         Toast.makeText(this, "商品運費尚未設定", Toast.LENGTH_SHORT).show()
@@ -477,7 +487,7 @@ class AddNewProductActivity : BaseActivity() {
 
                                             //quantity and product_price is discarded
                                             doAddProduct( MMKV_shop_id, MMKV_proCate_id.toInt(), MMKV_proSubCate_id.toInt(), value_editTextEntryProductName, value_editTextMerchanQunt.toInt(), value_editTextEntryProductDiscription, value_editTextMerchanPrice.toInt(), 0, MMKV_weight.toInt(), value_checked_brandNew, pic_list.size.toInt(), pic_list,  "{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }", MMKV_user_id, MMKV_length.toInt(), MMKV_width.toInt(), MMKV_height.toInt(), MMKV_jsonTutList_fare, value_editMoreTimeInput.toInt(), "launched")
-                                            Log.d("MMKV_shop_id" , "MMKV_shop_id: ${MMKV_shop_id} ; "+"MMKV_proCate_id: ${MMKV_proCate_id} ; "+"MMKV_proSubCate_id: ${MMKV_proSubCate_id} ; "+"value_editTextEntryProductName: ${value_editTextEntryProductName} ; "+"value_editTextMerchanQunt: ${value_editTextMerchanQunt} ; "+"value_editTextEntryProductDiscription: ${value_editTextEntryProductDiscription} ; "+"value_editTextMerchanPrice: ${value_editTextMerchanPrice} ; "+"MMKV_weight: ${MMKV_weight} ; "+"value_checked_brandNew: ${value_checked_brandNew} ; "+"pic_list.size: ${pic_list.size} ; "+"pic_list: ${pic_list} ; "+"${"{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }"} ; "+"MMKV_user_id: ${MMKV_user_id} ; "+"MMKV_length: ${MMKV_length} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_height: ${MMKV_height} ; "+"jsonTutList_fare: ${MMKV_jsonTutList_fare}"+"value_editMoreTimeInput: ${value_editMoreTimeInput}")
+                                            Log.d("MMKV_shop_id" , "MMKV_shop_id: ${MMKV_shop_id} ; "+"MMKV_proCate_id: ${MMKV_proCate_id} ; "+"MMKV_proSubCate_id: ${MMKV_proSubCate_id} ; "+"value_editTextEntryProductName: ${value_editTextEntryProductName} ; "+"value_editTextMerchanQunt: ${value_editTextMerchanQunt} ; "+"value_editTextEntryProductDiscription: ${value_editTextEntryProductDiscription} ; "+"value_editTextMerchanPrice: ${value_editTextMerchanPrice} ; "+"MMKV_weight: ${MMKV_weight} ; "+"value_checked_brandNew: ${value_checked_brandNew} ; "+"pic_list.size: ${pic_list.size} ; "+"pic_list: ${pic_list} ; "+"${"{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }"} ; "+"MMKV_user_id: ${MMKV_user_id} ; "+"MMKV_length: ${MMKV_length} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_height: ${MMKV_height} ; "+"jsonTutList_fare: ${MMKV_jsonTutList_fare} ; "+"value_editMoreTimeInput: ${value_editMoreTimeInput}")
 
                                         }else{
                                             Toast.makeText(this, "商品運費尚未設定", Toast.LENGTH_SHORT).show()
@@ -553,6 +563,7 @@ class AddNewProductActivity : BaseActivity() {
 
                     binding.containerAddSpecification.isVisible = true
                     binding.imgSpecLine.isVisible = true
+                    binding.textViewMerchanPriceUnit.isVisible = false
                     binding.editTextMerchanPrice.isVisible = false
                     binding.editTextMerchanQunt.isVisible = false
                     binding.textViewMerchanPriceRange.isVisible = true
@@ -570,6 +581,13 @@ class AddNewProductActivity : BaseActivity() {
 
                     binding.containerAddSpecification.isVisible = false
                     binding.imgSpecLine.isVisible = false
+                    if(  !binding.editTextMerchanPrice.text.toString().equals("")){
+                        binding.textViewMerchanPriceUnit.isVisible = true
+                        binding.textViewMerchanPriceUnit.setText("HKD$ ")
+                    }else{
+                        binding.textViewMerchanPriceUnit.isVisible = false
+                        binding.textViewMerchanPriceUnit.setText("")
+                    }
                     binding.editTextMerchanPrice.isVisible = true
                     binding.editTextMerchanQunt.isVisible = true
                     binding.textViewMerchanPriceRange.isVisible = false
@@ -670,14 +688,16 @@ class AddNewProductActivity : BaseActivity() {
                                 if( !value_editTextMerchanPrice.toString().equals("") && !value_editTextMerchanQunt.equals("") &&  binding.iosSwitchSpecification.isOpened().equals(false) ){
                                     if(MMKV_value_txtViewFareRange.isNotEmpty()){
 
+                                        var inven_switch_off_json = "{ \"product_spec_list\" : [{\"price\": ${value_editTextMerchanPrice}, \"quantity\": ${value_editTextMerchanQunt}, \"spec_dec_1_items\":\"\",\"spec_dec_2_items\":\"\",\"spec_desc_1\":\"\",\"spec_desc_2\":\"\"}]}"
+                                        Log.d("inven_switch_off_json", inven_switch_off_json.toString())
+
                                         if(value_editMoreTimeInput.equals("")){
                                             value_editMoreTimeInput = "0"
                                         }
 
-                                        var inven_switch_off_json = "{ \"product_spec_list\" : [{\"price\": ${value_editTextMerchanPrice}, \"quantity\": ${value_editTextMerchanQunt}, \"spec_dec_1_items\":\"\",\"spec_dec_2_items\":\"\",\"spec_desc_1\":\"\",\"spec_desc_2\":\"\"}]}"
                                         //quantity and product_price is discarded
                                         doAddProduct( MMKV_shop_id, MMKV_proCate_id.toInt(), MMKV_proSubCate_id.toInt(), value_editTextEntryProductName, 0, value_editTextEntryProductDiscription, 0, 0, MMKV_weight.toInt(), value_checked_brandNew, pic_list.size.toInt(), pic_list,  inven_switch_off_json, MMKV_user_id, MMKV_length.toInt(), MMKV_width.toInt(), MMKV_height.toInt(), MMKV_jsonTutList_fare, value_editMoreTimeInput.toInt(), "draft")
-                                        Log.d("MMKV_shop_id" , "MMKV_shop_id: ${MMKV_shop_id} ; "+"MMKV_proCate_id: ${MMKV_proCate_id} ; "+"MMKV_proSubCate_id: ${MMKV_proSubCate_id} ; "+"value_editTextEntryProductName: ${value_editTextEntryProductName} ; "+"value_editTextMerchanQunt: ${value_editTextMerchanQunt} ; "+"value_editTextEntryProductDiscription: ${value_editTextEntryProductDiscription} ; "+"value_editTextMerchanPrice: ${value_editTextMerchanPrice} ; "+"MMKV_weight: ${MMKV_weight} ; "+"value_checked_brandNew: ${value_checked_brandNew} ; "+"pic_list.size: ${pic_list.size} ; "+"pic_list: ${pic_list} ; "+"${"{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }"} ; "+"MMKV_user_id: ${MMKV_user_id} ; "+"MMKV_length: ${MMKV_length} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_height: ${MMKV_height} ; "+"jsonTutList_fare: ${MMKV_jsonTutList_fare}"+"value_editMoreTimeInput: ${value_editMoreTimeInput}")
+                                        Log.d("MMKV_shop_id" , "MMKV_shop_id: ${MMKV_shop_id} ; "+"MMKV_proCate_id: ${MMKV_proCate_id} ; "+"MMKV_proSubCate_id: ${MMKV_proSubCate_id} ; "+"value_editTextEntryProductName: ${value_editTextEntryProductName} ; "+"value_editTextMerchanQunt: ${value_editTextMerchanQunt} ; "+"value_editTextEntryProductDiscription: ${value_editTextEntryProductDiscription} ; "+"value_editTextMerchanPrice: ${value_editTextMerchanPrice} ; "+"MMKV_weight: ${MMKV_weight} ; "+"value_checked_brandNew: ${value_checked_brandNew} ; "+"pic_list.size: ${pic_list.size} ; "+"pic_list: ${pic_list} ; "+" product_spec_list : ${inven_switch_off_json} ; "+"MMKV_user_id: ${MMKV_user_id} ; "+"MMKV_length: ${MMKV_length} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_height: ${MMKV_height} ; "+"jsonTutList_fare: ${MMKV_jsonTutList_fare} ; "+"value_editMoreTimeInput: ${value_editMoreTimeInput}")
 
 
                                     }else{
@@ -696,7 +716,7 @@ class AddNewProductActivity : BaseActivity() {
 
                                             //quantity and product_price is discarded
                                             doAddProduct( MMKV_shop_id, MMKV_proCate_id.toInt(), MMKV_proSubCate_id.toInt(), value_editTextEntryProductName, value_editTextMerchanQunt.toInt(), value_editTextEntryProductDiscription, value_editTextMerchanPrice.toInt(), 0, MMKV_weight.toInt(), value_checked_brandNew, pic_list.size.toInt(), pic_list,  "{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }", MMKV_user_id, MMKV_length.toInt(), MMKV_width.toInt(), MMKV_height.toInt(), MMKV_jsonTutList_fare, value_editMoreTimeInput.toInt(), "draft")
-                                            Log.d("MMKV_shop_id" , "MMKV_shop_id: ${MMKV_shop_id} ; "+"MMKV_proCate_id: ${MMKV_proCate_id} ; "+"MMKV_proSubCate_id: ${MMKV_proSubCate_id} ; "+"value_editTextEntryProductName: ${value_editTextEntryProductName} ; "+"value_editTextMerchanQunt: ${value_editTextMerchanQunt} ; "+"value_editTextEntryProductDiscription: ${value_editTextEntryProductDiscription} ; "+"value_editTextMerchanPrice: ${value_editTextMerchanPrice} ; "+"MMKV_weight: ${MMKV_weight} ; "+"value_checked_brandNew: ${value_checked_brandNew} ; "+"pic_list.size: ${pic_list.size} ; "+"pic_list: ${pic_list} ; "+"${"{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }"} ; "+"MMKV_user_id: ${MMKV_user_id} ; "+"MMKV_length: ${MMKV_length} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_height: ${MMKV_height} ; "+"jsonTutList_fare: ${MMKV_jsonTutList_fare}"+"value_editMoreTimeInput: ${value_editMoreTimeInput}")
+                                            Log.d("MMKV_shop_id" , "MMKV_shop_id: ${MMKV_shop_id} ; "+"MMKV_proCate_id: ${MMKV_proCate_id} ; "+"MMKV_proSubCate_id: ${MMKV_proSubCate_id} ; "+"value_editTextEntryProductName: ${value_editTextEntryProductName} ; "+"value_editTextMerchanQunt: ${value_editTextMerchanQunt} ; "+"value_editTextEntryProductDiscription: ${value_editTextEntryProductDiscription} ; "+"value_editTextMerchanPrice: ${value_editTextMerchanPrice} ; "+"MMKV_weight: ${MMKV_weight} ; "+"value_checked_brandNew: ${value_checked_brandNew} ; "+"pic_list.size: ${pic_list.size} ; "+"pic_list: ${pic_list} ; "+"${"{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }"} ; "+"MMKV_user_id: ${MMKV_user_id} ; "+"MMKV_length: ${MMKV_length} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_width: ${MMKV_width} ; "+"MMKV_height: ${MMKV_height} ; "+"jsonTutList_fare: ${MMKV_jsonTutList_fare} ; "+"value_editMoreTimeInput: ${value_editMoreTimeInput}")
 
                                         }else{
                                             Toast.makeText(this, "商品運費尚未設定", Toast.LENGTH_SHORT).show()
@@ -1010,12 +1030,13 @@ class AddNewProductActivity : BaseActivity() {
         binding.editTextMerchanQunt.setText(value_editTextMerchanQunt)
 
         //預設containerSpecification的背景
-        if(inven_price_range != "" && inven_quant_range != "" ){
+        if(inven_price_range != "" && inven_quant_range != "" && inven_datas_size != null ){
 
             binding.iosSwitchSpecification.openSwitcher()
 
             binding.containerAddSpecification.isVisible = true
             binding.imgSpecLine.isVisible = true
+            binding.textViewMerchanPriceUnit.isVisible = false
             binding.editTextMerchanPrice.isVisible = false
             binding.editTextMerchanQunt.isVisible = false
             binding.textViewMerchanPriceRange.isVisible = true
@@ -1038,51 +1059,13 @@ class AddNewProductActivity : BaseActivity() {
 
             binding.containerAddSpecification.isVisible = false
             binding.imgSpecLine.isVisible = false
-            binding.editTextMerchanPrice.isVisible = true
-            binding.editTextMerchanQunt.isVisible = true
-            binding.textViewMerchanPriceRange.isVisible = false
-            binding.textViewMerchanQuntRange.isVisible = false
-
-            val scale = baseContext.resources.displayMetrics.density
-            var elevation = 10
-            val e = (elevation * scale + 0.5f).toInt()
-
-            binding.containerProductSpecSwitch.setElevation(e.toFloat())
-            binding.containerProductSpecPrice.setElevation(e.toFloat())
-            binding.containerProductSpecQuant.setElevation(e.toFloat())
-
-        }
-
-
-
-
-        if (inven_datas_size != null) {
-
-            if (inven_datas_size>0) {
-
-                binding.iosSwitchSpecification.openSwitcher()
-                binding.containerAddSpecification.isVisible = true
-                binding.imgSpecLine.isVisible = true
-                binding.editTextMerchanPrice.isVisible = false
-                binding.editTextMerchanQunt.isVisible = false
-                binding.textViewMerchanPriceRange.isVisible = true
-                binding.textViewMerchanQuntRange.isVisible = true
-
-
-                val scale = baseContext.resources.displayMetrics.density
-                var elevation = 0
-                val e = (elevation * scale + 0.5f).toInt()
-
-                binding.containerProductSpecPrice.setElevation(e.toFloat())
-                binding.containerProductSpecQuant.setElevation(e.toFloat())
-                binding.containerProductSpecSwitch.setElevation(e.toFloat())
-
+            if(  !binding.editTextMerchanPrice.text.toString().equals("")){
+                binding.textViewMerchanPriceUnit.isVisible = true
+                binding.textViewMerchanPriceUnit.setText("HKD$ ")
+            }else{
+                binding.textViewMerchanPriceUnit.isVisible = false
+                binding.textViewMerchanPriceUnit.setText("")
             }
-        } else {
-
-            binding.iosSwitchSpecification.closeSwitcher()
-            binding.containerAddSpecification.isVisible = false
-            binding.imgSpecLine.isVisible = false
             binding.editTextMerchanPrice.isVisible = true
             binding.editTextMerchanQunt.isVisible = true
             binding.textViewMerchanPriceRange.isVisible = false
@@ -1092,13 +1075,14 @@ class AddNewProductActivity : BaseActivity() {
             var elevation = 10
             val e = (elevation * scale + 0.5f).toInt()
 
+            binding.containerProductSpecSwitch.setElevation(e.toFloat())
             binding.containerProductSpecPrice.setElevation(e.toFloat())
             binding.containerProductSpecQuant.setElevation(e.toFloat())
-            binding.containerProductSpecSwitch.setElevation(e.toFloat())
 
 
 
         }
+
 
     }
 
