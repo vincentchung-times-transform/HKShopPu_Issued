@@ -162,16 +162,17 @@
 
     </RelativeLayout>
 
-    <ImageView
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/iv_addmerchant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="15dp"
+        android:elevation="10dp"
+        android:layout_marginEnd="28dp"
         android:layout_marginBottom="36dp"
-        android:src="@mipmap/ic_addmerchant"
-        android:visibility="gone"/>
+        android:foreground="@mipmap/ic_addmerchant"
+        android:visibility="visible"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_newproduct"

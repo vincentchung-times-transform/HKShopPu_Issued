@@ -1,5 +1,7 @@
 package com.hkshopu.hk.ui.main.product.fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +13,11 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.hkshopu.hk.R
+import com.hkshopu.hk.ui.main.product.activity.EditProductActivity
+import com.hkshopu.hk.ui.main.store.activity.ShopmenuActivity
+import com.tencent.mmkv.MMKV
 
-class EditProductRemindDialogFragment(): DialogFragment(), View.OnClickListener {
+class EditProductRemindDialogFragment(var baseActivity : Activity): DialogFragment(), View.OnClickListener {
 
 
     var signal : Boolean = false
@@ -45,7 +50,7 @@ class EditProductRemindDialogFragment(): DialogFragment(), View.OnClickListener 
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v = inflater.inflate(R.layout.dialog_fragment_learn_more, container, false)
+        val v = inflater.inflate(R.layout.dialog_fragment_edit_product_remind, container, false)
         val inset = InsetDrawable(
             ContextCompat.getDrawable(
                 activity!!,
@@ -54,15 +59,24 @@ class EditProductRemindDialogFragment(): DialogFragment(), View.OnClickListener 
         )
         dialog!!.window!!.setBackgroundDrawable(inset)
 
-        v.findViewById<ImageView>(R.id.btn_learn_more).setOnClickListener(this)
-
+        v.findViewById<ImageView>(R.id.btn_cancel_remind).setOnClickListener(this)
+        v.findViewById<ImageView>(R.id.btn_edit_keep_goning).setOnClickListener(this)
         return v
     }
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.btn_learn_more -> {
+            R.id.btn_cancel_remind -> {
+                dismiss()
+            }
+            R.id.btn_edit_keep_goning->{
 
+                var currentActivity : Activity = baseActivity
+
+                val intent = Intent(currentActivity, EditProductActivity::class.java)
+                startActivity(intent)
+
+                currentActivity.finish()
 
             }
         }

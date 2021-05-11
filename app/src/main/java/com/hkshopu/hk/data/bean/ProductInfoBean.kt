@@ -73,25 +73,25 @@ class ProductInfoBean {
     var c_sub_product_category: String = ""
 
     @SerializedName("price")
-    lateinit var price  : MutableList<Int>
+    var price  : MutableList<Int> = mutableListOf()
 
     @SerializedName("spec_desc_1")
-    lateinit var spec_desc_1 :  MutableList<String>
+    var spec_desc_1 :  MutableList<String> = mutableListOf()
 
     @SerializedName("spec_desc_2")
-    lateinit var spec_desc_2 :  MutableList<String>
+    var spec_desc_2 :  MutableList<String> = mutableListOf()
 
     @SerializedName("spec_dec_1_items")
-    lateinit var spec_dec_1_items :  MutableList<String>
+    var spec_dec_1_items :  MutableList<String> = mutableListOf()
 
     @SerializedName("spec_dec_2_items")
-    lateinit var spec_dec_2_items :  MutableList<String>
+    var spec_dec_2_items :  MutableList<String> = mutableListOf()
 
     @SerializedName("spec_quantity")
-    lateinit var spec_quantity :  MutableList<Int>
+    var spec_quantity :  MutableList<Int> = mutableListOf()
 
     @SerializedName("pic_path")
-    lateinit var pic_path:  MutableList<String>
+    var pic_path:  MutableList<String> = mutableListOf()
 
     @SerializedName("min_price")
     var min_price:  Int = 0

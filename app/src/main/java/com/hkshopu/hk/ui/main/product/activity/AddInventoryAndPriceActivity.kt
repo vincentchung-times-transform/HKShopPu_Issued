@@ -1053,7 +1053,6 @@ class AddInventoryAndPriceActivity : AppCompatActivity(), TextWatcher{
 
             }
             override fun afterTextChanged(s: Editable?) {
-
                 if(editText.text.toString().length >= 2 && editText.text.toString().startsWith("0")){
                     editText.setText(editText.text.toString().replace("0", "", false))
                     editText.setSelection(editText.text.toString().length)

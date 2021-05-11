@@ -519,6 +519,16 @@
 <!--    我的商品-->
     <string name="hkd_dollarSign">HKD$ </string>
 
+<!--    廣告與行銷活動-->
+    <string name="ad">廣告與行銷活動</string>
+
+<!--    銀行帳號-->
+    <string name="bankaccount_alert">為確保交易安全性，本操作會進行加密處理，店匯不會顯示你的完整卡號資訊。</string>
+    <string name="addbankaccount2">+ 新增銀行帳號</string>
 
 
+<!--    商品功能頁面-->
+    <string name="logistic">運輸設定</string>
+    <string name="helpcenter">幫助中心</string>
+    <string name="shoppreview">預覽我的店鋪</string>
 </resources>

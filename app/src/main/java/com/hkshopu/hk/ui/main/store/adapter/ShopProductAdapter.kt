@@ -1,30 +1,36 @@
 package com.hkshopu.hk.ui.main.store.adapter
 
+import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.hkshopu.hk.R
 
 import com.hkshopu.hk.data.bean.ShopProductBean
+import com.hkshopu.hk.ui.main.product.activity.MerchandiseActivity
 import com.hkshopu.hk.utils.extension.inflate
 import com.hkshopu.hk.utils.extension.loadNovelCover
 import com.hkshopu.hk.widget.view.click
+import com.tencent.mmkv.MMKV
 
 
 import org.jetbrains.anko.find
 import java.util.*
 
-class ShopProductAdapter : RecyclerView.Adapter<ShopProductAdapter.ShopInfoLinearHolder>(){
+class ShopProductAdapter(var fragment: Fragment) : RecyclerView.Adapter<ShopProductAdapter.ShopInfoLinearHolder>(){
     private var mData: ArrayList<ShopProductBean> = ArrayList()
     var itemClick : ((id: Int) -> Unit)? = null
+
+    var MMKV_product_id: Int = 1
 
     fun setData(list : ArrayList<ShopProductBean>){
         list?:return
         this.mData = list
-//        notifyDataSetChanged()
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopInfoLinearHolder {
@@ -44,6 +50,15 @@ class ShopProductAdapter : RecyclerView.Adapter<ShopProductAdapter.ShopInfoLinea
     override fun onBindViewHolder(holder: ShopInfoLinearHolder, position: Int) {
         val item = mData.get(position)
         holder.bindShop(item)
+
+        holder.itemView.setOnClickListener{
+
+            MMKV.mmkvWithID("http").putInt("ProductId", MMKV_product_id)
+
+            val intent = Intent(fragment.context, MerchandiseActivity::class.java)
+            fragment.context?.startActivity(intent)
+        }
+
     }
 
     inner class ShopInfoLinearHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -59,6 +74,8 @@ class ShopProductAdapter : RecyclerView.Adapter<ShopProductAdapter.ShopInfoLinea
             container.click {
                 itemClick?.invoke(bean.id)
             }
+
+            MMKV_product_id = bean.id
             image.loadNovelCover(bean.pic_path)
             title.text = bean.product_title
             price.text = bean.product_price.toString()

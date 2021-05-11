@@ -20,6 +20,7 @@ import com.hkshopu.hk.net.Web
 import com.hkshopu.hk.net.WebListener
 import com.hkshopu.hk.ui.main.store.adapter.MyProductsAdapter
 import com.hkshopu.hk.utils.rxjava.RxBus
+import com.tencent.mmkv.MMKV
 import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONException
@@ -36,6 +37,7 @@ class MerchantsOndeckFragment: Fragment() {
             return fragment
         }
     }
+    var shopId : Int = 0
 
     lateinit var recyclerview_myProducts: RecyclerView
     private val adapter = MyProductsAdapter(this)
@@ -49,8 +51,10 @@ class MerchantsOndeckFragment: Fragment() {
         recyclerview_myProducts = v.findViewById<RecyclerView>(R.id.recyclerview_myProducts)
         initRecyclerView()
 
-//        val shopId = MMKV.mmkvWithID("http").getInt("ShopId",0)
-//        var url = ApiConstants.API_HOST+"/product/"+shopId+"/shop_product/"
+        shopId = MMKV.mmkvWithID("http").getInt("ShopId",0)
+        Log.d("mkjgjs", shopId.toString())
+
+        getMyProductsList(shopId.toString(), "none", "active", "1")
 
         initEvent()
 
@@ -123,9 +127,11 @@ class MerchantsOndeckFragment: Fragment() {
 //                        initRecyclerView()
 
                 } catch (e: JSONException) {
+                    Log.d("getMyProductsList", "JSONException：" + e)
 
                 } catch (e: IOException) {
                     e.printStackTrace()
+                    Log.d("getMyProductsList", "IOException：" + e)
                 }
             }
 
@@ -146,18 +152,14 @@ class MerchantsOndeckFragment: Fragment() {
 
                         keyword = it.keyword
 
-                        Thread(Runnable {
+                        if(keyword.equals("")){
+                            keyword = "none"
+                        }
 
-                            if(keyword.equals("")){
-                                keyword = "none"
-                            }
 
-                            getMyProductsList("1", keyword, "active", "1")
+                        getMyProductsList(shopId.toString(), keyword, "active", "1")
 
-                            activity?.runOnUiThread {
-                            }
 
-                        }).start()
 
                     }
 

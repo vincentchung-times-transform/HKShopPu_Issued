@@ -72,13 +72,30 @@ class EditProductSpecificationMainActivity : BaseActivity() {
         MMKV_user_id = MMKV.mmkvWithID("http").getInt("UserId", 0)
         MMKV_shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
         MMKV_product_id = MMKV.mmkvWithID("http").getInt("ProductId", 0)
-        getProductInfo(MMKV_product_id)
+
 
         initMMKV()
         initView()
     }
 
     fun initMMKV() {
+
+        binding.titleSpec.setText(R.string.title_editSpecification)
+
+        //預設btnClearAllSpec和btnClearAllSpec隱藏
+        binding.btnClearAllSpec.isVisible = false
+        binding.btnClearAllSize.isVisible = false
+
+
+        //Spec and Size item recyclerview setting
+        binding.rViewSpecificationItemSpec.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.rViewSpecificationItemSpec.adapter = mAdapter_spec
+
+        binding.rviewSpecificationitemSize.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.rviewSpecificationitemSize.adapter = mAdapter_size
+
 
         value_editTextProductSpecFirst =
             MMKV.mmkvWithID("addPro").getString("value_editTextProductSpecFirst", "").toString()
@@ -141,32 +158,27 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
         }).start()
 
+        try{
+            Thread.sleep(800)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
+
+        //預設btnNextStep disable or enable
+        if (( binding.editTextProductSpecFirst.text.isNotEmpty() && mAdapter_spec.nextStepEnableOrNot()) || (binding.editTextProductSpecSecond.text.isNotEmpty() && mAdapter_size.nextStepEnableOrNot())) {
+            binding.btnNextStep.isEnabled = true
+            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
+        } else {
+            binding.btnNextStep.isEnabled = false
+            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+        }
+
+
 
     }
 
     fun initView() {
-
-        binding.titleSpec.setText(R.string.title_editSpecification)
-
-        //預設btnClearAllSpec和btnClearAllSpec隱藏
-        binding.btnClearAllSpec.isVisible = false
-        binding.btnClearAllSize.isVisible = false
-
-
-        //Spec and Size item recyclerview setting
-        binding.rViewSpecificationItemSpec.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.rViewSpecificationItemSpec.adapter = mAdapter_spec
-
-        binding.rviewSpecificationitemSize.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.rviewSpecificationitemSize.adapter = mAdapter_size
-
-
-        //預設btnNextStep disable
-        binding.btnNextStep.isEnabled = false
-        binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
-
 
         initEditText()
         initClick()
@@ -209,34 +221,14 @@ class EditProductSpecificationMainActivity : BaseActivity() {
             var datas_spec_title_first: String = binding.editTextProductSpecFirst.text.toString()
             var datas_spec_title_second: String = binding.editTextProductSpecSecond.text.toString()
 
-            var bundle = Bundle()
-
-            bundle.putInt("datas_spec_size", datas_spec_size)
-            bundle.putInt("datas_size_size", datas_size_size)
-            bundle.putString("datas_spec_title_first", datas_spec_title_first)
-            bundle.putString("datas_spec_title_second", datas_spec_title_second)
-
-
-
-
-            for (key in 0..datas_spec_item.size - 1) {
-                bundle.putParcelable("spec" + key.toString(), datas_spec_item.get(key)!!)
-            }
-
-            for (key in 0..datas_size_item.size - 1) {
-                bundle.putParcelable("size" + key.toString(), datas_size_item.get(key)!!)
-            }
-
-            intent.putExtra("bundle_AddProductSpecificationMainActivity", bundle)
-
-
             //MMKV input datas
+            MMKV.mmkvWithID("addPro").putString("datas_spec_size", datas_spec_size.toString())
+            MMKV.mmkvWithID("addPro").putString("datas_size_size", datas_size_size.toString())
             MMKV.mmkvWithID("addPro")
                 .putString("value_editTextProductSpecFirst", datas_spec_title_first)
             MMKV.mmkvWithID("addPro")
                 .putString("value_editTextProductSpecSecond", datas_spec_title_second)
-            MMKV.mmkvWithID("addPro").putString("datas_spec_size", datas_spec_size.toString())
-            MMKV.mmkvWithID("addPro").putString("datas_size_size", datas_size_size.toString())
+
 
             for (i in 0..datas_spec_size - 1) {
 
@@ -674,10 +666,7 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
     fun changeStatusOfNextStepBtn() {
 
-        if (firstSpecGrpTitle_check != 0 && mAdapter_spec.nextStepEnableOrNot()) {
-            binding.btnNextStep.isEnabled = true
-            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
-        } else if (secondSpecGrpTitle_check != 0 && mAdapter_size.nextStepEnableOrNot()) {
+        if ((firstSpecGrpTitle_check != 0 && mAdapter_spec.nextStepEnableOrNot()) || (secondSpecGrpTitle_check != 0 && mAdapter_size.nextStepEnableOrNot())) {
             binding.btnNextStep.isEnabled = true
             binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
         } else {
@@ -703,112 +692,6 @@ class EditProductSpecificationMainActivity : BaseActivity() {
     }
 
 
-    private fun getProductInfo(product_id: Int) {
-
-        val url = ApiConstants.API_HOST + "product/${product_id}/product_info_forAndroid/"
-        val web = Web(object : WebListener {
-            override fun onResponse(response: Response) {
-                var resStr: String? = ""
-                val list = ArrayList<ProductInfoBean>()
-//                val product_id_list = ArrayList<String>()
-                try {
-                    resStr = response.body()!!.string()
-                    val json = JSONObject(resStr)
-                    Log.d("getProductInfo", "返回資料 resStr：" + resStr)
-                    Log.d("getProductInfo", "返回資料 ret_val：" + json.get("ret_val"))
-                    val ret_val = json.get("ret_val")
-                    if (ret_val.equals("已取得商品資訊!")) {
-
-                        val jsonArray: JSONArray = json.getJSONArray("data")
-                        Log.d("getProductInfo", "返回資料 jsonArray：" + jsonArray.toString())
-
-                        for (i in 0 until jsonArray.length()) {
-                            val jsonObject: JSONObject = jsonArray.getJSONObject(i)
-                            productInfoList = Gson().fromJson(
-                                jsonObject.toString(),
-                                ProductInfoBean::class.java
-                            )
-
-                        }
-                        Log.d(
-                            "getProductInfo",
-                            "返回資料 productInfoList：" + productInfoList.toString()
-                        )
-
-
-                        MMKV.mmkvWithID("addPro").putString(
-                            "value_editTextProductSpecFirst",
-                            productInfoList.spec_desc_1.get(0)
-                        )
-                        MMKV.mmkvWithID("addPro").putString(
-                            "value_editTextProductSpecSecond",
-                            productInfoList.spec_desc_2.get(0)
-                        )
-
-                        var mutableSet_spec_dec_1_items: MutableSet<String> =
-                            productInfoList.spec_dec_1_items.toMutableSet()
-                        var mutableSet_spec_dec_2_items: MutableSet<String> =
-                            productInfoList.spec_dec_2_items.toMutableSet()
-                        var mutableList_spec_dec_1_items: MutableList<String> =
-                            mutableSet_spec_dec_1_items.toMutableList()
-                        var mutableList_spec_dec_2_items: MutableList<String> =
-                            mutableSet_spec_dec_2_items.toMutableList()
-
-                        MMKV.mmkvWithID("addPro").putString(
-                            "datas_spec_size",
-                            mutableSet_spec_dec_1_items.size.toString()
-                        )
-                        MMKV.mmkvWithID("addPro").putString(
-                            "datas_size_size",
-                            mutableSet_spec_dec_2_items.size.toString()
-                        )
-
-                        Thread(Runnable {
-
-                            for (i in 0..mutableSet_spec_dec_1_items.size - 1) {
-                                MMKV.mmkvWithID("addPro").putString(
-                                    "datas_spec_item${i}",
-                                    mutableList_spec_dec_1_items.get(i)
-                                )
-                            }
-
-                        }).start()
-
-
-                        Thread(Runnable {
-
-                            for (i in 0..mutableSet_spec_dec_2_items.size - 1) {
-                                MMKV.mmkvWithID("addPro").putString(
-                                    "datas_size_item${i}",
-                                    mutableList_spec_dec_2_items.get(i)
-                                )
-                            }
-
-                            runOnUiThread {
-
-                            }
-
-                        }).start()
-
-
-                    } else {
-                    }
-
-                } catch (e: JSONException) {
-
-
-                } catch (e: IOException) {
-                    e.printStackTrace()
-
-                }
-            }
-
-            override fun onErrorResponse(ErrorResponse: IOException?) {
-
-            }
-        })
-        web.Get_Data(url)
-    }
 
 
 }

@@ -1162,34 +1162,6 @@ class EditInventoryAndPriceActivity : AppCompatActivity(), TextWatcher{
 //                        MMKV.mmkvWithID("addPro").putString("datas_size_size", productInfoList.spec_dec_2_items.size.toString()).toString().toInt()
 
 
-                        var mutableSet_spec_dec_1_items : MutableSet<String> = productInfoList.spec_dec_1_items.toMutableSet()
-                        var mutableSet_spec_dec_2_items : MutableSet<String> = productInfoList.spec_dec_2_items.toMutableSet()
-                        var mutableList_spec_dec_1_items : MutableList<String> = mutableSet_spec_dec_1_items.toMutableList()
-                        var mutableList_spec_dec_2_items : MutableList<String> = mutableSet_spec_dec_2_items.toMutableList()
-
-//                        MMKV.mmkvWithID("addPro").putString("datas_spec_size",  mutableSet_spec_dec_1_items.size.toString())
-//                        MMKV.mmkvWithID("addPro").putString("datas_size_size",  mutableSet_spec_dec_2_items.size.toString())
-
-                        Thread(Runnable {
-
-                            for(i in 0..mutableSet_spec_dec_1_items.size -1){
-                                MMKV.mmkvWithID("addPro").putString("datas_spec_item${i}", mutableList_spec_dec_1_items.get(i))
-                            }
-
-                        }).start()
-
-
-                        Thread(Runnable {
-
-                            for(i in 0..mutableSet_spec_dec_2_items.size-1){
-                                MMKV.mmkvWithID("addPro").putString("datas_size_item${i}", mutableList_spec_dec_2_items.get(i))
-                            }
-
-                            runOnUiThread {
-
-                            }
-
-                        }).start()
 
 
 

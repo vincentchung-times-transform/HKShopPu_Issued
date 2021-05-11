@@ -20,6 +20,7 @@ import com.hkshopu.hk.net.Web
 import com.hkshopu.hk.net.WebListener
 import com.hkshopu.hk.ui.main.store.adapter.MyProductsAdapter
 import com.hkshopu.hk.utils.rxjava.RxBus
+import com.tencent.mmkv.MMKV
 import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONException
@@ -37,6 +38,7 @@ class MerchantsSoldFragment : Fragment() {
         }
     }
 
+    var shopId: Int = 0
     lateinit var recyclerview_myProducts: RecyclerView
     private val adapter = MyProductsAdapter(this)
     override fun onCreateView(
@@ -49,10 +51,11 @@ class MerchantsSoldFragment : Fragment() {
         recyclerview_myProducts = v.findViewById<RecyclerView>(R.id.recyclerview_myProducts)
         initRecyclerView()
 
-//        val shopId = MMKV.mmkvWithID("http").getInt("ShopId",0)
-//        var url = ApiConstants.API_HOST+"/product/"+shopId+"/shop_product/"
+        shopId = MMKV.mmkvWithID("http").getInt("ShopId",0)
+        Log.d("mkjgjs", shopId.toString())
 
-        getMyProductsList("1", "none", "active", "0")
+        getMyProductsList(shopId.toString(), "none", "actiive", "0")
+
         initEvent()
 
         return v
@@ -153,7 +156,7 @@ class MerchantsSoldFragment : Fragment() {
                             }
 
 
-                            getMyProductsList("1", keyword, "active", "0")
+                            getMyProductsList(shopId.toString(), keyword, "active", "0")
 
                             activity?.runOnUiThread {
                             }

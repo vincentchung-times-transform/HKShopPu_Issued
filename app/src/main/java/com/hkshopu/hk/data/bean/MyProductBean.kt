@@ -10,10 +10,10 @@ class MyProductBean {
     var product_title: String = ""
 
     @SerializedName("min_price")
-    var min_price: Int? = null
+    var min_price: Int? = 0
 
     @SerializedName("max_price")
-    var max_price: Int? = null
+    var max_price: Int? = 0
 
     @SerializedName("pic_path")
     var pic_path: String= ""
