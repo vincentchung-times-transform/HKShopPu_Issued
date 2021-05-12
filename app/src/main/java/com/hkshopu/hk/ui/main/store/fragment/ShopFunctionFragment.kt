@@ -53,10 +53,18 @@ class ShopFunctionFragment : Fragment(R.layout.fragment_shopfunction) {
 
     private fun initClick() {
         binding!!.tvMoreList.setOnClickListener {
-//            val intent = Intent(activity, MyMerchantsActivity::class.java)
-//            activity!!.startActivity(intent)
+            val intent = Intent(activity, MyMerchantsActivity::class.java)
+            activity!!.startActivity(intent)
 
         }
+
+        binding!!.tvMoreDelivery.setOnClickListener {
+
+            val intent = Intent(activity, LogisticListActivity::class.java)
+            activity!!.startActivity(intent)
+
+        }
+
         binding!!.tvMoreBankaccount.setOnClickListener {
 
             val intent = Intent(activity, BankListActivity::class.java)

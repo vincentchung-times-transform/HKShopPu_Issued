@@ -117,7 +117,7 @@ class AddShopBriefActivity : BaseActivity() {
         }
 
         binding.ivAddshopbriefSave.setOnClickListener {
-//            doShopDesUpdate(description)
+            doShopDesUpdate(description)
         }
 
     }
@@ -329,6 +329,43 @@ class AddShopBriefActivity : BaseActivity() {
             }
         })
         web.Do_ShopBgUpdate(url, address_id,postImg)
+    }
+    private fun doShopDesUpdate(description: String) {
+        val shopId = mmkvWithID("http").getInt("ShopId",0)
+        var url = ApiConstants.API_PATH+"shop/"+shopId+"/update/"
+
+        val web = Web(object : WebListener {
+            override fun onResponse(response: Response) {
+                var resStr: String? = ""
+                try {
+                    resStr = response.body()!!.string()
+                    val json = JSONObject(resStr)
+                    Log.d("AddShopBriefActivity", "返回資料 resStr：" + resStr)
+                    Log.d("AddShopBriefActivity", "返回資料 ret_val：" + json.get("ret_val"))
+                    val ret_val = json.get("ret_val")
+                    val status = json.get("status")
+                    if (status == 0) {
+                        RxBus.getInstance().post(EventAddShopBriefSuccess(description))
+                        finish()
+                    } else {
+                        runOnUiThread {
+
+                            Toast.makeText(this@AddShopBriefActivity, ret_val.toString(), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                } catch (e: JSONException) {
+
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onErrorResponse(ErrorResponse: IOException?) {
+
+            }
+        })
+        web.Do_ShopDesUpdate(url, address_id,description)
     }
 
 
