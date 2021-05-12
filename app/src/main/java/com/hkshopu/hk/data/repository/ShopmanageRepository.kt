@@ -62,6 +62,14 @@ class ShopmanageRepository : BaseRepository(){
             .compose(handleBean())
     }
 
+    fun updateProductStatus(lifecycleOwner: LifecycleOwner, id : Int ,status: String) : Observable<Any>{
+        return service.updateProductStatus(id, status)
+            .compose(SchedulersUtil.applySchedulers())
+            .bindUntilEvent(lifecycleOwner,Lifecycle.Event.ON_DESTROY)
+            .compose(handleBean())
+    }
+
+
 
 
 }

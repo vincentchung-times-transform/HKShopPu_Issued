@@ -128,11 +128,6 @@ class AddShippingFareActivity : AppCompatActivity(){
         binding.btnShippingFareStore.isEnabled = false
         binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore_disable)
 
-        setMonitor(binding.editPackageWeight, width_check)
-        setMonitor(binding.editPackageLength, length_check)
-        setMonitor(binding.editPackageWidth, width_check)
-        setMonitor(binding.editPackageHeight, height_check)
-
 
         initClick()
         initEdit()
@@ -290,6 +285,13 @@ class AddShippingFareActivity : AppCompatActivity(){
             }
             override fun afterTextChanged(s: Editable?) {
 
+                if( binding.editPackageWeight.text.isNotEmpty() && binding.editPackageLength.text.isNotEmpty() &&  binding.editPackageWidth.text.isNotEmpty() && binding.editPackageHeight.text.isNotEmpty() ){
+                    binding.btnShippingFareStore.isEnabled = true
+                    binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore)
+                }else{
+                    binding.btnShippingFareStore.isEnabled = false
+                    binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore_disable)
+                }
 
                 if(binding.editPackageWeight.text.toString().length >= 2 && binding.editPackageWeight.text.toString().startsWith("0")){
                     binding.editPackageWeight.setText(binding.editPackageWeight.text.toString().replace("0", "", false))
@@ -322,6 +324,13 @@ class AddShippingFareActivity : AppCompatActivity(){
             }
             override fun afterTextChanged(s: Editable?) {
 
+                if( binding.editPackageWeight.text.isNotEmpty() && binding.editPackageLength.text.isNotEmpty() &&  binding.editPackageWidth.text.isNotEmpty() && binding.editPackageHeight.text.isNotEmpty() ){
+                    binding.btnShippingFareStore.isEnabled = true
+                    binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore)
+                }else{
+                    binding.btnShippingFareStore.isEnabled = false
+                    binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore_disable)
+                }
 
                 if(binding.editPackageLength.text.toString().length >= 2 && binding.editPackageLength.text.toString().startsWith("0")){
                     binding.editPackageLength.setText(binding.editPackageLength.text.toString().replace("0", "", false))
@@ -358,6 +367,14 @@ class AddShippingFareActivity : AppCompatActivity(){
             }
             override fun afterTextChanged(s: Editable?) {
 
+                if( binding.editPackageWeight.text.isNotEmpty() && binding.editPackageLength.text.isNotEmpty() &&  binding.editPackageWidth.text.isNotEmpty() && binding.editPackageHeight.text.isNotEmpty() ){
+                    binding.btnShippingFareStore.isEnabled = true
+                    binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore)
+                }else{
+                    binding.btnShippingFareStore.isEnabled = false
+                    binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore_disable)
+                }
+
                 if(binding.editPackageWidth.text.toString().length >= 2 && binding.editPackageWidth.text.toString().startsWith("0")){
                     binding.editPackageWidth.setText(binding.editPackageWidth.text.toString().replace("0", "", false))
                     binding.editPackageWidth.setSelection(binding.editPackageWidth.text.toString().length)
@@ -387,6 +404,14 @@ class AddShippingFareActivity : AppCompatActivity(){
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
             override fun afterTextChanged(s: Editable?) {
+
+                if( binding.editPackageWeight.text.isNotEmpty() && binding.editPackageLength.text.isNotEmpty() &&  binding.editPackageWidth.text.isNotEmpty() && binding.editPackageHeight.text.isNotEmpty() ){
+                    binding.btnShippingFareStore.isEnabled = true
+                    binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore)
+                }else{
+                    binding.btnShippingFareStore.isEnabled = false
+                    binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore_disable)
+                }
 
                 if(binding.editPackageHeight.text.toString().length >= 2 && binding.editPackageHeight.text.toString().startsWith("0")){
                     binding.editPackageHeight.setText(binding.editPackageHeight.text.toString().replace("0", "", false))
@@ -460,94 +485,6 @@ class AddShippingFareActivity : AppCompatActivity(){
 
     }
 
-
-    fun setMonitor(editText : EditText, var_check : Boolean) {
-
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-            override fun afterTextChanged(s: Editable?) {
-
-                if (s.toString().isNotEmpty()||s.toString()!=""){
-
-                    when (editText) {
-                        binding.editPackageWeight ->{
-                            weight_check=true
-                            Log.d("checkvar", weight_check.toString()+length_check.toString()+width_check.toString()+height_check.toString())
-                        }
-                        binding.editPackageLength ->{
-                            length_check=true
-                            Log.d("checkvar", weight_check.toString()+length_check.toString()+width_check.toString()+height_check.toString())
-                        }
-                        binding.editPackageWidth ->{
-                            width_check=true
-                            Log.d("checkvar", weight_check.toString()+length_check.toString()+width_check.toString()+height_check.toString())
-                        }
-                        binding.editPackageHeight ->{
-                            height_check=true
-                            Log.d("checkvar", weight_check.toString()+length_check.toString()+width_check.toString()+height_check.toString())
-                        }
-                    }
-
-                    if(weight_check==true && length_check==true && width_check==true && height_check==true ){
-                        binding.btnShippingFareStore.isEnabled = true
-                        binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore)
-                    }else{
-                        binding.btnShippingFareStore.isEnabled = false
-                        binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore_disable)
-                    }
-
-
-
-                }else{
-
-                    when (editText) {
-                        binding.editPackageWeight ->{
-                            weight_check=false
-                        }
-                        binding.editPackageLength ->{
-                            length_check=false
-                        }
-                        binding.editPackageLength ->{
-                            width_check=false
-                        }
-                        binding.editPackageLength ->{
-                            height_check=false
-                        }
-                    }
-
-                    if(weight_check==true && length_check==true && width_check==true && height_check==true ){
-                        binding.btnShippingFareStore.isEnabled = true
-                        binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore)
-                    }else{
-                        binding.btnShippingFareStore.isEnabled = false
-                        binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore_disable)
-                    }
-
-                }
-            }
-        }
-        editText.addTextChangedListener(textWatcher)
-
-
-        editText.singleLine = true
-        editText.setOnEditorActionListener() { v, actionId, event ->
-            when (actionId) {
-                EditorInfo.IME_ACTION_DONE -> {
-                    Log.d("checkvar", weight_check.toString()+length_check.toString()+width_check.toString()+height_check.toString())
-
-
-                    editText.clearFocus()
-
-                    true
-                }
-
-                else -> false
-            }
-        }
-    }
 
     fun View.hideKeyboard() {
         val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

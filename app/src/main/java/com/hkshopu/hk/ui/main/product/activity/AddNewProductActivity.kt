@@ -53,6 +53,7 @@ class AddNewProductActivity : BaseActivity() {
     private val VM = ShopVModel()
     val mAdapters_shippingFareChecked = ShippingFareCheckedAdapter()
     val REQUEST_EXTERNAL_STORAGE = 100
+    var which_click: String = ""
 
     //從本地端選取圖片轉換為bitmap後存的list
     var mutableList_pics = mutableListOf<ItemPics>()
@@ -93,7 +94,6 @@ class AddNewProductActivity : BaseActivity() {
         setContentView(binding.root)
 
         //Add Mode
-//        initVM()
         initView()
 
         //Edit Mode
@@ -465,6 +465,7 @@ class AddNewProductActivity : BaseActivity() {
     fun initClick() {
 
         binding.btnOnShelf.setOnClickListener {
+            which_click="launch"
 
             var pic_list : ArrayList<File> = arrayListOf()
             var file: File? = null
@@ -486,7 +487,7 @@ class AddNewProductActivity : BaseActivity() {
                         if(MMKV_proCate_id.isNotEmpty()||MMKV_proSubCate_id.isNotEmpty()){
                             if(MMKV_weight.isNotEmpty() && MMKV_length.isNotEmpty() && MMKV_width.isNotEmpty() && MMKV_height.isNotEmpty()){
                                 if( !MMKV_editTextMerchanPrice.toString().equals("") && !MMKV_editTextMerchanQunt.equals("") &&  binding.iosSwitchSpecification.isOpened().equals(false) ){
-                                    if(MMKV_value_txtViewFareRange.isNotEmpty()){
+                                    if(mutableList_itemShipingFare.size>0){
 
 //                                        var inven_switch_off_json = "{ \"product_spec_list\" : [{\"price\": ${value_editTextMerchanPrice}, \"quantity\": ${value_editTextMerchanQunt}, \"spec_dec_1_items\":\"\",\"spec_dec_2_items\":\"\",\"spec_desc_1\":\"\",\"spec_desc_2\":\"\"}]}"
 //                                        Log.d("inven_switch_off_json", inven_switch_off_json.toString())
@@ -547,7 +548,7 @@ class AddNewProductActivity : BaseActivity() {
                                     }
                                 }else if( binding.iosSwitchSpecification.isOpened()){
                                     if( MMKV_inven_price_range.isNotEmpty() && MMKV_inven_quant_range.isNotEmpty()){
-                                        if(MMKV_value_txtViewFareRange .isNotEmpty()){
+                                        if(mutableList_itemShipingFare.size>0){
 
                                             MMKV_editTextMerchanPrice = "0"
                                             MMKV_editTextMerchanQunt = "0"
@@ -785,6 +786,8 @@ class AddNewProductActivity : BaseActivity() {
 
         binding.btnStore.setOnClickListener {
 
+            which_click="store"
+
             var pic_list : ArrayList<File> = arrayListOf()
             var file: File? = null
             for(i in 0..mutableList_pics.size-1){
@@ -797,7 +800,6 @@ class AddNewProductActivity : BaseActivity() {
             Log.d("addNewPro", "{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }")
             Log.d("addNewPro", MMKV_jsonTutList_fare)
 
-//            VM.add_product(this, 1, 1, 1, "0", 0, "0", 0, 0, 0, "new", pic_list,  "{ \"product_spec_list\" : ${jsonTutList_inven} }", 1, 0, 0, 0, jsonTutList_fare)
 
             if(pic_list.size >=1){
                 if(MMKV_editTextEntryProductName.isNotEmpty()){
@@ -805,7 +807,7 @@ class AddNewProductActivity : BaseActivity() {
                         if(MMKV_proCate_id.isNotEmpty()||MMKV_proSubCate_id.isNotEmpty()){
                             if(MMKV_weight.isNotEmpty() && MMKV_length.isNotEmpty() && MMKV_width.isNotEmpty() && MMKV_height.isNotEmpty()){
                                 if( !MMKV_editTextMerchanPrice.toString().equals("") && !MMKV_editTextMerchanQunt.equals("") &&  binding.iosSwitchSpecification.isOpened().equals(false) ){
-                                    if(MMKV_value_txtViewFareRange.isNotEmpty()){
+                                    if(mutableList_itemShipingFare.size>0){
 
 //                                        var inven_switch_off_json = "{ \"product_spec_list\" : [{\"price\": ${value_editTextMerchanPrice}, \"quantity\": ${value_editTextMerchanQunt}, \"spec_dec_1_items\":\"\",\"spec_dec_2_items\":\"\",\"spec_desc_1\":\"\",\"spec_desc_2\":\"\"}]}"
 //                                        Log.d("inven_switch_off_json", inven_switch_off_json.toString())
@@ -868,7 +870,7 @@ class AddNewProductActivity : BaseActivity() {
                                     }
                                 }else if( binding.iosSwitchSpecification.isOpened()){
                                     if( MMKV_inven_price_range.isNotEmpty() && MMKV_inven_quant_range.isNotEmpty()){
-                                        if(MMKV_value_txtViewFareRange .isNotEmpty()){
+                                        if(mutableList_itemShipingFare.size>0){
 
                                             MMKV_editTextMerchanPrice = "0"
                                             MMKV_editTextMerchanQunt = "0"
@@ -1160,6 +1162,19 @@ class AddNewProductActivity : BaseActivity() {
                 binding.rViewFareItem.isVisible = true
                 binding.imgLineFare.isVisible = true
 
+
+                //MMKV取出 Fare Item
+                for (i in 0..fare_datas_size-1!!) {
+                    var json_invens : String? = MMKV.mmkvWithID("addPro").getString(
+                        "value_fare_item${i}",
+                        ""
+                    )
+                    val json = json_invens
+                    val value_fare_item = gson.fromJson(json, ItemShippingFare::class.java)
+                    mutableList_itemShipingFare.add(value_fare_item)
+                }
+
+
                 //MMKV取出 Filtered Fare Item
                 for (i in 0..fare_datas_filtered_size-1!!) {
                     var json_invens : String? = MMKV.mmkvWithID("addPro").getString("value_fare_item_filtered${i}", "")
@@ -1286,33 +1301,6 @@ class AddNewProductActivity : BaseActivity() {
     }
 
 
-
-    private fun initVM() {
-
-        VM.addProductData.observe(
-            this,
-            Observer {
-                when (it?.status) {
-                    Status.Success -> {
-                        if (it.ret_val.toString().equals("產品新增成功!!")) {
-
-                            Toast.makeText(this, it.ret_val.toString(), Toast.LENGTH_LONG).show()
-
-                        } else {
-
-                            Toast.makeText(this, it.ret_val.toString(), Toast.LENGTH_LONG).show()
-
-                        }
-
-                    }
-//                Status.Start -> showLoading()
-//                Status.Complete -> disLoading()
-                }
-            }
-        )
-
-    }
-
     private fun processImage(bitmap: Bitmap, i: Int): File? {
 
         val bmp = bitmap
@@ -1356,21 +1344,37 @@ class AddNewProductActivity : BaseActivity() {
                     val ret_val = json.get("ret_val")
                     if (ret_val.equals("產品新增成功!")) {
 
-                        runOnUiThread {
-                            Toast.makeText(this@AddNewProductActivity, ret_val.toString(), Toast.LENGTH_SHORT).show()
-                        }
-//                        var user_id: Int = json.getInt("user_id")
-//                        var shop_id:Int = json.getInt("shop_id")
-//                        MMKV.mmkvWithID("http").putInt("UserId", user_id)
-//                        MMKV.mmkvWithID("http").putInt("ShopId", shop_id)
-//                        val intent = Intent(this@AddShopActivity, ShopmenuActivity::class.java)
-//                        startActivity(intent)
-//                        finish()
+                     when(which_click){
+                         "store"->{
+                             runOnUiThread {
+                                 Toast.makeText(this@AddNewProductActivity, ret_val.toString(), Toast.LENGTH_SHORT).show()
+                             }
+                         }
+                         "Launch"->{
+                             runOnUiThread {
+                                 Toast.makeText(this@AddNewProductActivity, "產品上架成功!", Toast.LENGTH_SHORT).show()
+                             }
+                         }
+
+                     }
+
+                        finish()
 
                     } else {
-                        runOnUiThread {
-                            Toast.makeText(this@AddNewProductActivity, ret_val.toString(), Toast.LENGTH_SHORT).show()
+                        when(which_click){
+                            "store"->{
+                                runOnUiThread {
+                                    Toast.makeText(this@AddNewProductActivity, ret_val.toString(), Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            "Launch"->{
+                                runOnUiThread {
+                                    Toast.makeText(this@AddNewProductActivity, "產品上架失敗!", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
                         }
+
                     }
 //                        initRecyclerView()
 
@@ -1392,7 +1396,6 @@ class AddNewProductActivity : BaseActivity() {
 
 
     override fun onBackPressed() {
-
 
         StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
 

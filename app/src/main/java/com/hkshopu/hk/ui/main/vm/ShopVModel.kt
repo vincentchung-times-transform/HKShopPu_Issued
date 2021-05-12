@@ -24,7 +24,7 @@ class ShopVModel : BaseViewModel() {
     val addnewshopLiveData = MediatorLiveData<UIDataBean<Any>>()
     val addProductData = MediatorLiveData<UIDataBean<Any>>()
     val syncShippingfareData = MediatorLiveData<UIDataBean<Any>>()
-
+    val updateProductStatusData = MediatorLiveData<UIDataBean<Any>>()
 
     fun shopnamecheck(lifecycleOwner: LifecycleOwner, shop_title: String) {
         repository.shopnamecheck(lifecycleOwner, shop_title)
@@ -44,6 +44,12 @@ class ShopVModel : BaseViewModel() {
     fun syncShippingfare(lifecycleOwner: LifecycleOwner, id : Int, shipment_settings : String) {
         repository.syncShippingfare(lifecycleOwner, id, shipment_settings)
             .subscribe(StatusResourceObserver(syncShippingfareData, silent = false))
+    }
+
+
+    fun updateProductStatus(lifecycleOwner: LifecycleOwner, id : Int, status : String) {
+        repository.updateProductStatus(lifecycleOwner, id, status)
+            .subscribe(StatusResourceObserver(updateProductStatusData, silent = false))
     }
 
 

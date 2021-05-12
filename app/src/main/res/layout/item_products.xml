@@ -37,6 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/layout_product"
+        android:textColor="@color/black"
         android:layout_marginStart="12dp"
         android:layout_marginTop="10dp"
         android:text="商品名稱" />
@@ -48,6 +49,7 @@
         android:layout_below="@id/tv_productname"
         android:layout_marginStart="12dp"
         android:layout_marginTop="5dp"
+        android:textColor="@color/black"
         android:text="@string/currency"
         android:textStyle="bold" />
 
@@ -57,6 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_productname"
         android:layout_marginTop="5dp"
+        android:textColor="@color/black"
         android:layout_toRightOf="@id/tv_current"
         android:textStyle="bold" />
 

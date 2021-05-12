@@ -10,13 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.hkshopu.hk.Base.BaseActivity
+import com.hkshopu.hk.Base.response.Status
 import com.hkshopu.hk.R
 import com.hkshopu.hk.data.bean.*
 import com.hkshopu.hk.databinding.ActivityMerchandiseBinding
@@ -26,6 +29,7 @@ import com.hkshopu.hk.net.WebListener
 import com.hkshopu.hk.ui.main.product.adapter.PicsAdapter
 import com.hkshopu.hk.ui.main.product.fragment.EditProductRemindDialogFragment
 import com.hkshopu.hk.ui.main.product.fragment.StoreOrNotDialogFragment
+import com.hkshopu.hk.ui.user.vm.ShopVModel
 import com.tencent.mmkv.MMKV
 import okhttp3.Response
 import org.json.JSONArray
@@ -44,6 +48,8 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
     lateinit var points: ArrayList<ImageView> //指示器圖片
     val list = ArrayList<ProductImagesObjBean>()
 
+    private val VM = ShopVModel()
+
     lateinit var productInfoList :  ProductInfoBean
     var mutableList_pics = mutableListOf<ItemPics>()
 
@@ -51,18 +57,19 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
     var MMKV_product_id: Int = 1
 
+    var product_status : String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMerchandiseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         MMKV_product_id = MMKV.mmkvWithID("http").getInt("ProductId", 0)
-        Log.d("dfjodiajfid", MMKV_product_id.toString())
         getProductInfo(MMKV_product_id)
 
 
 
-
+        initVM()
         initView()
 
     }
@@ -83,7 +90,17 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
         }
 
         binding.btnLaunch.setOnClickListener {
+           when(product_status){
+               "active"->{
+                    VM.updateProductStatus(this, MMKV_product_id, "draft")
 
+               }
+               "draft"->{
+                   VM.updateProductStatus(this, MMKV_product_id, "active")
+
+               }
+
+           }
         }
     }
 
@@ -93,7 +110,7 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
         for ( i in 0..mutableList_pics.size-1){
             list.add(ProductImagesObjBean(mutableList_pics.get(i).bitmap, mutableList_pics.get(i).bitmap))
         }
-        Log.d("gfsgghdghgd", "gfdgfdgdf : ${mutableList_pics}")
+
 
     }
 
@@ -269,8 +286,26 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
                         setBoardingData()
 
+                        runOnUiThread {
+                            binding.tvQuantity.setText(productInfoList.sum_quantity.toString())
+                            binding.textViewSoldQuantity.setText(productInfoList.sold_quantity.toString())
+                            binding.textViewLike.setText(productInfoList.like.toString())
+                            binding.tvLongestStockUpDays.setText(productInfoList.longterm_stock_up.toString())
+                        }
 
                         runOnUiThread {
+
+                            when(productInfoList.product_status){
+                                "active"->{
+                                    binding.btnLaunch.setImageResource(R.mipmap.btn_launch)
+                                    product_status = productInfoList.product_status
+                                }
+                                "draft"->{
+                                    binding.btnLaunch.setImageResource(R.mipmap.btn_launch)
+                                    product_status = productInfoList.product_status
+                                }
+                            }
+
 
                             binding.textViewProductName.setText(productInfoList.product_title.toString())
                             binding.textViewProductPriceRange.setText(pick_max_and_min_num().toString())
@@ -285,7 +320,7 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                             )
 
                             binding.textViewShippingFareRange.setText(
-                                "${productInfoList.shipment_min_price} > ${
+                                "HKD$${productInfoList.shipment_min_price}-HKD$${
                                     productInfoList.shipment_max_price
                                 }"
                             )
@@ -298,7 +333,6 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
                                 var mutableSet_spec_dec_1_items : MutableSet<String> = productInfoList.spec_dec_1_items.toMutableSet()
                                 var mutableSet_spec_dec_2_items : MutableSet<String> = productInfoList.spec_dec_2_items.toMutableSet()
-
 
                                 binding.firstLayerSpec01.setText(productInfoList.spec_desc_1.get(0))
                                 binding.firstLayerSpec02.setText(productInfoList.spec_desc_1.get(0))
@@ -325,8 +359,8 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
                                                     binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
                                                     binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0))
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0))
+                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
 
                                                 }
                                                 2->{
@@ -338,10 +372,10 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                                     binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
                                                     binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0))
-                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1))
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0))
-                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1))
+                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
 
                                                 }
                                                 3->{
@@ -354,12 +388,12 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                                     binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
                                                     binding.secondLayerItemName03.setText(productInfoList.spec_dec_2_items.get(2))
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0))
-                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1))
-                                                    binding.secondLayerItemPrice03.setText(productInfoList.price.get(2))
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0))
-                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1))
-                                                    binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2))
+                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                    binding.secondLayerItemPrice03.setText(productInfoList.price.get(2).toString())
+                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                    binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2).toString())
 
                                                 }
 
@@ -372,7 +406,7 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                             binding.containerInvenItem02.isVisible = true
                                             binding.containerInvenItem03.isVisible = false
 
-                                            when(productInfoList.spec_dec_2_items.size){
+                                            when(mutableSet_spec_dec_1_items.size){
                                                 1->{
                                                     binding.secondLayerItemContainer01.isVisible = true
                                                     binding.secondLayerItemContainer02.isVisible = false
@@ -387,10 +421,10 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                                     binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
                                                     binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(1))
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0))
-                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(1))
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0))
-                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(1))
+                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(1).toString())
+                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(1).toString())
 
 
                                                 }
@@ -411,14 +445,14 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                                     binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(2))
                                                     binding.secondLayerItemName05.setText(productInfoList.spec_dec_2_items.get(3))
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0))
-                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1))
-                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(2))
-                                                    binding.secondLayerItemPrice05.setText(productInfoList.price.get(3))
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0))
-                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1))
-                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(2))
-                                                    binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(3))
+                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(2).toString())
+                                                    binding.secondLayerItemPrice05.setText(productInfoList.price.get(3).toString())
+                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(2).toString())
+                                                    binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(3).toString())
 
 
                                                 }
@@ -441,18 +475,18 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                                     binding.secondLayerItemName05.setText(productInfoList.spec_dec_2_items.get(4))
                                                     binding.secondLayerItemName06.setText(productInfoList.spec_dec_2_items.get(5))
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0))
-                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1))
-                                                    binding.secondLayerItemPrice03.setText(productInfoList.price.get(2))
-                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(3))
-                                                    binding.secondLayerItemPrice05.setText(productInfoList.price.get(4))
-                                                    binding.secondLayerItemPrice06.setText(productInfoList.price.get(5))
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0))
-                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1))
-                                                    binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2))
-                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(3))
-                                                    binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(4))
-                                                    binding.secondLayerItemQuant06.setText(productInfoList.spec_quantity.get(5))
+                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                    binding.secondLayerItemPrice03.setText(productInfoList.price.get(2).toString())
+                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(3).toString())
+                                                    binding.secondLayerItemPrice05.setText(productInfoList.price.get(4).toString())
+                                                    binding.secondLayerItemPrice06.setText(productInfoList.price.get(5).toString())
+                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                    binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2).toString())
+                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(3).toString())
+                                                    binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(4).toString())
+                                                    binding.secondLayerItemQuant06.setText(productInfoList.spec_quantity.get(5).toString())
 
                                                 }
                                             }
@@ -464,7 +498,7 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                             binding.containerInvenItem02.isVisible = true
                                             binding.containerInvenItem03.isVisible = true
 
-                                            when(productInfoList.spec_dec_2_items.size){
+                                            when(mutableSet_spec_dec_1_items.size){
                                                 1->{
                                                     binding.secondLayerItemContainer01.isVisible = true
                                                     binding.secondLayerItemContainer02.isVisible = false
@@ -483,12 +517,12 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                                     binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(1))
                                                     binding.secondLayerItemName07.setText(productInfoList.spec_dec_2_items.get(2))
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0))
-                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(1))
-                                                    binding.secondLayerItemPrice07.setText(productInfoList.price.get(2))
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0))
-                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(1))
-                                                    binding.secondLayerItemQuant07.setText(productInfoList.spec_quantity.get(2))
+                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(1).toString())
+                                                    binding.secondLayerItemPrice07.setText(productInfoList.price.get(2).toString())
+                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(1).toString())
+                                                    binding.secondLayerItemQuant07.setText(productInfoList.spec_quantity.get(2).toString())
 
 
                                                 }
@@ -516,18 +550,18 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                                     binding.secondLayerItemName08.setText(productInfoList.spec_dec_2_items.get(5))
 
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0))
-                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1))
-                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(2))
-                                                    binding.secondLayerItemPrice05.setText(productInfoList.price.get(3))
-                                                    binding.secondLayerItemPrice07.setText(productInfoList.price.get(4))
-                                                    binding.secondLayerItemPrice08.setText(productInfoList.price.get(5))
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0))
-                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1))
-                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(2))
-                                                    binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(3))
-                                                    binding.secondLayerItemQuant07.setText(productInfoList.spec_quantity.get(4))
-                                                    binding.secondLayerItemQuant08.setText(productInfoList.spec_quantity.get(5))
+                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(2).toString())
+                                                    binding.secondLayerItemPrice05.setText(productInfoList.price.get(3).toString())
+                                                    binding.secondLayerItemPrice07.setText(productInfoList.price.get(4).toString())
+                                                    binding.secondLayerItemPrice08.setText(productInfoList.price.get(5).toString())
+                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(2).toString())
+                                                    binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(3).toString())
+                                                    binding.secondLayerItemQuant07.setText(productInfoList.spec_quantity.get(4).toString())
+                                                    binding.secondLayerItemQuant08.setText(productInfoList.spec_quantity.get(5).toString())
 
                                                 }
                                                 3->{
@@ -556,24 +590,24 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                                     binding.secondLayerItemName08.setText(productInfoList.spec_dec_2_items.get(7))
                                                     binding.secondLayerItemName09.setText(productInfoList.spec_dec_2_items.get(8))
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0))
-                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1))
-                                                    binding.secondLayerItemPrice03.setText(productInfoList.price.get(2))
-                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(3))
-                                                    binding.secondLayerItemPrice05.setText(productInfoList.price.get(4))
-                                                    binding.secondLayerItemPrice06.setText(productInfoList.price.get(5))
-                                                    binding.secondLayerItemPrice07.setText(productInfoList.price.get(6))
-                                                    binding.secondLayerItemPrice08.setText(productInfoList.price.get(7))
-                                                    binding.secondLayerItemPrice09.setText(productInfoList.price.get(8))
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0))
-                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1))
-                                                    binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2))
-                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(3))
-                                                    binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(4))
-                                                    binding.secondLayerItemQuant06.setText(productInfoList.spec_quantity.get(5))
-                                                    binding.secondLayerItemQuant07.setText(productInfoList.spec_quantity.get(6))
-                                                    binding.secondLayerItemQuant08.setText(productInfoList.spec_quantity.get(7))
-                                                    binding.secondLayerItemQuant09.setText(productInfoList.spec_quantity.get(8))
+                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                    binding.secondLayerItemPrice03.setText(productInfoList.price.get(2).toString())
+                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(3).toString())
+                                                    binding.secondLayerItemPrice05.setText(productInfoList.price.get(4).toString())
+                                                    binding.secondLayerItemPrice06.setText(productInfoList.price.get(5).toString())
+                                                    binding.secondLayerItemPrice07.setText(productInfoList.price.get(6).toString())
+                                                    binding.secondLayerItemPrice08.setText(productInfoList.price.get(7).toString())
+                                                    binding.secondLayerItemPrice09.setText(productInfoList.price.get(8).toString())
+                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                    binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2).toString())
+                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(3).toString())
+                                                    binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(4).toString())
+                                                    binding.secondLayerItemQuant06.setText(productInfoList.spec_quantity.get(5).toString())
+                                                    binding.secondLayerItemQuant07.setText(productInfoList.spec_quantity.get(6).toString())
+                                                    binding.secondLayerItemQuant08.setText(productInfoList.spec_quantity.get(7).toString())
+                                                    binding.secondLayerItemQuant09.setText(productInfoList.spec_quantity.get(8).toString())
 
                                                 }
                                             }
@@ -597,8 +631,8 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
                                             binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
                                             binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                            binding.secondLayerItemPrice01.setText(productInfoList.price.get(0))
-                                            binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0))
+                                            binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                            binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
 
                                         }
                                         2->{
@@ -610,10 +644,10 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                             binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
                                             binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
 
-                                            binding.secondLayerItemPrice01.setText(productInfoList.price.get(0))
-                                            binding.secondLayerItemPrice02.setText(productInfoList.price.get(1))
-                                            binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0))
-                                            binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1))
+                                            binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                            binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                            binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                            binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
 
                                         }
                                         3->{
@@ -626,12 +660,12 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                             binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
                                             binding.secondLayerItemName03.setText(productInfoList.spec_dec_2_items.get(2))
 
-                                            binding.secondLayerItemPrice01.setText(productInfoList.price.get(0))
-                                            binding.secondLayerItemPrice02.setText(productInfoList.price.get(1))
-                                            binding.secondLayerItemPrice03.setText(productInfoList.price.get(2))
-                                            binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0))
-                                            binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1))
-                                            binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2))
+                                            binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                            binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                            binding.secondLayerItemPrice03.setText(productInfoList.price.get(2).toString())
+                                            binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                            binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                            binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2).toString())
 
                                         }
                                     }
@@ -694,6 +728,49 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
             e.printStackTrace()
             null
         }
+    }
+
+    private fun initVM() {
+
+        VM.updateProductStatusData.observe(
+            this,
+            Observer {
+                when (it?.status) {
+                    Status.Success -> {
+                        if (it.ret_val.toString().equals("上架/下架成功!")) {
+
+                            when(product_status){
+                                "active"->{
+                                    runOnUiThread {
+                                        Toast.makeText(this, "下架成功", Toast.LENGTH_LONG).show()
+                                        product_status = "draft"
+                                        binding.btnLaunch.setImageResource(R.mipmap.btn_launch)
+                                    }
+
+                                }
+                                "draft"->{
+                                    runOnUiThread {
+                                        Toast.makeText(this, "上架成功", Toast.LENGTH_LONG).show()
+                                        product_status = "active"
+                                        binding.btnLaunch.setImageResource(R.mipmap.btn_draft)
+                                    }
+
+                                }
+                            }
+
+                        } else {
+
+                            Toast.makeText(this, it.ret_val.toString(), Toast.LENGTH_LONG).show()
+
+                        }
+
+                    }
+//                Status.Start -> showLoading()
+//                Status.Complete -> disLoading()
+                }
+            }
+        )
+
     }
 
 }

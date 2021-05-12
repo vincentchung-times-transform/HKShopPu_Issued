@@ -1,5 +1,6 @@
 package com.hkshopu.hk.ui.main.store.adapter
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +22,7 @@ import com.tencent.mmkv.MMKV
 import org.jetbrains.anko.find
 import java.util.*
 
-class MyProductsAdapter(var fragment: Fragment) : RecyclerView.Adapter<MyProductsAdapter.ProductInfoLinearHolder>(){
+class MyProductsAdapter(var fragment: Fragment, var product_type: String) : RecyclerView.Adapter<MyProductsAdapter.ProductInfoLinearHolder>(){
     private var mData: ArrayList<MyProductBean> = ArrayList()
     var itemClick : ((id: Int) -> Unit)? = null
 
@@ -84,6 +85,8 @@ class MyProductsAdapter(var fragment: Fragment) : RecyclerView.Adapter<MyProduct
 
 
 
+
+        @SuppressLint("ResourceType")
         fun bindShop(bean : MyProductBean){
 //            iv_Icon.click {
 //                itemClick?.invoke(bean.id)
@@ -97,7 +100,14 @@ class MyProductsAdapter(var fragment: Fragment) : RecyclerView.Adapter<MyProduct
             tv_productName.text = bean.product_title
             tv_priceRange.text = price_range.toString()
 
-
+           when(product_type){
+               "active"->{
+                   btn_draftOrActive.setImageResource(R.mipmap.btn_draft_pros)
+               }
+               "draft"->{
+                   btn_draftOrActive.setImageResource(R.mipmap.btn_active_pros)
+               }
+           }
 
         }
     }

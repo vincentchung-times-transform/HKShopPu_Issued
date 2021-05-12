@@ -40,7 +40,7 @@ class MerchantsSoldFragment : Fragment() {
 
     var shopId: Int = 0
     lateinit var recyclerview_myProducts: RecyclerView
-    private val adapter = MyProductsAdapter(this)
+    private val adapter = MyProductsAdapter(this, "active")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

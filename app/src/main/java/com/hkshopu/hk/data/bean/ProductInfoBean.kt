@@ -115,6 +115,10 @@ class ProductInfoBean {
     @SerializedName("product_shipment_list")
     lateinit var product_shipment_list:  MutableList<ItemShippingFare_forGet>
 
+    @SerializedName("product_status")
+    var product_status:  String = ""
 
+    @SerializedName("sum_quantity")
+    var sum_quantity:  String = ""
 
 }

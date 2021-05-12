@@ -78,11 +78,17 @@ class ShopProductAdapter(var fragment: Fragment) : RecyclerView.Adapter<ShopProd
             MMKV_product_id = bean.id
             image.loadNovelCover(bean.pic_path)
             title.text = bean.product_title
-            price.text = bean.product_price.toString()
-            sold.text = "已賣出"+bean.sold_quantity
-            amount.text = "數量"+bean.quantity
-            heart.text = "讚"+bean.like
-            eye.text = "檢視"+bean.seen
+
+            if(bean.product_price.equals(-1)){
+                price.text = "${bean.min_price}-${bean.max_price}"
+            }else{
+                price.text = bean.product_price.toString()
+            }
+
+            sold.text = "已賣出"+bean.sold_quantity.toString()
+            amount.text = "數量"+bean.sum_quantity.toString()
+            heart.text = "讚"+bean.like.toString()
+            eye.text = "檢視"+bean.seen.toString()
 
         }
     }

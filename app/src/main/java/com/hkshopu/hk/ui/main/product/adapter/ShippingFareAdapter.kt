@@ -33,7 +33,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
     var mutableList_shipMethod = mutableListOf<ItemShippingFare>()
     var empty_item_num = 0
 
-    var MMKV_shop_id : Int =0
+    var MMKV_shop_id : Int =MMKV.mmkvWithID("http").getInt("ShopId", 0)
 
     inner class mViewHolder(itemView: View):RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
@@ -52,13 +52,12 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
 
 
         init {
-            MMKV_shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
 
             Thread(Runnable {
 
                 activity.runOnUiThread {
-
                     addEmptyItem()
+
                 }
 
             }).start()

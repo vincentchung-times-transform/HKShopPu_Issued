@@ -1012,6 +1012,15 @@ class AddInventoryAndPriceActivity : AppCompatActivity(), TextWatcher{
                     editText.setSelection(editText.text.toString().length)
                 }
 
+                if(editText.text.toString() == "" ){
+
+                    editText.setText("0")
+
+                }else{
+                    editText.setTextColor(resources.getColor(R.color.black))
+                    textView.setTextColor(resources.getColor(R.color.black))
+                }
+
             }
         }
         editText.addTextChangedListener(textWatcher)
@@ -1057,6 +1066,15 @@ class AddInventoryAndPriceActivity : AppCompatActivity(), TextWatcher{
                     editText.setText(editText.text.toString().replace("0", "", false))
                     editText.setSelection(editText.text.toString().length)
                 }
+
+                if(editText.text.toString() == "" ){
+
+                    editText.setText("0")
+
+                }else{
+                    editText.setTextColor(resources.getColor(R.color.black))
+                }
+
 
             }
         }

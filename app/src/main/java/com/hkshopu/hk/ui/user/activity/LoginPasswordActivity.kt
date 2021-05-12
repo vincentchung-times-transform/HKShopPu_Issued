@@ -83,32 +83,6 @@ class LoginPasswordActivity : BaseActivity(), TextWatcher {
     }
 
     private fun initVM() {
-        //Old Login Version
-//        VM.loginLiveData.observe(this, Observer {
-//            when (it?.status) {
-//                Status.Success -> {
-//
-//                    if (it.ret_val.toString() == "登入成功!") {
-//                        Toast.makeText(this, it.ret_val.toString(), Toast.LENGTH_SHORT ).show()
-//
-//                        var settings_rememberPassword: SharedPreferences = this.getSharedPreferences("rememberPassword", 0)
-//                        val editor : SharedPreferences.Editor = settings_rememberPassword.edit()
-//                        editor.apply {
-//                            putString("rememberPassword", "true")
-//                        }.apply()
-//
-//                        val intent = Intent(this, ShopmenuActivity::class.java)
-//                        startActivity(intent)
-//
-//                    }else {
-//                        Toast.makeText(this, it.ret_val.toString(), Toast.LENGTH_SHORT ).show()
-//                    }
-//
-//                }
-////                Status.Start -> showLoading()
-////                Status.Complete -> disLoading()
-//            }
-//        })
 
         VM.verifycodeLiveData.observe(this, Observer {
             when (it?.status) {

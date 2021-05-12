@@ -258,7 +258,7 @@
                             android:text="數量"
                             android:textSize="12sp" />
                         <TextView
-
+                            android:id="@+id/tv_quantity"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:textSize="12sp"
@@ -1405,7 +1405,7 @@
                             <TextView
                                 android:id="@+id/second_layer_item_quant09"
                                 android:layout_width="match_parent"
-                                android:layout_height="9dp"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:background="@color/white"
                                 android:textColor="@color/gray_txt"
@@ -1595,11 +1595,13 @@
                         android:layout_marginStart="4dp"
                         android:textColor="@color/hkshop_color"
                         android:text="@string/textView_more_time_to_stock"/>
+
                     <TextView
+                        android:id="@+id/tv_longestStockUpDays"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/hkshop_color"
-                        android:text="20"/>
+                        android:layout_height="match_parent"
+                        android:text="20"
+                        android:textColor="@color/hkshop_color" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

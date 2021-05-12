@@ -18,4 +18,7 @@ class MyProductBean {
     @SerializedName("pic_path")
     var pic_path: String= ""
 
+    @SerializedName("product_status")
+    var product_status: String = ""
+
 }

@@ -41,7 +41,7 @@ class MerchantsNoPopFragment : Fragment() {
     var shopId: Int = 0
 
     lateinit var recyclerview_myProducts: RecyclerView
-    private val adapter = MyProductsAdapter(this)
+    private val adapter = MyProductsAdapter(this, "draft")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

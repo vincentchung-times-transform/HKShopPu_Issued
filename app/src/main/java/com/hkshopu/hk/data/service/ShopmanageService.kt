@@ -34,4 +34,9 @@ interface ShopmanageService{
     fun syncShippingfare(@Path("id") id : Int, @Field("shipment_settings") shipment_settings : String) : Observable<BaseResponse<Any>>
 
 
+    @FormUrlEncoded
+    @POST("${ApiConstants.API_PATH}product/update_product_status_forAndroid/")
+    fun updateProductStatus(@Field("id") id : Int, @Field("status") status : String) : Observable<BaseResponse<Any>>
+
+
 }
