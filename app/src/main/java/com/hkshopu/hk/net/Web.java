@@ -2,6 +2,10 @@ package com.hkshopu.hk.net;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.cert.CertificateException;
@@ -390,4 +394,451 @@ public class Web {
 
     }
 
+    public void Delete_Data(String url) {
+
+        Request request = new Request.Builder().url(url).delete().build();
+
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+                response.close();
+                call.cancel();
+            }
+        });
+    }
+
+    public void Do_ShopBankAccountUpdate(String url,String code,String name,String account,String account_name) {
+        JSONObject jsonObject=new JSONObject();
+        JSONArray jsonArray=new JSONArray();
+        try {
+//            jsonObject.put("id",id);
+            jsonObject.put("code",code);
+            jsonObject.put("name",name);
+            jsonObject.put("account",account);
+            jsonObject.put("account_name",account_name);
+//            jsonObject.put("is_default","n");
+            jsonArray.put(jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        MultipartBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("bank_account_settings",jsonArray.toString())
+                .build();
+
+//        RequestBody requestBody = RequestBody.create(jsonObject.toString(),JSON);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
+            }
+        });
+    }
+
+
+
+    public void Do_ShopAddAddress(String url, final String address_name, String address_country_code,final String address_phone, String address_is_phone_show,final String address_area, String address_district,final String address_road, String address_number,final String address_other, String address_floor , String address_room) {
+        Log.d(TAG, "Do_ShopAdd Url ＝ " + url);
+//        ArrayList<String> shop_category_id = new ArrayList<>();
+//        shop_category_id.add(shop_category_id1);
+//        shop_category_id.add(shop_category_id2);
+//        shop_category_id.add(shop_category_id3);
+        MultipartBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+
+                .addFormDataPart("address_name", address_name)
+                .addFormDataPart("address_country_code", address_country_code)
+                .addFormDataPart("address_phone", address_phone)
+                .addFormDataPart("address_is_phone_show", address_is_phone_show)
+                .addFormDataPart("address_area", address_area)
+                .addFormDataPart("address_district", address_district)
+                .addFormDataPart("address_road", address_road)
+                .addFormDataPart("address_number", address_number)
+                .addFormDataPart("address_other", address_other)
+                .addFormDataPart("address_floor", address_floor)
+                .addFormDataPart("address_room", address_room)
+                .build();
+//        RequestBody requestBody = RequestBody.create(jsonObject.toString(),JSON);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+//        Log.d(TAG, "Request ＝ " + requestBody);
+//        Log.d(TAG, "Content ＝ " + bodyToString(request));
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+                response.close();
+                call.cancel();
+            }
+        });
+    }
+
+    public void Do_ShopBgUpdate(String url,String addressid,File postImg) {
+
+        RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), postImg);
+        MultipartBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("address_id",addressid)
+                .addFormDataPart("background_pic", postImg.getName(), fileBody)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
+            }
+        });
+    }
+
+    public void Patch_Data(String url) {
+        RequestBody formBody = new FormBody.Builder()
+                .build();
+
+        Request request = new Request.Builder().url(url).patch(formBody).build();
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+                response.close();
+                call.cancel();
+            }
+        });
+    }
+
+    public void Do_ShopEmailUpdate(String url,String addressid,String email,String is_email_show) {
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("address_id",addressid)
+                .add("shop_email", email)
+                .add("email_on", is_email_show)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
+            }
+        });
+    }
+
+    public void Do_ShopPhoneUpdate(String url,String addressid,String countrycode,String phone,String is_phone_show) {
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("address_id",addressid)
+                .add("address_country_code", countrycode)
+                .add("address_phone", phone)
+                .add("address_is_phone_show", is_phone_show)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
+            }
+        });
+    }
+
+    public void Do_ShopAddressDel(String url,ArrayList<String> addressid) {
+
+        JSONArray jsonArray=new JSONArray();
+        for(int i=0; i< addressid.size(); i++) {
+            jsonArray.put(addressid.get(i));
+
+        }
+        MultipartBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("address_ID",jsonArray.toString())
+                .build();
+
+//        RequestBody requestBody = RequestBody.create(jsonObject.toString(),JSON);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
+            }
+        });
+    }
+    public void Do_ShopAddressPreset(String url,int shopid,String presetid) {
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("shop_id",String.valueOf(shopid))
+                .add("shop_address_id", presetid)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
+            }
+        });
+    }
+
+    public void Do_ShopIconUpdate(String url,String addressid,File postImg) {
+
+        RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), postImg);
+        MultipartBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("address_id",addressid)
+                .addFormDataPart("shop_icon", postImg.getName(), fileBody)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
+            }
+        });
+    }
+
+    public void Do_ShopPicUpdate(String url,String addressid,File postImg) {
+
+        RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), postImg);
+        MultipartBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("address_id",addressid)
+                .addFormDataPart("shop_pic", postImg.getName(), fileBody)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
+            }
+        });
+    }
+    public void Do_ShopTitleUpdate(String url,String addressid,String shopTitle) {
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("address_id",addressid)
+                .add("shop_title", shopTitle)
+
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
+            }
+        });
+    }
+
+
+    public void Do_ShopFaceBookOnOff(String url,String addressid,String facebook_on) {
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("address_id",addressid)
+                .add("facebook_on", facebook_on)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
+            }
+        });
+    }
+
+    public void Do_ShopCategoryUpdate(String url,ArrayList<String> category_id_list) {
+        JSONArray jsonArray=new JSONArray();
+        for(int i=0; i< category_id_list.size(); i++) {
+            jsonArray.put(Integer.parseInt(category_id_list.get(i)));
+
+            Log.d(TAG, "category_id_list ＝ " + category_id_list.get(i));
+        }
+        MultipartBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("shop_category_id",jsonArray.toString())
+                .build();
+
+//        RequestBody requestBody = RequestBody.create(jsonObject.toString(),JSON);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
+            }
+        });
+    }
 }

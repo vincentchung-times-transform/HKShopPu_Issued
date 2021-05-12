@@ -34,6 +34,7 @@ import com.hkshopu.hk.net.WebListener
 import com.hkshopu.hk.ui.main.product.adapter.PicsAdapter
 import com.hkshopu.hk.ui.main.product.adapter.ShippingFareCheckedAdapter
 import com.hkshopu.hk.ui.main.product.fragment.StoreOrNotDialogFragment
+import com.hkshopu.hk.ui.main.store.activity.ShopmenuActivity
 import com.hkshopu.hk.ui.user.vm.ShopVModel
 import com.hkshopu.hk.widget.view.KeyboardUtil
 import com.tencent.mmkv.MMKV
@@ -1439,8 +1440,11 @@ class EditProductActivity : BaseActivity() {
                                 "產品上架成功!",
                                 Toast.LENGTH_SHORT
                             ).show()
+
                         }
-                        
+
+
+
 
 //                        var user_id: Int = json.getInt("user_id")
 //                        var shop_id:Int = json.getInt("shop_id")

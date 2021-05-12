@@ -17,6 +17,7 @@ android {
         versionName "0.1"
 
 
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         Properties properties = new Properties()
         if (rootProject.file("local.properties").exists()) {
@@ -73,8 +74,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.0'
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.maps.android:maps-ktx:2.4.0'
 
@@ -109,7 +110,7 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:3.0.1'  //高斯模糊
 
 
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.recyclerview:recyclerview:1.2.0"
     // For control over item selection of both touch and mouse driven selection
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 

@@ -34,7 +34,12 @@ class AccountSetupActivity : BaseActivity() {
             startActivity(intent)
         }
         binding.ivChevronShopAddress.setOnClickListener {
-
+            val intent = Intent(this, ShopAddressListActivity::class.java)
+            startActivity(intent)
+        }
+        binding.ivChevronShopBankaccount.setOnClickListener {
+            val intent = Intent(this, BankListActivity::class.java)
+            startActivity(intent)
         }
         binding.ivChevronSetupNotify.setOnClickListener {
 

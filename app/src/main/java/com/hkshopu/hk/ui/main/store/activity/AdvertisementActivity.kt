@@ -19,6 +19,7 @@ class AdvertisementActivity : BaseActivity() {
 
         initVM()
         initClick()
+
     }
 
     private fun initVM() {

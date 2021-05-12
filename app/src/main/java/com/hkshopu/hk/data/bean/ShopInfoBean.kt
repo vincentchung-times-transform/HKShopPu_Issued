@@ -21,50 +21,21 @@ class ShopInfoBean {
     @SerializedName("shop_description")
     var shop_description: String= ""
 
-    @SerializedName("bank_code")
-    var bank_code: String= ""
+    @SerializedName("background_pic")
+    var background_pic: String= ""
+    @SerializedName("shop_email")
+    var shop_email: String= ""
+    @SerializedName("email_on")
+    var email_on: String= ""
 
-    @SerializedName("bank_name")
-    var bank_name: String= ""
+    @SerializedName("long_description")
+    var long_description: String= ""
 
-    @SerializedName("bank_account")
-    var bank_account: String= ""
+    @SerializedName("facebook_on")
+    var facebook_on: String= ""
 
-    @SerializedName("bank_account_name")
-    var bank_account_name: String= ""
-
-    @SerializedName("address_name")
-    var address_name: String= ""
-
-    @SerializedName("address_country_code")
-    var address_country_code: String= ""
-
-    @SerializedName("address_phone")
-    var address_phone: String= ""
-
-    @SerializedName("address_is_phone_show")
-    var address_is_phone_show: String= ""
-
-    @SerializedName("address_area")
-    var address_area: String= ""
-
-    @SerializedName("address_district")
-    var address_district: String= ""
-
-    @SerializedName("address_road")
-    var address_road: String= ""
-
-    @SerializedName("address_number")
-    var address_number: String= ""
-
-    @SerializedName("address_other")
-    var address_other: String= ""
-
-    @SerializedName("address_floor")
-    var address_floor: String= ""
-
-    @SerializedName("address_room")
-    var address_room: String= ""
+    @SerializedName("instagram_on")
+    var instagram_on: String= ""
 
     @SerializedName("product_count")
     var product_count: Int = 0

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.hkshopu.hk.Base.BaseActivity
 import com.hkshopu.hk.R
 import com.hkshopu.hk.component.CommonVariable
+import com.hkshopu.hk.component.EventChangeShopCategory
 import com.hkshopu.hk.component.EventShopCatSelected
 import com.hkshopu.hk.data.bean.ShopCategoryBean
 import com.hkshopu.hk.databinding.ActivityShopcategoryBinding
@@ -20,12 +21,13 @@ class ShopCategoryActivity : BaseActivity() {
 
     private val VM = ShopVModel()
     private val adapter = CategoryMultiAdapter()
-
+    var toShopFunction:Boolean = false
     val list = ArrayList<ShopCategoryBean>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityShopcategoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        toShopFunction = intent.getBundleExtra("bundle")!!.getBoolean("toShopFunction")
         initView()
         initRecyclerView()
         initVM()
@@ -108,7 +110,13 @@ class ShopCategoryActivity : BaseActivity() {
             finish()
         }
         binding.tvSelected.setOnClickListener {
-            RxBus.getInstance().post(EventShopCatSelected(list))
+
+            if(toShopFunction){
+                RxBus.getInstance().post(EventChangeShopCategory(list))
+            }else {
+                RxBus.getInstance().post(EventShopCatSelected(list))
+
+            }
             finish()
         }
 

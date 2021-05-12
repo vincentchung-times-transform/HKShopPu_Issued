@@ -186,8 +186,20 @@ class LoginActivity : BaseActivity(), TextWatcher {
         binding.btnNextStep.setOnClickListener {
 
             email = binding.editEmail.text.toString()
+            val editor : SharedPreferences.Editor = settings_rememberEmail.edit()
+            editor.apply {
+                putString("rememberEmail", "true")
+            }.apply()
+
+
+            settings.edit().apply {
+                putString("email", email)
+            }.apply()
+
+            val intent = Intent(this, LoginPasswordActivity::class.java)
+            startActivity(intent)
 //            val password = binding.password1.text.toString()
-            VM.login(this, email, "checkfortheemail")
+//            VM.login(this, email, "checkfortheemail")
 
         }
 

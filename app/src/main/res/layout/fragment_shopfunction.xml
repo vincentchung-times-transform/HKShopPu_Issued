@@ -381,6 +381,55 @@
             android:text="@string/textView_more" />
     </RelativeLayout>
 
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colordivideline" />
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="52dp">
+
+        <ImageView
+            android:id="@+id/iv_shoppreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="38dp"
+            android:src="@mipmap/ic_storepreview"
+            android:contentDescription="@string/empty"/>
+
+        <TextView
+            android:id="@+id/tv_shoppreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@id/iv_shoppreview"
+            android:text="@string/shoppreview" />
+
+        <ImageView
+            android:id="@+id/iv_chevron_shoppreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="35dp"
+            android:src="@mipmap/ic_chevron" />
+
+        <TextView
+            android:id="@+id/tv_more_shoppreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="50dp"
+            android:layout_toStartOf="@id/iv_chevron_shoppreview"
+            android:text="@string/textView_more" />
+    </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -524,51 +573,4 @@
             android:text="@string/textView_more" />
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colordivideline" />
-
-    <RelativeLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="52dp">
-
-        <ImageView
-            android:id="@+id/iv_shoppreview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="38dp"
-            android:src="@mipmap/ic_storepreview"
-            android:contentDescription="@string/empty"/>
-
-        <TextView
-            android:id="@+id/tv_shoppreview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="12dp"
-            android:layout_toEndOf="@id/iv_shoppreview"
-            android:text="@string/shoppreview" />
-
-        <ImageView
-            android:id="@+id/iv_chevron_shoppreview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="35dp"
-            android:src="@mipmap/ic_chevron" />
-
-        <TextView
-            android:id="@+id/tv_more_shoppreview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="50dp"
-            android:layout_toStartOf="@id/iv_chevron_shoppreview"
-            android:text="@string/textView_more" />
-    </RelativeLayout>
 </LinearLayout>

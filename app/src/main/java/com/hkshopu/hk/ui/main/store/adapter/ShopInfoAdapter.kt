@@ -13,7 +13,7 @@ import com.hkshopu.hk.utils.extension.inflate
 import com.hkshopu.hk.utils.extension.loadNovelCover
 import com.hkshopu.hk.widget.view.click
 import com.kaelli.niceratingbar.NiceRatingBar
-import com.tencent.mmkv.MMKV
+
 
 
 import org.jetbrains.anko.find
@@ -22,7 +22,6 @@ import java.util.*
 class ShopInfoAdapter : RecyclerView.Adapter<ShopInfoAdapter.ShopInfoLinearHolder>(){
     private var mData: ArrayList<ShopListBean> = ArrayList()
     var itemClick : ((id: Int) -> Unit)? = null
-
 
     fun setData(list : ArrayList<ShopListBean>){
         list?:return
@@ -47,7 +46,6 @@ class ShopInfoAdapter : RecyclerView.Adapter<ShopInfoAdapter.ShopInfoLinearHolde
     override fun onBindViewHolder(holder: ShopInfoLinearHolder, position: Int) {
         val item = mData.get(position)
         holder.bindShop(item)
-
     }
 
     inner class ShopInfoLinearHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -63,7 +61,6 @@ class ShopInfoAdapter : RecyclerView.Adapter<ShopInfoAdapter.ShopInfoLinearHolde
             container.click {
                 itemClick?.invoke(bean.id)
             }
-
             image.loadNovelCover(bean.shop_icon)
             title.text = bean.shop_title
             merchantNums .text = bean.product_count
