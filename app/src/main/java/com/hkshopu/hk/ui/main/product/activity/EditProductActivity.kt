@@ -24,8 +24,11 @@ import com.google.gson.reflect.TypeToken
 import com.hkshopu.hk.Base.BaseActivity
 import com.hkshopu.hk.Base.response.Status
 import com.hkshopu.hk.R
+import com.hkshopu.hk.component.EventChangeShopEmailSuccess
+import com.hkshopu.hk.component.EventdeleverFragmentAfterUpdateStatus
 import com.hkshopu.hk.data.bean.*
 import com.hkshopu.hk.databinding.ActivityAddNewProductBinding
+import com.hkshopu.hk.databinding.ActivityEditProductBinding
 import com.hkshopu.hk.net.ApiConstants
 import com.hkshopu.hk.net.GsonProvider
 import com.hkshopu.hk.net.GsonProvider.gson
@@ -36,6 +39,7 @@ import com.hkshopu.hk.ui.main.product.adapter.ShippingFareCheckedAdapter
 import com.hkshopu.hk.ui.main.product.fragment.StoreOrNotDialogFragment
 import com.hkshopu.hk.ui.main.store.activity.ShopmenuActivity
 import com.hkshopu.hk.ui.user.vm.ShopVModel
+import com.hkshopu.hk.utils.rxjava.RxBus
 import com.hkshopu.hk.widget.view.KeyboardUtil
 import com.tencent.mmkv.MMKV
 import com.zilchzz.library.widgets.EasySwitcher
@@ -54,11 +58,10 @@ import kotlin.collections.ArrayList
 
 class EditProductActivity : BaseActivity() {
 
-    private lateinit var binding: ActivityAddNewProductBinding
+    private lateinit var binding: ActivityEditProductBinding
     private val VM = ShopVModel()
     val mAdapters_shippingFareChecked = ShippingFareCheckedAdapter()
     val REQUEST_EXTERNAL_STORAGE = 100
-
 
     //從本地端選取圖片轉換為bitmap後存的list
     var mutableList_pics = mutableListOf<ItemPics>()
@@ -102,7 +105,7 @@ class EditProductActivity : BaseActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddNewProductBinding.inflate(layoutInflater)
+        binding = ActivityEditProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         MMKV_user_id = MMKV.mmkvWithID("http").getInt("UserId", 0)
@@ -116,12 +119,12 @@ class EditProductActivity : BaseActivity() {
             getProductInfo(MMKV_product_id)
         }
 
-
         try{
-            Thread.sleep(800)
+            Thread.sleep(5000)
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
+
 
         initVM()
         initView()
@@ -1225,6 +1228,8 @@ class EditProductActivity : BaseActivity() {
                                 }
                             }
 
+                            RxBus.getInstance().post(EventdeleverFragmentAfterUpdateStatus("action"))
+
                             finish()
 
                         } else {
@@ -1309,24 +1314,24 @@ class EditProductActivity : BaseActivity() {
                     Log.d("doUpdateProduct", "返回資料 resStr：" + resStr)
                     Log.d("doUpdateProduct", "返回資料 ret_val：" + json.get("ret_val"))
                     val ret_val = json.get("ret_val")
-                    if (ret_val.equals("產品新增成功!")) {
+                    if (ret_val.equals("商品更新成功!")) {
 
-                        runOnUiThread {
-                            Toast.makeText(
-                                this@EditProductActivity,
-                                "產品上架成功!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                        }
-
-                        finish()
-
-                    } else {
                         runOnUiThread {
                             Toast.makeText(
                                 this@EditProductActivity,
                                 ret_val.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        RxBus.getInstance().post(EventdeleverFragmentAfterUpdateStatus("action"))
+                        finish()
+
+                    }else{
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@EditProductActivity,
+                                "yes",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -1380,8 +1385,8 @@ class EditProductActivity : BaseActivity() {
                 try {
                     resStr = response.body()!!.string()
                     val json = JSONObject(resStr)
-                    Log.d("getProductInfo", "返回資料 resStr：" + resStr)
-                    Log.d("getProductInfo", "返回資料 ret_val：" + json.get("ret_val"))
+                    Log.d("mutableList_pics", "返回資料 resStr：" + resStr)
+                    Log.d("mutableList_pics", "返回資料 ret_val：" + json.get("ret_val"))
                     val ret_val = json.get("ret_val")
                     if (ret_val.equals("已取得商品資訊!")) {
 
@@ -1397,9 +1402,8 @@ class EditProductActivity : BaseActivity() {
                         }
 
                         Log.d("getProductInfo", "返回資料 productInfoList：" + productInfoList.toString())
-                        Log.d("mutableList_pics", "mutableList_pics : ${mutableList_pics}")
 
-
+                        //Pictures
                         MMKV.mmkvWithID("addPro").putInt("value_pics_size", productInfoList.pic_path.size)
 
                         for(i in 0..productInfoList.pic_path.size-1){
@@ -1417,6 +1421,8 @@ class EditProductActivity : BaseActivity() {
                             MMKV.mmkvWithID("addPro").putString("value_pic${i}", encodedImage)
                         }
 
+
+                        //Others
                         MMKV.mmkvWithID("addPro").putString("value_editTextEntryProductName", productInfoList.product_title.toString())
                         MMKV.mmkvWithID("addPro").putString("value_editTextEntryProductDiscription", productInfoList.product_description.toString())
                         MMKV.mmkvWithID("addPro").putString("product_category_id", productInfoList.product_category_id.toString())
@@ -1439,6 +1445,7 @@ class EditProductActivity : BaseActivity() {
                         MMKV.mmkvWithID("addPro").putString("value_editTextMerchanQunt", productInfoList.quantity.toString())
                         MMKV.mmkvWithID("addPro").putInt("inven_datas_size", 0)
                         MMKV.mmkvWithID("addPro").putString("product_status",  productInfoList.product_status.toString())
+
 
                         //EditShippingFareActivity
                         MMKV.mmkvWithID("addPro").putString("fare_datas_size", productInfoList.product_shipment_list.size.toString())
@@ -1464,37 +1471,37 @@ class EditProductActivity : BaseActivity() {
                             MMKV.mmkvWithID("addPro").putString("value_fare_item_filtered${i}",json_shippingItem)
                         }
 
+                        if(  productInfoList.spec_desc_1.size.equals(0)){
 
+                        }else{
 
-                        //EditProductSpecificationMainActivity
-                        MMKV.mmkvWithID("addPro").putString(
-                            "value_editTextProductSpecFirst",
-                            productInfoList.spec_desc_1.get(0)
-                        )
-                        MMKV.mmkvWithID("addPro").putString(
-                            "value_editTextProductSpecSecond",
-                            productInfoList.spec_desc_2.get(0)
-                        )
+                            //EditProductSpecificationMainActivity
+                            MMKV.mmkvWithID("addPro").putString(
+                                "value_editTextProductSpecFirst",
+                                productInfoList.spec_desc_1.get(0)
+                            )
+                            MMKV.mmkvWithID("addPro").putString(
+                                "value_editTextProductSpecSecond",
+                                productInfoList.spec_desc_2.get(0)
+                            )
 
-                        var mutableSet_spec_dec_1_items: MutableSet<String> =
-                            productInfoList.spec_dec_1_items.toMutableSet()
-                        var mutableSet_spec_dec_2_items: MutableSet<String> =
-                            productInfoList.spec_dec_2_items.toMutableSet()
-                        var mutableList_spec_dec_1_items: MutableList<String> =
-                            mutableSet_spec_dec_1_items.toMutableList()
-                        var mutableList_spec_dec_2_items: MutableList<String> =
-                            mutableSet_spec_dec_2_items.toMutableList()
+                            var mutableSet_spec_dec_1_items: MutableSet<String> =
+                                productInfoList.spec_dec_1_items.toMutableSet()
+                            var mutableSet_spec_dec_2_items: MutableSet<String> =
+                                productInfoList.spec_dec_2_items.toMutableSet()
+                            var mutableList_spec_dec_1_items: MutableList<String> =
+                                mutableSet_spec_dec_1_items.toMutableList()
+                            var mutableList_spec_dec_2_items: MutableList<String> =
+                                mutableSet_spec_dec_2_items.toMutableList()
 
-                        MMKV.mmkvWithID("addPro").putString(
-                            "datas_spec_size",
-                            mutableSet_spec_dec_1_items.size.toString()
-                        )
-                        MMKV.mmkvWithID("addPro").putString(
-                            "datas_size_size",
-                            mutableSet_spec_dec_2_items.size.toString()
-                        )
-
-                        Thread(Runnable {
+                            MMKV.mmkvWithID("addPro").putString(
+                                "datas_spec_size",
+                                mutableSet_spec_dec_1_items.size.toString()
+                            )
+                            MMKV.mmkvWithID("addPro").putString(
+                                "datas_size_size",
+                                mutableSet_spec_dec_2_items.size.toString()
+                            )
 
                             for (i in 0..mutableSet_spec_dec_1_items.size - 1) {
                                 MMKV.mmkvWithID("addPro").putString(
@@ -1503,10 +1510,6 @@ class EditProductActivity : BaseActivity() {
                                 )
                             }
 
-                        }).start()
-
-
-                        Thread(Runnable {
 
                             for (i in 0..mutableSet_spec_dec_2_items.size - 1) {
                                 MMKV.mmkvWithID("addPro").putString(
@@ -1515,45 +1518,37 @@ class EditProductActivity : BaseActivity() {
                                 )
                             }
 
-                            runOnUiThread {
 
-                            }
+                            //EditProductSpecificationMainActivity
 
-                        }).start()
-
-                        //EditProductSpecificationMainActivity
-                        Thread(Runnable {
-
-                            for(i in 0..mutableSet_spec_dec_1_items.size -1){
-                                MMKV.mmkvWithID("addPro").putString("datas_spec_item${i}", mutableList_spec_dec_1_items.get(i))
-                            }
-
-                        }).start()
-
-
-                        Thread(Runnable {
-
-                            for(i in 0..mutableSet_spec_dec_2_items.size-1){
-                                MMKV.mmkvWithID("addPro").putString("datas_size_item${i}", mutableList_spec_dec_2_items.get(i))
-                            }
+//                            for(i in 0..mutableSet_spec_dec_1_items.size -1){
+//                                MMKV.mmkvWithID("addPro").putString("datas_spec_item${i}", mutableList_spec_dec_1_items.get(i))
+//                            }
+//
+//
+//                            for(i in 0..mutableSet_spec_dec_2_items.size-1){
+//                                MMKV.mmkvWithID("addPro").putString("datas_size_item${i}",
+//                                    mutableList_spec_dec_2_items.get(i)
+//                                )
+//                            }
 
                             runOnUiThread {
 
                             }
 
-                        }).start()
-
-
+                        }
 
                     }else{
                     }
 
                 } catch (e: JSONException) {
+                    Log.d("dfojdidj", e.toString())
 
-                    Log.d("jaisogj", "JSONException : "+ e.toString())
                 } catch (e: IOException) {
                     e.printStackTrace()
-                    Log.d("jaisogj", "IOException : " + e.toString())
+
+                    Log.d("dfojdidj", e.toString())
+
                 }
             }
 

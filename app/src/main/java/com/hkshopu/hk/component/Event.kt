@@ -1,5 +1,6 @@
 package com.hkshopu.hk.component
 
+import androidx.fragment.app.Fragment
 import com.hkshopu.hk.data.bean.ProductCategoryBean
 import com.hkshopu.hk.data.bean.ShopBankAccountBean
 import com.hkshopu.hk.data.bean.ShopCategoryBean
@@ -28,6 +29,7 @@ class EventGetBankAccountSuccess(val list: ArrayList<ShopBankAccountBean>)
 //Add Product Events
 class EventProductCatSelected(val selectrdId: Int = 1, var c_product_category: String)
 class EventProductCatLastPostion(val postion: Int = 1)
+class EventdeleverFragmentAfterUpdateStatus(val action : String)
 
 //Other Events (Not Used)
 

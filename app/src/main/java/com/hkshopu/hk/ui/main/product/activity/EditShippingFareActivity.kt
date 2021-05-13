@@ -187,7 +187,7 @@ class EditShippingFareActivity : AppCompatActivity(){
 
         binding.btnShippingFareStore.setOnClickListener {
 
-            val intent = Intent(this, AddNewProductActivity::class.java)
+            val intent = Intent(this, EditProductActivity::class.java)
             var datas_ship_method_and_fare : MutableList<ItemShippingFare> = mAdapters_shippingFare.get_shipping_method_datas()
 
             MMKV_weight = binding.editPackageWeight.text.toString()

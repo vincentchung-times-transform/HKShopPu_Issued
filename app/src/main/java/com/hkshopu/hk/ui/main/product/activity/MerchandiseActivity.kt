@@ -84,6 +84,11 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
     fun initClick() {
 
+        binding.titleBackAddshop.setOnClickListener {
+            MMKV.mmkvWithID("addPro").clearAll()
+            finish()
+        }
+
         binding.btnEditmerchandise.setOnClickListener {
 
             EditProductRemindDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
@@ -772,5 +777,11 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
         )
 
     }
+
+    override fun onBackPressed() {
+        MMKV.mmkvWithID("addPro").clearAll()
+        finish()
+    }
+
 
 }

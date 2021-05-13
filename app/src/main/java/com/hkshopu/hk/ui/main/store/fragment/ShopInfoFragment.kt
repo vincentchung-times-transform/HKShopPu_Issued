@@ -236,12 +236,15 @@ class ShopInfoFragment : Fragment(R.layout.fragment_shopinfo) {
                             binding!!.ivShopImg.loadNovelCover(list[0].shop_icon)
                             MMKV.mmkvWithID("http").putString("shoptitle", list[0].shop_title)
                                 .putString("description",list[0].long_description)
-                            if(list[0].email_on.equals("Y")){
-                                MMKV.mmkvWithID("http").putString("email_on", list[0].email_on)
-                                    .putString("shop_email",list[0].shop_email)
+                            list[0].email_on ?. let {
+                                if (list[0].email_on.equals("Y")) {
+                                    MMKV.mmkvWithID("http").putString("email_on", list[0].email_on)
+                                        .putString("shop_email", list[0].shop_email)
+                                }
+                                null // finally returns null
+                            } ?: let {
+
                             }
-
-
                         }
 
 

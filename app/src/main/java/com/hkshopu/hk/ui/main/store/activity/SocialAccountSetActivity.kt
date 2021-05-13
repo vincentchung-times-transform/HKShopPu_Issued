@@ -126,7 +126,10 @@ class SocialAccountSetActivity : BaseActivity() {
                     val ret_val = json.get("ret_val")
                     val status = json.get("status")
                     if (status == 0) {
-                        Toast.makeText(this@SocialAccountSetActivity, ret_val.toString(), Toast.LENGTH_SHORT).show()
+                        runOnUiThread {
+
+                            Toast.makeText(this@SocialAccountSetActivity, ret_val.toString(), Toast.LENGTH_SHORT).show()
+                        }
                         finish()
                     } else {
                         runOnUiThread {

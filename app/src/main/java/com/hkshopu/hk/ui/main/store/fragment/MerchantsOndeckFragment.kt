@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.hkshopu.hk.R
 import com.hkshopu.hk.component.EventProductSearch
+import com.hkshopu.hk.component.EventdeleverFragmentAfterUpdateStatus
 import com.hkshopu.hk.data.bean.MyProductBean
 import com.hkshopu.hk.net.ApiConstants
 import com.hkshopu.hk.net.Web
@@ -156,12 +157,18 @@ class MerchantsOndeckFragment: Fragment() {
                             keyword = "none"
                         }
 
-
                         getMyProductsList(shopId.toString(), keyword, "active", "1")
 
+                    }
 
+                    is EventdeleverFragmentAfterUpdateStatus -> {
+                        var action = it.action
+
+                        getMyProductsList(shopId.toString(), "none", "active", "1")
+                        adapter.notifyDataSetChanged()
 
                     }
+
 
                 }
             }, {

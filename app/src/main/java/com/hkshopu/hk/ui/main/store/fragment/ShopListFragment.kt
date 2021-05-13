@@ -150,7 +150,6 @@ class ShopListFragment : Fragment(R.layout.fragment_shoplist){
                             initRecyclerView()
                             binding!!.container2.visibility = View.VISIBLE
                             binding!!.tvAddonlineshop2.visibility = View.VISIBLE
-
                         }
 
 

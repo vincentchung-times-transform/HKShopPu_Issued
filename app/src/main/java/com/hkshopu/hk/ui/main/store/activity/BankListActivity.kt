@@ -51,6 +51,7 @@ class BankListActivity : BaseActivity() {
     val shopId = MMKV.mmkvWithID("http").getInt("ShopId", 0)
     var url = ApiConstants.API_HOST + "/shop/" + shopId + "/bankAccount/"
     var cancelurl:String = ""
+    lateinit var list : ArrayList<ShopBankAccountBean>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBankaccountlistBinding.inflate(layoutInflater)
@@ -96,7 +97,7 @@ class BankListActivity : BaseActivity() {
         val web = Web(object : WebListener {
             override fun onResponse(response: Response) {
                 var resStr: String? = ""
-                val list = ArrayList<ShopBankAccountBean>()
+                list = ArrayList<ShopBankAccountBean>()
                 list.clear()
 
                 try {
@@ -151,16 +152,24 @@ class BankListActivity : BaseActivity() {
 
         binding.tvEdit.setOnClickListener {
 
+
             if(binding.tvEdit.text.equals("編輯")){
                 binding.tvEdit.text = "完成"
                 binding.tvEdit.textColor = Color.parseColor("#1DBCCF")
-                adapter.updateData(true)
+
+                if(list.size>1) {
+                    adapter.updateData(true)
+                }
             }else{
                 binding.tvEdit.text = "編輯"
                 binding.tvEdit.textColor = Color.parseColor("#8E8E93")
                 adapter.updateData(false)
-                doShopBankDel(cancelurl)
+                if(cancelurl.isNotEmpty()){
+                    doShopBankDel(cancelurl)
+                }
             }
+
+
         }
 //
 //        btn_Signup.setOnClickListener {

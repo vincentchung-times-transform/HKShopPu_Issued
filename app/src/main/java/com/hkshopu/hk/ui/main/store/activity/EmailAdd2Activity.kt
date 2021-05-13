@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 
 import com.hkshopu.hk.Base.BaseActivity
+import com.hkshopu.hk.component.EventChangeShopEmailSuccess
 import com.hkshopu.hk.component.EventChangeShopPhoneSuccess
 
 import com.hkshopu.hk.databinding.*
@@ -116,9 +117,7 @@ class EmailAdd2Activity : BaseActivity(){
                     val ret_val = json.get("ret_val")
                     val status = json.get("status")
                     if (status == 0) {
-                        if(is_email_show.equals("Y")) {
-                            RxBus.getInstance().post(EventChangeShopPhoneSuccess(email))
-                        }
+                        RxBus.getInstance().post(EventChangeShopEmailSuccess(email))
                         finish()
                     } else {
                         runOnUiThread {

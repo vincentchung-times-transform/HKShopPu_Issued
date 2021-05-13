@@ -55,7 +55,7 @@ class ShopmenuActivity : BaseActivity(), ViewPager.OnPageChangeListener {
         fragments.add(SecondFragment)
         fragments.add(ShopListFragment)
         binding.viewPager.adapter =
-            object : FragmentPagerAdapter(manager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+            object : FragmentPagerAdapter(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
                 override fun getItem(position: Int) = fragments[position]
                 override fun getCount() = fragments.size
             }
@@ -120,10 +120,6 @@ class ShopmenuActivity : BaseActivity(), ViewPager.OnPageChangeListener {
             }
         })
         web.Get_Data(url)
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {

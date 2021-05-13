@@ -6,16 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.hkshopu.hk.Base.response.Status
 import com.hkshopu.hk.R
+import com.hkshopu.hk.component.EventdeleverFragmentAfterUpdateStatus
 import com.hkshopu.hk.data.bean.MyProductBean
 
 import com.hkshopu.hk.ui.main.product.activity.EditProductActivity
 import com.hkshopu.hk.ui.main.product.activity.MerchandiseActivity
 import com.hkshopu.hk.ui.main.store.fragment.MerchantsOndeckFragment
+import com.hkshopu.hk.ui.user.vm.ShopVModel
 import com.hkshopu.hk.utils.extension.inflate
 import com.hkshopu.hk.utils.extension.loadNovelCover
+import com.hkshopu.hk.utils.rxjava.RxBus
 import com.tencent.mmkv.MMKV
 
 
@@ -27,6 +32,7 @@ class MyProductsAdapter(var fragment: Fragment, var product_type: String) : Recy
     var itemClick : ((id: Int) -> Unit)? = null
 
     var MMKV_product_id: Int = 1
+    var VM = ShopVModel()
 
     fun setData(list : ArrayList<MyProductBean>){
         list?:return
@@ -54,6 +60,8 @@ class MyProductsAdapter(var fragment: Fragment, var product_type: String) : Recy
 
         holder.itemView.setOnClickListener{
 
+            MMKV_product_id = mData.get(holder.adapterPosition).id
+
             MMKV.mmkvWithID("http").putInt("ProductId", MMKV_product_id)
 
             val intent = Intent(fragment.context, MerchandiseActivity::class.java)
@@ -61,6 +69,8 @@ class MyProductsAdapter(var fragment: Fragment, var product_type: String) : Recy
         }
 
         holder.btn_edit_pro.setOnClickListener {
+
+            MMKV_product_id = mData.get(holder.adapterPosition).id
 
             MMKV.mmkvWithID("http").putInt("ProductId", MMKV_product_id)
 
@@ -70,6 +80,21 @@ class MyProductsAdapter(var fragment: Fragment, var product_type: String) : Recy
         }
         holder.btn_draftOrActive.setOnClickListener {
 
+            MMKV_product_id = mData.get(holder.adapterPosition).id
+
+            when(product_type){
+                "active"->{
+                    VM.updateProductStatus(fragment, MMKV_product_id, "draft")
+
+
+                }
+                "draft"->{
+                    VM.updateProductStatus(fragment, MMKV_product_id, "active")
+
+                }
+            }
+
+            RxBus.getInstance().post(EventdeleverFragmentAfterUpdateStatus("action"))
 
         }
 
@@ -92,7 +117,7 @@ class MyProductsAdapter(var fragment: Fragment, var product_type: String) : Recy
 //                itemClick?.invoke(bean.id)
 //            }
 
-            MMKV_product_id = bean.id
+//            MMKV_product_id = bean.id
 
             var price_range = "${bean.min_price}-${bean.max_price}"
 
@@ -110,7 +135,9 @@ class MyProductsAdapter(var fragment: Fragment, var product_type: String) : Recy
            }
 
         }
+
     }
+
 
 
 

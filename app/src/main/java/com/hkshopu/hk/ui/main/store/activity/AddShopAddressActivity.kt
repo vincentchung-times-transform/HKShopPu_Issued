@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.support.v4.media.MediaBrowserCompat
 import android.util.Base64
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
@@ -14,11 +15,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import com.hkshopu.hk.Base.BaseActivity
+import com.hkshopu.hk.component.EventAddShopSuccess
 import com.hkshopu.hk.databinding.*
 import com.hkshopu.hk.net.ApiConstants
 import com.hkshopu.hk.net.Web
 import com.hkshopu.hk.net.WebListener
 import com.hkshopu.hk.ui.user.vm.AuthVModel
+import com.hkshopu.hk.utils.rxjava.RxBus
 import com.hkshopu.hk.widget.view.KeyboardUtil
 import com.tencent.mmkv.MMKV
 import okhttp3.Response
@@ -217,6 +220,7 @@ class AddShopAddressActivity : BaseActivity(){
     ) {
         val url = ApiConstants.API_HOST+"/shop/save/"
         val editor = settings.edit()
+        editor.clear()
         val web = Web(object : WebListener {
             override fun onResponse(response: Response) {
                 var resStr: String? = ""
@@ -226,18 +230,26 @@ class AddShopAddressActivity : BaseActivity(){
                     Log.d("AddShopAddressActivity", "返回資料 resStr：" + resStr)
                     Log.d("AddShopAddressActivity", "返回資料 ret_val：" + json.get("ret_val"))
                     val ret_val = json.get("ret_val")
-                    if (ret_val.equals("商店與選擇商店分類新增成功!")) {
-                        var user_id: Int = json.getInt("user_id")
+                    val status = json.get("status")
+                    if (status == 0) {
+                        RxBus.getInstance().post(EventAddShopSuccess())
                         var shop_id: Int = json.getInt("shop_id")
-                        MMKV.mmkvWithID("http").putInt("UserId", user_id)
-                        MMKV.mmkvWithID("http").putInt("ShopId", shop_id)
-                        editor.clear()
+//                        MMKV.mmkvWithID("http").putInt("ShopId", shop_id)
                         val intent = Intent(
                             this@AddShopAddressActivity,
                             ShopmenuActivity::class.java
                         )
                         startActivity(intent)
                         finish()
+//                        runOnUiThread {
+//
+//                            Toast.makeText(
+//                                this@AddShopAddressActivity,
+//                                ret_val.toString(),
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
+
                     } else {
                         runOnUiThread {
                             Toast.makeText(

@@ -1,5 +1,6 @@
 package com.hkshopu.hk.ui.main.store.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,12 +13,14 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.hkshopu.hk.R
+import com.hkshopu.hk.component.EventAddShopBriefSuccess
 import com.hkshopu.hk.data.bean.ProductInfoBean
 
 import com.hkshopu.hk.data.bean.ShopProductBean
@@ -95,8 +98,48 @@ class MyStoreFragment : Fragment() {
         newProduct_null = v.find<RelativeLayout>(R.id.layout_new_product)
         newProduct = v.find<RecyclerView>(R.id.recyclerview_newproduct)
 
+        initView()
+        initEvent()
+
         return v
     }
+
+    private fun initView(){
+        val description = MMKV.mmkvWithID("http").getString("description","")
+        Log.d(
+            "MyStoreFragment",
+            "資料 description：" + description
+        )
+        if(description!!.length > 0 ){
+            storeBrief.visibility = View.VISIBLE
+            shopBrief.text = description
+
+        }else{
+            addShopBrief.visibility = View.VISIBLE
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    fun initEvent() {
+        RxBus.getInstance().toMainThreadObservable(activity!!, Lifecycle.Event.ON_DESTROY)
+            .subscribe({
+                when (it) {
+                    is EventAddShopBriefSuccess -> {
+                        addShopBrief.visibility = View.INVISIBLE
+                        storeBrief.visibility = View.VISIBLE
+                        shopBrief.text = it.description
+                    }
+                }
+
+            })
+    }
+
+
+
+
+
+
+
     private fun initRecyclerView(){
 
 

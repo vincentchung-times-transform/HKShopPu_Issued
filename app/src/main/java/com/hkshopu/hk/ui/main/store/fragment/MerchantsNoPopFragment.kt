@@ -6,14 +6,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.hkshopu.hk.Base.response.Status
 import com.hkshopu.hk.R
-import com.hkshopu.hk.component.EventProductSearch
+import com.hkshopu.hk.component.*
 import com.hkshopu.hk.data.bean.MyProductBean
 import com.hkshopu.hk.net.ApiConstants
 import com.hkshopu.hk.net.Web
@@ -167,6 +169,13 @@ class MerchantsNoPopFragment : Fragment() {
                         }).start()
 
                     }
+                    is EventdeleverFragmentAfterUpdateStatus -> {
+                        var action = it.action
+
+                        getMyProductsList(shopId.toString(), "none", "draft", "1")
+                        adapter.notifyDataSetChanged()
+
+                    }
 
                 }
             }, {
@@ -174,8 +183,5 @@ class MerchantsNoPopFragment : Fragment() {
             })
 
     }
-
-
-
 
 }
