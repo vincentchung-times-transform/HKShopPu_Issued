@@ -9,8 +9,8 @@ class ProductInfoBean {
     @SerializedName("product_category_id")
     var product_category_id: Int = 0
 
-    @SerializedName("product_category_sub_id")
-    var product_category_sub_id: Int = 0
+    @SerializedName("product_sub_category_id")
+    var product_sub_category_id: Int = 0
 
 
     @SerializedName("product_title")

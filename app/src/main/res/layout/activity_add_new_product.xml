@@ -391,6 +391,7 @@
                             android:singleLine="true"
                             android:textAlignment="textEnd"
                             android:imeOptions="actionDone"
+                            android:inputType="number"
                             android:textSize="14sp"
                             android:src="@mipmap/ic_chevron"/>
 

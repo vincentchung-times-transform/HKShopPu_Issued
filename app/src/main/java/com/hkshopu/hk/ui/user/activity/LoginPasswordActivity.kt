@@ -43,6 +43,7 @@ class LoginPasswordActivity : BaseActivity(), TextWatcher {
     var email: String = ""
     var password : String = ""
     private lateinit var settings: SharedPreferences
+    lateinit var settings_rememberPassword: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -217,6 +218,13 @@ class LoginPasswordActivity : BaseActivity(), TextWatcher {
                         MMKV.mmkvWithID("http").putInt("UserId", user_id)
                             .putString("Email",email)
                             .putString("Password",password)
+
+                        settings_rememberPassword = getSharedPreferences("rememberPassword", 0)
+
+                        val editor : SharedPreferences.Editor = settings_rememberPassword.edit()
+                        editor.apply {
+                            putString("rememberPassword", "true")
+                        }.apply()
 
 
                         val intent = Intent(this@LoginPasswordActivity, ShopmenuActivity::class.java)

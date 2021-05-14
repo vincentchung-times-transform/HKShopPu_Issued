@@ -17,10 +17,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hkshopu.hk.Base.BaseActivity
-import com.hkshopu.hk.Base.response.Status
 import com.hkshopu.hk.R
 import com.hkshopu.hk.component.EventdeleverFragmentAfterUpdateStatus
 import com.hkshopu.hk.data.bean.ItemPics
@@ -781,7 +779,7 @@ class AddNewProductActivity : BaseActivity() {
         }
 
         binding.categoryContainer.setOnClickListener {
-            val intent = Intent(this, MerchanCategoryActivity::class.java)
+            val intent = Intent(this, AddMerchanCategoryActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -1145,7 +1143,7 @@ class AddNewProductActivity : BaseActivity() {
     fun initProFareDatas() {
 
         MMKV_weight = MMKV.mmkvWithID("addPro").getString("datas_packagesWeights", "").toString()
-        MMKV_length = MMKV.mmkvWithID("addPro").getString("datas_lenght", "").toString()
+        MMKV_length = MMKV.mmkvWithID("addPro").getString("datas_length", "").toString()
         MMKV_width = MMKV.mmkvWithID("addPro").getString("datas_width", "").toString()
         MMKV_height = MMKV.mmkvWithID("addPro").getString("datas_height", "").toString()
         var fare_datas_size = MMKV.mmkvWithID("addPro").getString("fare_datas_size", "0").toString().toInt()

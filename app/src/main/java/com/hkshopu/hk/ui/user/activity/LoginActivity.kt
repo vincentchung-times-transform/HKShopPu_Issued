@@ -115,12 +115,6 @@ class LoginActivity : BaseActivity(), TextWatcher {
 
                     if (it.ret_val.toString() == "密碼錯誤!") {
 
-                        val editor : SharedPreferences.Editor = settings_rememberEmail.edit()
-                        editor.apply {
-                            putString("rememberEmail", "true")
-                        }.apply()
-
-
                         settings.edit().apply {
                             putString("email", email)
                         }.apply()
@@ -190,7 +184,6 @@ class LoginActivity : BaseActivity(), TextWatcher {
             editor.apply {
                 putString("rememberEmail", "true")
             }.apply()
-
 
             settings.edit().apply {
                 putString("email", email)

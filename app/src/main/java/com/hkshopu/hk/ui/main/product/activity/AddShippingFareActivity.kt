@@ -57,7 +57,7 @@ class AddShippingFareActivity : AppCompatActivity(){
     //資料變數宣告
     var MMKV_shop_id: Int = 0
     var MMKV_datas_packagesWeights : String = ""
-    var MMKV_datas_lenght : String = ""
+    var MMKV_datas_length : String = ""
     var MMKV_datas_width : String = ""
     var MMKV_datas_height : String = ""
     var sync_to_shop = false
@@ -102,12 +102,14 @@ class AddShippingFareActivity : AppCompatActivity(){
     }
     fun initView() {
 
+        MMKV_shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
+
         MMKV_datas_packagesWeights = MMKV.mmkvWithID("addPro").getString("datas_packagesWeights", "").toString()
-        MMKV_datas_lenght = MMKV.mmkvWithID("addPro").getString("datas_length", "").toString()
+        MMKV_datas_length = MMKV.mmkvWithID("addPro").getString("datas_length", "").toString()
         MMKV_datas_width = MMKV.mmkvWithID("addPro").getString("datas_width", "").toString()
         MMKV_datas_height = MMKV.mmkvWithID("addPro").getString("datas_height", "").toString()
         binding.editPackageWeight.setText(MMKV_datas_packagesWeights)
-        binding.editPackageLength.setText(MMKV_datas_lenght)
+        binding.editPackageLength.setText(MMKV_datas_length)
         binding.editPackageWidth.setText(MMKV_datas_width)
         binding.editPackageHeight.setText(MMKV_datas_height)
 
@@ -183,7 +185,7 @@ class AddShippingFareActivity : AppCompatActivity(){
             var datas_ship_method_and_fare : MutableList<ItemShippingFare> = mAdapters_shippingFare.get_shipping_method_datas()
 
             MMKV.mmkvWithID("addPro").putString("datas_packagesWeights", MMKV_datas_packagesWeights.toString())
-            MMKV.mmkvWithID("addPro").putString("datas_lenght", MMKV_datas_lenght)
+            MMKV.mmkvWithID("addPro").putString("datas_length", MMKV_datas_length)
             MMKV.mmkvWithID("addPro").putString("datas_width", MMKV_datas_width)
             MMKV.mmkvWithID("addPro").putString("datas_height", MMKV_datas_height)
 
@@ -309,7 +311,7 @@ class AddShippingFareActivity : AppCompatActivity(){
         binding.editPackageLength.setOnEditorActionListener() { v, actionId, event ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
-                    MMKV_datas_lenght = binding.editPackageLength.text.toString()
+                    MMKV_datas_length = binding.editPackageLength.text.toString()
                     v.hideKeyboard()
                     binding.editPackageLength.clearFocus()
                     true
@@ -337,7 +339,7 @@ class AddShippingFareActivity : AppCompatActivity(){
                     binding.editPackageLength.setSelection(binding.editPackageLength.text.toString().length)
                 }
 
-                MMKV_datas_lenght = binding.editPackageLength.text.toString()
+                MMKV_datas_length = binding.editPackageLength.text.toString()
             }
         }
         binding.editPackageLength.addTextChangedListener(textWatcher_editPackageLength)
@@ -495,18 +497,24 @@ class AddShippingFareActivity : AppCompatActivity(){
     //計算費用最大最小範圍
     fun fare_pick_max_and_min_num(size: Int): String {
         //挑出最大與最小的數字
-        var min: Int =mutableList_itemShipingFare_filtered[0].price.toInt()
-        var max: Int =mutableList_itemShipingFare_filtered[0].price.toInt()
 
-        for (f in 1..size-1) {
-            if(mutableList_itemShipingFare_filtered[f].price.toInt() >= min ){
-                max = mutableList_itemShipingFare_filtered[f].price.toInt()
-            }else{
-                min = mutableList_itemShipingFare_filtered[f].price.toInt()
+        if(mutableList_itemShipingFare_filtered.size>0){
+            //挑出最大與最小的數字
+            var min: Int =mutableList_itemShipingFare_filtered[0].price.toInt()
+            var max: Int =mutableList_itemShipingFare_filtered[0].price.toInt()
+
+            for (f in 1..size-1) {
+                if(mutableList_itemShipingFare_filtered[f].price.toInt() >= min ){
+                    max = mutableList_itemShipingFare_filtered[f].price.toInt()
+                }else{
+                    min = mutableList_itemShipingFare_filtered[f].price.toInt()
+                }
             }
-        }
 
-        return "HKD$${min}-HKD$${max}"
+            return "HKD$${min}-HKD$${max}"
+        }else{
+            return ""
+        }
 
     }
 

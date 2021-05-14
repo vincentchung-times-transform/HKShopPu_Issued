@@ -1,23 +1,27 @@
 package com.hkshopu.hk.ui.main.store.adapter
 
 
+import android.app.Activity
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.hkshopu.hk.R
 import com.hkshopu.hk.data.bean.ItemData
+import com.hkshopu.hk.data.bean.ItemShippingFare
 import com.hkshopu.hk.data.bean.ShopLogisticBean
 import com.hkshopu.hk.net.Web
 import com.hkshopu.hk.utils.extension.inflate
 import com.tencent.mmkv.MMKV
 import com.zilchzz.library.widgets.EasySwitcher
 import org.jetbrains.anko.find
+import org.jetbrains.anko.singleLine
 import java.util.*
 
 
@@ -84,6 +88,8 @@ class LogisticsListAdapter :
         if (cancel_inner) {
             if (value_shipping_name.isNotEmpty()) {
                 viewHolder.cancel.visibility = View.VISIBLE
+            }else{
+                viewHolder.cancel.visibility = View.GONE
             }
 
         } else {
@@ -96,10 +102,56 @@ class LogisticsListAdapter :
         }
         value_shipping_name = viewHolder.name.text.toString()
 
+
+        //editText_shipping_name編輯鍵盤監控
+        viewHolder.name.singleLine = true
+        viewHolder.name.setOnEditorActionListener() { v, actionId, event ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+
+                    value_shipping_name = viewHolder.name.text.toString()
+
+                    if(viewHolder.OnOff.isOpened()){
+                        value_shipping_isChecked = "on"
+                    }else{
+                        value_shipping_isChecked = "off"
+                    }
+
+                    //檢查名稱是否重複
+                    var check_duplicate = 0
+
+                    for (i in 0..mData.size - 1) {
+                        if (value_shipping_name == mData[i].shipment_desc) {
+                            check_duplicate = check_duplicate + 1
+                        } else {
+                            check_duplicate = check_duplicate + 0
+                        }
+                    }
+                    if (check_duplicate > 0) {
+                        viewHolder.name.setText("")
+                        Toast.makeText(viewHolder.name.context, "貨運商不可重複", Toast.LENGTH_SHORT).show()
+
+                    } else {
+                        onItemUpdate(
+                            value_shipping_name,
+                            value_shipping_isChecked,
+                            position
+                        )
+                        viewHolder.name.clearFocus()
+                    }
+
+                    true
+                }
+                else -> false
+            }
+        }
+
         viewHolder.OnOff.setOnStateChangedListener(object :
             EasySwitcher.SwitchStateChangedListener {
             override fun onStateChanged(isOpen: Boolean) {
                 if (isOpen) {
+
+                    value_shipping_name = viewHolder.name.text.toString()
 
                     if (value_shipping_name == "") {
                         Toast.makeText(viewHolder.OnOff.context, "請先填入自訂項目名稱", Toast.LENGTH_SHORT)
@@ -107,6 +159,7 @@ class LogisticsListAdapter :
                         viewHolder.OnOff.closeSwitcher()
                     } else {
 
+                        value_shipping_name = viewHolder.name.text.toString()
                         value_shipping_isChecked = "on"
 
                         onItemUpdate(
@@ -155,7 +208,7 @@ class LogisticsListAdapter :
         init {
             Handler(Looper.getMainLooper()).post(Runnable {
                 shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
-                addEmptyItem()
+//                addEmptyItem()
             })
 
         }
@@ -219,7 +272,17 @@ class LogisticsListAdapter :
         }
 
         if (empty_item_num > 1) {
-            mData.removeAt(position)
+
+            val shopLogisticBean = ShopLogisticBean()
+            shopLogisticBean.id = 0
+            shopLogisticBean.shipment_desc = ""
+            shopLogisticBean.shop_id = shop_id.toString()
+            shopLogisticBean.onoff = "off"
+
+            mData.remove(
+                shopLogisticBean
+            )
+//            mData.removeAt(position)
 
 
             try {
@@ -241,9 +304,9 @@ class LogisticsListAdapter :
         mData[position].setShipmentDesc(update_txt)
         mData[position].setShopID(shop_id.toString())
         mData[position].setOnOff(is_checked)
-//        Handler(Looper.getMainLooper()).post(Runnable {
-//            notifyItemChanged(position)
-//        })
+        Handler(Looper.getMainLooper()).post(Runnable {
+            notifyItemChanged(position)
+        })
 
     }
 

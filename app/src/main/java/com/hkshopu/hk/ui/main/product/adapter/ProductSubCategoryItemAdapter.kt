@@ -15,6 +15,8 @@ import com.hkshopu.hk.R
 import com.hkshopu.hk.data.bean.ProductChildCategoryBean
 import com.hkshopu.hk.net.ApiConstants
 import com.hkshopu.hk.ui.main.product.activity.AddNewProductActivity
+import com.hkshopu.hk.ui.main.product.activity.EditMerchanCategoryActivity
+import com.hkshopu.hk.ui.main.product.activity.EditProductActivity
 import com.squareup.picasso.Picasso
 import com.tencent.mmkv.MMKV
 
@@ -145,7 +147,7 @@ class ProductSubCategoryItemAdapter(var activity: BaseActivity): RecyclerView.Ad
 
             var currentActivity: Activity = activity
 
-            val intent = Intent(currentActivity, AddNewProductActivity::class.java)
+            val intent = Intent(currentActivity, EditProductActivity::class.java)
 //            intent.putExtra("bundle", bundle)
             currentActivity.startActivity(intent)
 

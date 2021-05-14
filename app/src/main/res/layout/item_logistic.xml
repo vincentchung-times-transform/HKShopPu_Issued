@@ -32,6 +32,7 @@
         android:singleLine="true"
         android:gravity="center_vertical"
         android:layout_marginStart="8dp"
+        android:imeOptions="actionDone"
         android:paddingStart="20dp"
         android:paddingEnd="00dp"
         android:textColor="@color/black"

@@ -350,9 +350,10 @@
                                 android:layout_alignParentTop="true"
                                 android:background="@color/white"
                                 android:hint="@string/txtview_priceinput"
-                                android:textAlignment="textEnd"
                                 android:imeOptions="actionDone"
+                                android:inputType="number"
                                 android:singleLine="true"
+                                android:textAlignment="textEnd"
                                 android:textSize="14sp" />
 
                         </RelativeLayout>
@@ -400,6 +401,7 @@
                             android:hint="@string/txtview_quantityinput"
                             android:background="@color/white"
                             android:singleLine="true"
+                            android:inputType="number"
                             android:textAlignment="textEnd"
                             android:imeOptions="actionDone"
                             android:textSize="14sp"

@@ -221,6 +221,8 @@ class EditProductSpecificationMainActivity : BaseActivity() {
             var datas_spec_title_first: String = binding.editTextProductSpecFirst.text.toString()
             var datas_spec_title_second: String = binding.editTextProductSpecSecond.text.toString()
 
+
+
             //MMKV input datas
             MMKV.mmkvWithID("addPro").putString("datas_spec_size", datas_spec_size.toString())
             MMKV.mmkvWithID("addPro").putString("datas_size_size", datas_size_size.toString())
@@ -242,6 +244,8 @@ class EditProductSpecificationMainActivity : BaseActivity() {
                     .putString("datas_size_item${i}", datas_size_item.get(i).spec_name.toString())
 
             }
+
+
 
             startActivity(intent)
             finish()
@@ -666,7 +670,7 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
     fun changeStatusOfNextStepBtn() {
 
-        if ((firstSpecGrpTitle_check != 0 && mAdapter_spec.nextStepEnableOrNot()) || (secondSpecGrpTitle_check != 0 && mAdapter_size.nextStepEnableOrNot())) {
+        if ((firstSpecGrpTitle_check != 0 && mAdapter_spec.nextStepEnableOrNot())&&((firstSpecGrpTitle_check != 0 && mAdapter_spec.nextStepEnableOrNot()) || (secondSpecGrpTitle_check != 0 && mAdapter_size.nextStepEnableOrNot()))) {
             binding.btnNextStep.isEnabled = true
             binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
         } else {

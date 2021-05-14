@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.hkshopu.hk.R
 import com.hkshopu.hk.data.bean.ItemSpecification
@@ -23,6 +24,9 @@ class SpecificationSpecAdapter: RecyclerView.Adapter<SpecificationSpecAdapter.mV
     var nextStepBtnStatus  = false
 
     var check_empty: Boolean = true
+
+    //資料變數宣告
+    var value_spec : String = ""
 
     inner class mViewHolder(itemView: View):RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
@@ -55,19 +59,31 @@ class SpecificationSpecAdapter: RecyclerView.Adapter<SpecificationSpecAdapter.mV
             editTextView.setOnEditorActionListener() { v, actionId, event ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
+
                         customSpecName = editTextView.text.toString()
 
-                        onItemUpdate(customSpecName, adapterPosition)
+                        //檢查名稱是否重複
+                        var check_duplicate = 0
 
-                        if (editTextView.text.toString().isEmpty()){
-
-                            nextStepBtnStatus = false
-
-                        }else{
-                            nextStepBtnStatus = true
+                        for (i in 0..unAssignList.size - 1) {
+                            if (customSpecName == unAssignList[i].spec_name) {
+                                check_duplicate = check_duplicate + 1
+                            } else {
+                                check_duplicate = check_duplicate + 0
+                            }
                         }
 
-                        editTextView.clearFocus()
+                        if (check_duplicate > 0) {
+                            editTextView.setText("")
+                            Toast.makeText(itemView.context, "規格不可重複", Toast.LENGTH_SHORT).show()
+
+                        } else {
+
+                            value_spec = editTextView.text.toString()
+                            onItemUpdate(value_spec , adapterPosition)
+
+                            editTextView.clearFocus()
+                        }
 
                         true
                     }

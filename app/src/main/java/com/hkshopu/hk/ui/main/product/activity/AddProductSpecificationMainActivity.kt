@@ -497,7 +497,7 @@ class AddProductSpecificationMainActivity : BaseActivity() {
 
     fun changeStatusOfNextStepBtn(){
 
-        if( firstSpecGrpTitle_check != 0 && mAdapter_spec.nextStepEnableOrNot() ){
+        if ((firstSpecGrpTitle_check != 0 && mAdapter_spec.nextStepEnableOrNot())&&((firstSpecGrpTitle_check != 0 && mAdapter_spec.nextStepEnableOrNot()) || (secondSpecGrpTitle_check != 0 && mAdapter_size.nextStepEnableOrNot()))) {
             binding.btnNextStep.isEnabled = true
             binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
         }else if(secondSpecGrpTitle_check != 0 && mAdapter_size.nextStepEnableOrNot()){

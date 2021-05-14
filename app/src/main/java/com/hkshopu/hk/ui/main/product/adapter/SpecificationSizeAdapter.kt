@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.hkshopu.hk.R
 import com.hkshopu.hk.data.bean.ItemSpecification
@@ -60,11 +61,29 @@ class SpecificationSizeAdapter: RecyclerView.Adapter<SpecificationSizeAdapter.mV
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
 
-                        value_spec = editTextView.text.toString()
+                        customSpecName = editTextView.text.toString()
+                        //檢查名稱是否重複
+                        var check_duplicate = 0
 
-                        onItemUpdate(value_spec , adapterPosition)
+                        for (i in 0..unAssignList.size - 1) {
+                            if (customSpecName == unAssignList[i].spec_name) {
+                                check_duplicate = check_duplicate + 1
+                            } else {
+                                check_duplicate = check_duplicate + 0
+                            }
+                        }
 
-                        editTextView.clearFocus()
+                        if (check_duplicate > 0) {
+                            editTextView.setText("")
+                            Toast.makeText(itemView.context, "規格不可重複", Toast.LENGTH_SHORT).show()
+
+                        } else {
+
+                            value_spec = editTextView.text.toString()
+                            onItemUpdate(value_spec , adapterPosition)
+
+                            editTextView.clearFocus()
+                        }
 
                         true
                     }

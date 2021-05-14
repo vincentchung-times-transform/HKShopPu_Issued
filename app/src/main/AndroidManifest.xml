@@ -238,8 +238,12 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask" />
-<!-- Product -->
-        <activity android:name=".ui.main.product.activity.MerchanCategoryActivity"
+<!-- Product -->EditMerchanCategoryActivity
+        <activity android:name=".ui.main.product.activity.AddMerchanCategoryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".ui.main.product.activity.EditMerchanCategoryActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|screenSize"/>
