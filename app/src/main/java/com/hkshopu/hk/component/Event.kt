@@ -27,10 +27,14 @@ class EventChangeShopEmailSuccess(val email: String?)
 class EventChangeShopTitleSuccess(val shopname: String?)
 class EventGetBankAccountSuccess(val list: ArrayList<ShopBankAccountBean>)
 //Add Product Events
+
 class EventProductCatSelected(val selectrdId: Int = 1, var c_product_category: String)
 class EventProductCatLastPostion(val postion: Int = 1)
+
 class EventdeleverFragmentAfterUpdateStatus(val action : String)
 
+class EventCheckFirstSpecEnableBtnOrNot(val boolean : Boolean)
+class EventCheckSecondSpecEnableBtnOrNot(val boolean : Boolean)
 //Other Events (Not Used)
 
 //Add Product Events

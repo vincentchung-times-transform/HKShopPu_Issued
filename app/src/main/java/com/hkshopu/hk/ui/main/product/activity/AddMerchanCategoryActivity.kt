@@ -38,7 +38,7 @@ class AddMerchanCategoryActivity : BaseActivity() {
     lateinit var selected_product_child_category_list :MutableList<ProductChildCategoryBean>
 
     val mAdapters_ProCateItem = ProductCategoryItemAdapter()
-    val mAdapters_SubProCateItem = ProductSubCategoryItemAdapter(this)
+    val mAdapters_SubProCateItem = ProductSubCategoryItemAdapter(this, "add")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,8 +73,8 @@ class AddMerchanCategoryActivity : BaseActivity() {
 
             val intent = Intent(this, AddNewProductActivity::class.java)
             startActivity(intent)
-
             finish()
+
         }
     }
     //新增主選單項目
@@ -205,9 +205,10 @@ class AddMerchanCategoryActivity : BaseActivity() {
 
     override fun onBackPressed() {
 
-        val intent = Intent(this, EditProductActivity::class.java)
+        val intent = Intent(this, AddNewProductActivity::class.java)
         startActivity(intent)
         finish()
+
     }
 
 

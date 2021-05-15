@@ -248,7 +248,7 @@ class AddShopActivity : BaseActivity() {
 //                }
 //                .show()
 
-            StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
+//            StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
 
         }
 
@@ -375,7 +375,7 @@ class AddShopActivity : BaseActivity() {
 //            }
 //            .show()
 
-        StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
+//        StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
 
     }
 

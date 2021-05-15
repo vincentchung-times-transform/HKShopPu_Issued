@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_shopbg"
+    android:background="@color/white"
     tools:context=".ui.main.product.activity.MerchandiseActivity">
 
     <RelativeLayout
@@ -1626,10 +1626,22 @@
                 android:paddingBottom="10dp"
                 android:background="@drawable/customborder_addproduct"
                 android:orientation="vertical">
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/textView_merchandiseinfo"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/textView_merchandiseinfo"/>
+                    <ImageView
+                        android:id="@+id/status_lebal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/new_lebal"/>
+                </LinearLayout>
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1641,7 +1653,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="1"/>
-
 
             </LinearLayout>
 

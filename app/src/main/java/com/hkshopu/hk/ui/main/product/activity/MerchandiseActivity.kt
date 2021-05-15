@@ -306,7 +306,7 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                     product_status = productInfoList.product_status
                                 }
                                 "draft"->{
-                                    binding.btnLaunch.setImageResource(R.mipmap.btn_launch)
+                                    binding.btnLaunch.setImageResource(R.mipmap.btn_draft)
                                     product_status = productInfoList.product_status
                                 }
                             }
@@ -315,7 +315,7 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                             if(productInfoList.product_spec_on.equals("y")){
                                 binding.textViewProductPriceRange.setText(pick_max_and_min_num().toString())
                             }else{
-                                binding.textViewProductPriceRange.setText(productInfoList.product_price)
+                                binding.textViewProductPriceRange.setText(productInfoList.product_price.toString())
                             }
 
                             binding.textViewProductName.setText(productInfoList.product_title.toString())
@@ -690,9 +690,15 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
 
                         if (productInfoList.new_secondhand == "new") {
+                            runOnUiThread {
+                                binding.statusLebal.setImageResource(R.mipmap.new_lebal)
+                            }
 
                         } else {
+                            runOnUiThread {
+                                binding.statusLebal.setImageResource(R.mipmap.secondhand_lebal)
 
+                            }
                         }
 
 

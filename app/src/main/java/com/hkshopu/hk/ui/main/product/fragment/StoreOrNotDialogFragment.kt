@@ -17,7 +17,7 @@ import com.hkshopu.hk.R
 import com.hkshopu.hk.ui.main.store.activity.ShopmenuActivity
 import com.tencent.mmkv.MMKV
 
-class StoreOrNotDialogFragment(var baseActivity : BaseActivity ): DialogFragment(), View.OnClickListener {
+class StoreOrNotDialogFragment(var activity: BaseActivity): DialogFragment(), View.OnClickListener {
 
 
     var signal : Boolean = false
@@ -70,13 +70,14 @@ class StoreOrNotDialogFragment(var baseActivity : BaseActivity ): DialogFragment
             R.id.btn_cancel_add_prodcut -> dismiss()
             R.id.btn_discard -> {
 
-                var currentActivity : Activity  = baseActivity
+                var activity: BaseActivity  = activity
 
                 product_edit_session=false
                 MMKV.mmkvWithID("http").putBoolean("product_edit_session", product_edit_session)
                 MMKV.mmkvWithID("addPro").clear()
 
-                currentActivity.finish()
+                activity.finish()
+
 
             }
         }

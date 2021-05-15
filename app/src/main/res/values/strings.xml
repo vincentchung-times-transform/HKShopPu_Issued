@@ -467,6 +467,8 @@
     <string name="editView_inputproductdescription">請輸入商品規格</string>
     <string name="btn_edit">編輯</string>
     <string name="btn_editdone">完成</string>
+    <string name="textView_questionNeedMoreTimeToStockUp">需要較長備貨嗎?</string>
+    <string name="textView_needMoreTimeToStockUp">較長時間備貨</string>
     <string name="dialog_spec_info">當您要上架的商品有不同規格（例如：顏色、尺寸）時，則會需要使用商品規格功能，設定詳細商品規格，可以讓買家在購買時更清楚迅速的選擇。</string>
 
 <!--    設定庫存與價格-->
@@ -476,7 +478,6 @@
     <string name="textView_setInventoryPrice">價格</string>
     <string name="textView_setInventoryQuantity">數量</string>
     <string name="textView_setInventorySoldQuantity">已賣出</string>
-    <string name="textView_needMoreTimeToStockUp">需要較長時間備貨嗎?</string>
     <string name="textView_title_spec">規格:</string>
     <string name="textView_clear_all_inventory"><u>全部清空</u></string>
 

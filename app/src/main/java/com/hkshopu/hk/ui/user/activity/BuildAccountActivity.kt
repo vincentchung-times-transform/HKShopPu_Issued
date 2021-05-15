@@ -206,8 +206,19 @@ class BuildAccountActivity : BaseActivity(), TextWatcher {
 
         binding.imgViewNextStep.setOnClickListener {
 
-            VM.emailCheck(this,email)
 
+            val regex  = """^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}${'$'}""".toRegex()
+            if(regex.matches(password)||regex.matches(passwordconf)){
+                if(password != passwordconf){
+                    Toast.makeText(this, "密碼不一致", Toast.LENGTH_SHORT).show()
+                }else{
+
+                    VM.emailCheck(this,email)
+                }
+            }else{
+                Toast.makeText(this, "密碼格式錯誤", Toast.LENGTH_SHORT).show()
+
+            }
         }
         binding.tvAgreeterm.setOnClickListener {
             val intent = Intent(this, TermsOfServiceActivity::class.java)

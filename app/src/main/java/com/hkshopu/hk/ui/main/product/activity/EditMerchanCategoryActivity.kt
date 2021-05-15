@@ -38,7 +38,7 @@ class EditMerchanCategoryActivity : BaseActivity() {
     lateinit var selected_product_child_category_list :MutableList<ProductChildCategoryBean>
 
     val mAdapters_ProCateItem = ProductCategoryItemAdapter()
-    val mAdapters_SubProCateItem = ProductSubCategoryItemAdapter(this)
+    val mAdapters_SubProCateItem = ProductSubCategoryItemAdapter(this, "edit")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

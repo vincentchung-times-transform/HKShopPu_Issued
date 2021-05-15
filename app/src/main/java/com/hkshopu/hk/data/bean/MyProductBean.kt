@@ -9,6 +9,12 @@ class MyProductBean {
     @SerializedName("product_title")
     var product_title: String = ""
 
+    @SerializedName("product_price")
+    var product_price: Int = 0
+
+    @SerializedName("quantity")
+    var quantity: Int = 0
+
     @SerializedName("min_price")
     var min_price: Int? = 0
 

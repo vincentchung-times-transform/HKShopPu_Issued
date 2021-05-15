@@ -2,6 +2,7 @@ package com.hkshopu.hk.ui.main.store.adapter
 
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -23,6 +24,7 @@ import com.zilchzz.library.widgets.EasySwitcher
 import org.jetbrains.anko.find
 import org.jetbrains.anko.singleLine
 import java.util.*
+import kotlin.concurrent.schedule
 
 
 class LogisticsListAdapter :
@@ -137,6 +139,7 @@ class LogisticsListAdapter :
                             value_shipping_isChecked,
                             position
                         )
+//                        Log.d("dfjjifjd", mData[position].onoff.toString())
                         viewHolder.name.clearFocus()
                     }
 
@@ -149,17 +152,18 @@ class LogisticsListAdapter :
         viewHolder.OnOff.setOnStateChangedListener(object :
             EasySwitcher.SwitchStateChangedListener {
             override fun onStateChanged(isOpen: Boolean) {
+
+
                 if (isOpen) {
 
                     value_shipping_name = viewHolder.name.text.toString()
 
-                    if (value_shipping_name == "") {
+                    if (value_shipping_name.isEmpty()) {
                         Toast.makeText(viewHolder.OnOff.context, "請先填入自訂項目名稱", Toast.LENGTH_SHORT)
                             .show()
                         viewHolder.OnOff.closeSwitcher()
                     } else {
 
-                        value_shipping_name = viewHolder.name.text.toString()
                         value_shipping_isChecked = "on"
 
                         onItemUpdate(
@@ -168,10 +172,10 @@ class LogisticsListAdapter :
                             position
                         )
 
+                        Log.d("dfjjifjd", mData[position].onoff.toString())
                         Handler(Looper.getMainLooper()).post(Runnable {
                             addEmptyItem()
                         })
-
 
                     }
 
@@ -186,6 +190,7 @@ class LogisticsListAdapter :
                         position
                     )
 
+                    Log.d("dfjjifjd", mData[position].onoff.toString())
                     Handler(Looper.getMainLooper()).post(Runnable {
                         delEmptyItem(position)
                     })
@@ -208,7 +213,7 @@ class LogisticsListAdapter :
         init {
             Handler(Looper.getMainLooper()).post(Runnable {
                 shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
-//                addEmptyItem()
+                addEmptyItem()
             })
 
         }
@@ -221,7 +226,7 @@ class LogisticsListAdapter :
         empty_item_num = 0
         if (mData.size > 0) {
             for (i in 0..mData.size - 1) {
-                if (mData.get(i).getShipmentDesc() == "") {
+                if (mData.get(i).getShipmentDesc()!!.isEmpty()) {
                     empty_item_num += 1
                 } else {
                     empty_item_num += 0

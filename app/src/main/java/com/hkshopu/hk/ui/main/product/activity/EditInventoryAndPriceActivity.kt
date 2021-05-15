@@ -16,6 +16,7 @@ import androidx.core.view.isVisible
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.hkshopu.hk.Base.BaseActivity
 import com.hkshopu.hk.R
 import com.hkshopu.hk.data.bean.*
 import com.hkshopu.hk.databinding.ActivityInventoryAndPriceBinding
@@ -33,7 +34,7 @@ import org.json.JSONObject
 import java.io.IOException
 import java.lang.reflect.Type
 
-class EditInventoryAndPriceActivity : AppCompatActivity(), TextWatcher{
+class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
 
     private lateinit var binding : ActivityInventoryAndPriceBinding
 
@@ -74,12 +75,6 @@ class EditInventoryAndPriceActivity : AppCompatActivity(), TextWatcher{
         MMKV_user_id = MMKV.mmkvWithID("http").getInt("UserId", 0)
         MMKV_shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
         MMKV_product_id = MMKV.mmkvWithID("http").getInt("ProductId", 0)
-
-        try{
-            Thread.sleep(500)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
 
         initMMKV()
         initView()
@@ -414,14 +409,12 @@ class EditInventoryAndPriceActivity : AppCompatActivity(), TextWatcher{
     }
     fun initClick() {
         binding.titleBackAddshop.setOnClickListener {
-            val intent = Intent(this, EditProductSpecificationMainActivity::class.java)
+            val intent = Intent(this, AddNewProductActivity::class.java)
             startActivity(intent)
             finish()
         }
 
         binding.btnInvenStore.setOnClickListener {
-
-            val intent = Intent(this, EditProductActivity::class.java)
 
             MMKV.mmkvWithID("addPro").putInt("inven_datas_size", mutableList_InvenDatas.size)
 
@@ -447,16 +440,14 @@ class EditInventoryAndPriceActivity : AppCompatActivity(), TextWatcher{
 
             }
 
-
-
             //挑選最大與最小金額，回傳價格區間
             inven_price_range = inven_price_pick_max_and_min_num(mutableList_InvenDatas.size!!)
             inven_quant_range = inven_quant_pick_max_and_min_num(mutableList_InvenDatas.size!!)
             MMKV.mmkvWithID("addPro").putString("inven_price_range", inven_price_range)
             MMKV.mmkvWithID("addPro").putString("inven_quant_range", inven_quant_range)
 
+            val intent = Intent(this, AddNewProductActivity::class.java)
             startActivity(intent)
-
             finish()
         }
 
@@ -1068,8 +1059,9 @@ class EditInventoryAndPriceActivity : AppCompatActivity(), TextWatcher{
                 }
 
                 if(editText.text.toString() == "" ){
-
-                    editText.setText("0")
+//                    editText.setText("0")
+                    editText.setTextColor(resources.getColor(R.color.gray_txt))
+                    textView.setTextColor(resources.getColor(R.color.gray_txt))
 
                 }else{
                     editText.setTextColor(resources.getColor(R.color.black))
@@ -1088,7 +1080,9 @@ class EditInventoryAndPriceActivity : AppCompatActivity(), TextWatcher{
 
                     if(editText.text.toString() == "" ){
 
-                        editText.setText("0")
+//                        editText.setText("0")
+                        editText.setTextColor(resources.getColor(R.color.gray_txt))
+                        textView.setTextColor(resources.getColor(R.color.gray_txt))
 
                     }else{
                         editText.setTextColor(resources.getColor(R.color.black))
@@ -1225,7 +1219,7 @@ class EditInventoryAndPriceActivity : AppCompatActivity(), TextWatcher{
 
     override fun onBackPressed() {
 
-        val intent = Intent(this, EditProductSpecificationMainActivity::class.java)
+        val intent = Intent(this, AddNewProductActivity::class.java)
         startActivity(intent)
         finish()
 

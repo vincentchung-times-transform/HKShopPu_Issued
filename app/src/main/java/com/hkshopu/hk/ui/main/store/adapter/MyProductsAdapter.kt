@@ -119,11 +119,14 @@ class MyProductsAdapter(var fragment: Fragment, var product_type: String) : Recy
 
 //            MMKV_product_id = bean.id
 
-            var price_range = "${bean.min_price}-${bean.max_price}"
+            if(bean.product_price.equals(-1)){
+                tv_priceRange.text = "${bean.min_price}-${bean.max_price}"
+            }else{
+                tv_priceRange.text = bean.product_price.toString()
+            }
 
             iv_Icon.loadNovelCover(bean.pic_path)
             tv_productName.text = bean.product_title
-            tv_priceRange.text = price_range.toString()
 
            when(product_type){
                "active"->{

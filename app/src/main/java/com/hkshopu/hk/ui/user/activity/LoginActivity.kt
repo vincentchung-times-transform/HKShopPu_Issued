@@ -109,49 +109,33 @@ class LoginActivity : BaseActivity(), TextWatcher {
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
 
     private fun initVM() {
-        VM.loginLiveData.observe(this, Observer {
+
+        VM.emailcheckLiveData.observe(this, Observer {
             when (it?.status) {
                 Status.Success -> {
+                    if(android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                        if (it.ret_val!!.equals("該電子郵件已存在!")) {
+                            settings.edit()
+                                .putString("email", email)
+                                .apply()
 
-                    if (it.ret_val.toString() == "密碼錯誤!") {
+                            val intent = Intent(this, LoginPasswordActivity::class.java)
+                            startActivity(intent)
 
-                        settings.edit().apply {
-                            putString("email", email)
-                        }.apply()
-
-                        val intent = Intent(this, LoginPasswordActivity::class.java)
-                        startActivity(intent)
-
-                    } else {
-                        Toast.makeText(this, it.ret_val.toString(), Toast.LENGTH_SHORT ).show()
+                        }else{
+                            Toast.makeText(this, "電子郵件不存在", Toast.LENGTH_SHORT).show()
+                        }
+                    }else {
+                        Toast.makeText(this, "電子郵件格式錯誤", Toast.LENGTH_SHORT).show()
                     }
-
                 }
 //                Status.Start -> showLoading()
 //                Status.Complete -> disLoading()
             }
         })
 
-        VM.socialloginLiveData.observe(this, Observer {
-            when (it?.status) {
-                Status.Success -> {
-//                    Log.d("OnBoardActivity", "Sign-In Result" + it.data)
-                    if (it.ret_val.toString().isNotEmpty()) {
-                        val intent = Intent(this, ShopmenuActivity::class.java)
-                        startActivity(intent)
-                        finish()
 
-                    } else {
-                        val intent = Intent(this, BuildAccountActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
 
-                }
-//                Status.Start -> showLoading()
-//                Status.Complete -> disLoading()
-            }
-        })
     }
 
     private fun initView() {
@@ -189,10 +173,9 @@ class LoginActivity : BaseActivity(), TextWatcher {
                 putString("email", email)
             }.apply()
 
-            val intent = Intent(this, LoginPasswordActivity::class.java)
-            startActivity(intent)
-//            val password = binding.password1.text.toString()
-//            VM.login(this, email, "checkfortheemail")
+            VM.emailCheck(this,email)
+
+
 
         }
 

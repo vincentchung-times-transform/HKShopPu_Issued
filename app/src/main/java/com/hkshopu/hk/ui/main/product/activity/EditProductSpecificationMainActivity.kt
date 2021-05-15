@@ -1,5 +1,6 @@
 package com.hkshopu.hk.ui.main.product.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,14 +14,13 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.hkshopu.hk.Base.BaseActivity
 import com.hkshopu.hk.R
-import com.hkshopu.hk.data.bean.ItemPics
-import com.hkshopu.hk.data.bean.ItemShippingFare
-import com.hkshopu.hk.data.bean.ItemSpecification
-import com.hkshopu.hk.data.bean.ProductInfoBean
+import com.hkshopu.hk.component.*
+import com.hkshopu.hk.data.bean.*
 import com.hkshopu.hk.databinding.ActivityAddProductDescriptionMainBinding
 import com.hkshopu.hk.net.ApiConstants
 import com.hkshopu.hk.net.GsonProvider
@@ -30,6 +30,9 @@ import com.hkshopu.hk.ui.main.product.adapter.SpecificationSizeAdapter
 import com.hkshopu.hk.ui.main.product.adapter.SpecificationSpecAdapter
 import com.hkshopu.hk.ui.main.product.fragment.SpecificationInfoDialogFragment
 import com.hkshopu.hk.ui.main.product.fragment.StoreOrNotDialogFragment
+import com.hkshopu.hk.utils.rxjava.RxBus
+import com.hkshopu.hk.widget.view.disable
+import com.hkshopu.hk.widget.view.enable
 import com.tencent.mmkv.MMKV
 import okhttp3.Response
 import org.jetbrains.anko.singleLine
@@ -49,9 +52,6 @@ class EditProductSpecificationMainActivity : BaseActivity() {
     var mutableList_size = mutableListOf<ItemSpecification>()
     var EDIT_MODE_SPEC = "0"
     var EDIT_MODE_SIZE = "0"
-
-    var firstSpecGrpTitle_check = 0
-    var secondSpecGrpTitle_check = 0
 
     //頁面資料變數宣告
     var MMKV_user_id: Int = 0
@@ -76,6 +76,7 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
         initMMKV()
         initView()
+        initEvent()
     }
 
     fun initMMKV() {
@@ -111,24 +112,22 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
         Thread(Runnable {
 
-            for (i in 0..value_datas_spec_size - 1) {
-                var item_name = MMKV.mmkvWithID("addPro").getString("datas_spec_item${i}", "")
-                mutableList_spec.add(
-                    ItemSpecification(
-                        item_name.toString(),
-                        R.drawable.custom_unit_transparent
+            if(value_datas_spec_size>0){
+                for (i in 0..value_datas_spec_size - 1) {
+                    var item_name = MMKV.mmkvWithID("addPro").getString("datas_spec_item${i}", "")
+                    mutableList_spec.add(
+                        ItemSpecification(
+                            item_name.toString(),
+                            R.drawable.custom_unit_transparent
+                        )
                     )
-                )
-            }
+                }
+                runOnUiThread {
+                    //更新或新增item
+                    mAdapter_spec.updateList(mutableList_spec)
+                    mAdapter_spec.notifyDataSetChanged()
 
-            runOnUiThread {
-                //更新或新增item
-                mAdapter_spec.updateList(mutableList_spec)
-                mAdapter_spec.notifyDataSetChanged()
-
-                //判斷Next Step Btn is enable or disable
-                changeStatusOfNextStepBtn()
-
+                }
             }
 
         }).start()
@@ -136,24 +135,25 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
         Thread(Runnable {
 
-            for (i in 0..value_datas_size_size - 1) {
-                var item_name = MMKV.mmkvWithID("addPro").getString("datas_size_item${i}", "")
-                mutableList_size.add(
-                    ItemSpecification(
-                        item_name.toString(),
-                        R.drawable.custom_unit_transparent
+            if(value_datas_size_size>0){
+                for (i in 0..value_datas_size_size - 1) {
+                    var item_name = MMKV.mmkvWithID("addPro").getString("datas_size_item${i}", "")
+                    mutableList_size.add(
+                        ItemSpecification(
+                            item_name.toString(),
+                            R.drawable.custom_unit_transparent
+                        )
                     )
-                )
-            }
+                }
 
-            runOnUiThread {
+                runOnUiThread {
 
-                //更新或新增item
-                mAdapter_size.updateList(mutableList_size)
-                mAdapter_size.notifyDataSetChanged()
+                    //更新或新增item
+                    mAdapter_size.updateList(mutableList_size)
+                    mAdapter_size.notifyDataSetChanged()
 
-                //判斷Next Step Btn is enable or disable
-                changeStatusOfNextStepBtn()
+                }
+
             }
 
         }).start()
@@ -164,17 +164,11 @@ class EditProductSpecificationMainActivity : BaseActivity() {
             e.printStackTrace()
         }
 
-
-        //預設btnNextStep disable or enable
-        if (( binding.editTextProductSpecFirst.text.isNotEmpty() && mAdapter_spec.nextStepEnableOrNot()) || (binding.editTextProductSpecSecond.text.isNotEmpty() && mAdapter_size.nextStepEnableOrNot())) {
-            binding.btnNextStep.isEnabled = true
-            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
-        } else {
-            binding.btnNextStep.isEnabled = false
-            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+        if(value_datas_spec_size>0 && value_datas_size_size==0){
+            checkButtonNextStep_single()
+        }else if (value_datas_spec_size>0 && value_datas_size_size>0){
+            checkButtonNextStep_double()
         }
-
-
 
     }
 
@@ -203,17 +197,20 @@ class EditProductSpecificationMainActivity : BaseActivity() {
             binding.editTextProductSpecFirst.setText("")
             clearAllSpecItem()
 
+            checkButtonNextStep_single()
+
         }
         binding.btnClearAllSize.setOnClickListener {
 
             binding.editTextProductSpecSecond.setText("")
             clearAllSizeItem()
 
+            checkButtonNextStep_double()
+
         }
 
         binding.btnNextStep.setOnClickListener {
 
-            val intent = Intent(this, EditInventoryAndPriceActivity::class.java)
             var datas_spec_item: MutableList<ItemSpecification> = mAdapter_spec.get_spec_list()
             var datas_size_item: MutableList<ItemSpecification> = mAdapter_size.get_size_list()
             var datas_spec_size: Int = mAdapter_spec.get_datas_spec_size()
@@ -246,86 +243,88 @@ class EditProductSpecificationMainActivity : BaseActivity() {
             }
 
 
-
+            val intent = Intent(this, EditInventoryAndPriceActivity::class.java)
             startActivity(intent)
             finish()
         }
 
         //first specification "spec" item add
         binding.btnAddspecificationSpec.setOnClickListener {
-            if (mutableList_spec.size < 3) {
 
-                if (EDIT_MODE_SPEC == "0") {
+            if(binding.editTextProductSpecFirst.text.isNullOrEmpty()){
+                Toast.makeText(this, "請先輸入第一層商品規格名稱", Toast.LENGTH_SHORT).show()
+            }else{
+                mutableList_spec = mAdapter_spec.get_spec_list()
+                if (mutableList_spec.size < 3) {
 
-                    if (mAdapter_spec.get_check_empty() == true && mutableList_spec.size > 0) {
-                        Toast.makeText(this, "請先完成輸入才能新增下個項目", Toast.LENGTH_SHORT).show()
+                    if (EDIT_MODE_SPEC == "0") {
+
+                        if (mAdapter_spec.get_check_empty() == true && mutableList_spec.size > 0) {
+                            Toast.makeText(this, "請先完成輸入才能新增下個項目", Toast.LENGTH_SHORT).show()
+                        } else {
+
+                            Thread(Runnable {
+
+                                mutableList_spec = mAdapter_spec.get_spec_list()
+                                mutableList_spec.add(
+                                    ItemSpecification(
+                                        "",
+                                        R.drawable.custom_unit_transparent
+                                    )
+                                )
+
+                                runOnUiThread {
+                                    //更新或新增item
+                                    mAdapter_spec.updateList(mutableList_spec)
+                                    mAdapter_spec.notifyDataSetChanged()
+
+                                }
+
+                            }).start()
+                        }
+
+
                     } else {
 
-                        Thread(Runnable {
+                        if (mAdapter_spec.get_check_empty() == true && mutableList_spec.size > 0) {
+                            Toast.makeText(this, "請先完成輸入才能新增下個項目", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Thread(Runnable {
 
-                            mutableList_spec = mAdapter_spec.get_spec_list()
-                            mutableList_spec.add(
-                                ItemSpecification(
-                                    "",
-                                    R.drawable.custom_unit_transparent
+                                mutableList_spec.add(
+                                    ItemSpecification(
+                                        "",
+                                        R.mipmap.btn_delete_spec_item
+                                    )
                                 )
-                            )
 
-                            runOnUiThread {
-                                //更新或新增item
-                                mAdapter_spec.updateList(mutableList_spec)
-                                mAdapter_spec.notifyDataSetChanged()
+                                runOnUiThread {
 
-                                //判斷Next Step Btn is enable or disable
-                                changeStatusOfNextStepBtn()
+                                    //更新或新增item
+                                    mAdapter_spec.updateList(mutableList_spec)
+                                    mAdapter_spec.notifyDataSetChanged()
 
-                            }
+                                }
 
-                        }).start()
+                            }).start()
+                        }
+
                     }
-
 
                 } else {
 
-                    if (mAdapter_spec.get_check_empty() == true && mutableList_spec.size > 0) {
-                        Toast.makeText(this, "請先完成輸入才能新增下個項目", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Thread(Runnable {
-
-                            mutableList_spec.add(
-                                ItemSpecification(
-                                    "",
-                                    R.mipmap.btn_delete_spec_item
-                                )
-                            )
-
-                            runOnUiThread {
-
-                                //更新或新增item
-                                mAdapter_spec.updateList(mutableList_spec)
-                                mAdapter_spec.notifyDataSetChanged()
-
-                                //判斷Next Step Btn is enable or disable
-                                changeStatusOfNextStepBtn()
-
-                            }
-
-                        }).start()
-                    }
+                    Toast.makeText(this, "只能新增最多三個規格", Toast.LENGTH_SHORT).show()
 
                 }
-
-            } else {
-
-                Toast.makeText(this, "只能新增最多三個規格", Toast.LENGTH_SHORT).show()
-
             }
+
         }
 
         //second specification "spec" setting enable
         binding.btnEditspecificationEnableSpec.setOnClickListener {
 
             binding.btnClearAllSpec.isVisible = true
+            binding.btnEditspecificationEnableSize.disable()
 
             EDIT_MODE_SPEC = "1"
 
@@ -351,9 +350,6 @@ class EditProductSpecificationMainActivity : BaseActivity() {
                     mAdapter_spec.updateList(mutableList_spec)
                     mAdapter_spec.notifyDataSetChanged()
 
-                    //判斷Next Step Btn is enable or disable
-                    changeStatusOfNextStepBtn()
-
                 }
 
             }).start()
@@ -364,6 +360,7 @@ class EditProductSpecificationMainActivity : BaseActivity() {
         binding.btnEditspecificationDisableSpec.setOnClickListener {
 
             binding.btnClearAllSpec.isVisible = false
+            binding.btnEditspecificationEnableSize.enable()
 
             EDIT_MODE_SPEC = "0"
 
@@ -390,11 +387,14 @@ class EditProductSpecificationMainActivity : BaseActivity() {
                     mAdapter_spec.updateList(mutableList_spec)
                     mAdapter_spec.notifyDataSetChanged()
 
-                    //判斷Next Step Btn is enable or disable
-                    changeStatusOfNextStepBtn()
                 }
 
             }).start()
+
+            if(mAdapter_spec.get_datas_spec_size()==0){
+                binding.btnNextStep.disable()
+                binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+            }
 
         }
 
@@ -402,87 +402,89 @@ class EditProductSpecificationMainActivity : BaseActivity() {
         //second specification "size" item add
         binding.btnAddspecificationSize.setOnClickListener {
 
-            mutableList_size = mAdapter_size.get_size_list()
 
-            if (mutableList_size.size < 3) {
 
-                if (EDIT_MODE_SIZE == "0") {
+            if(binding.editTextProductSpecSecond.text.isNullOrEmpty()){
+                Toast.makeText(this, "請先完成輸入第一層規格內容", Toast.LENGTH_SHORT).show()
+            }else{
+                mutableList_size = mAdapter_size.get_size_list()
+                if (mutableList_size.size < 3) {
 
-                    if (mAdapter_size.get_check_empty() == true && mutableList_size.size > 0) {
-                        Toast.makeText(this, "請先完成輸入才能新增項目", Toast.LENGTH_SHORT).show()
+                    if (EDIT_MODE_SIZE == "0") {
+
+                        if (mAdapter_size.get_check_empty() == true && mutableList_size.size > 0) {
+                            Toast.makeText(this, "請先完成輸入才能新增項目", Toast.LENGTH_SHORT).show()
+
+                        } else {
+                            Thread(Runnable {
+
+                                mutableList_size = mAdapter_size.get_size_list()
+                                mutableList_size.add(
+                                    ItemSpecification(
+                                        "",
+                                        R.drawable.custom_unit_transparent
+                                    )
+                                )
+
+                                runOnUiThread {
+
+                                    //更新或新增item
+                                    mAdapter_size.updateList(mutableList_size)
+                                    mAdapter_size.notifyDataSetChanged()
+
+
+                                }
+
+                            }).start()
+
+                        }
+
 
                     } else {
-                        Thread(Runnable {
 
-                            mutableList_size = mAdapter_size.get_size_list()
-                            mutableList_size.add(
-                                ItemSpecification(
-                                    "",
-                                    R.drawable.custom_unit_transparent
+
+                        if (mAdapter_size.get_check_empty() == true && mutableList_size.size > 0) {
+                            Toast.makeText(this, "請先完成輸入才能新增項目", Toast.LENGTH_SHORT).show()
+
+                        } else {
+
+                            Thread(Runnable {
+
+                                mutableList_size = mAdapter_size.get_size_list()
+                                mutableList_size.add(
+                                    ItemSpecification(
+                                        "",
+                                        R.mipmap.btn_delete_spec_item
+                                    )
                                 )
-                            )
 
-                            runOnUiThread {
+                                runOnUiThread {
 
-                                //更新或新增item
-                                mAdapter_size.updateList(mutableList_size)
-                                mAdapter_size.notifyDataSetChanged()
+                                    //更新或新增item
+                                    mAdapter_size.updateList(mutableList_size)
+                                    mAdapter_size.notifyDataSetChanged()
 
-                                //判斷Next Step Btn is enable or disable
-                                changeStatusOfNextStepBtn()
-                            }
+                                }
 
-                        }).start()
+
+                            }).start()
+
+                        }
+
 
                     }
-
 
                 } else {
-
-
-                    if (mAdapter_size.get_check_empty() == true && mutableList_size.size > 0) {
-                        Toast.makeText(this, "請先完成輸入才能新增項目", Toast.LENGTH_SHORT).show()
-
-                    } else {
-
-                        Thread(Runnable {
-
-                            mutableList_size = mAdapter_size.get_size_list()
-                            mutableList_size.add(
-                                ItemSpecification(
-                                    "",
-                                    R.mipmap.btn_delete_spec_item
-                                )
-                            )
-
-                            runOnUiThread {
-
-                                //更新或新增item
-                                mAdapter_size.updateList(mutableList_size)
-                                mAdapter_size.notifyDataSetChanged()
-
-                                //判斷Next Step Btn is enable or disable
-                                changeStatusOfNextStepBtn()
-                            }
-
-
-                        }).start()
-
-                    }
-
-
+                    Toast.makeText(this, "只能新增最多三個規格", Toast.LENGTH_SHORT).show()
                 }
-
-            } else {
-                Toast.makeText(this, "只能新增最多三個規格", Toast.LENGTH_SHORT).show()
             }
-
         }
 
         //second specification "size" item settings cancel
         binding.btnEditspecificationDisableSize.setOnClickListener {
 
             binding.btnClearAllSize.isVisible = false
+            binding.btnEditspecificationEnableSpec.enable()
 
             EDIT_MODE_SIZE = "0"
 
@@ -509,11 +511,16 @@ class EditProductSpecificationMainActivity : BaseActivity() {
                     mAdapter_size.updateList(mutableList_size)
                     mAdapter_size.notifyDataSetChanged()
 
-                    //判斷Next Step Btn is enable or disable
-                    changeStatusOfNextStepBtn()
                 }
 
             }).start()
+
+
+            if(mAdapter_size.get_datas_size_size()==0 && mAdapter_spec.get_datas_spec_size()==0){
+                binding.btnNextStep.disable()
+                binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+            }
+
 
 
         }
@@ -522,6 +529,7 @@ class EditProductSpecificationMainActivity : BaseActivity() {
         binding.btnEditspecificationEnableSize.setOnClickListener {
 
             binding.btnClearAllSize.isVisible = true
+            binding.btnEditspecificationEnableSpec.disable()
 
             EDIT_MODE_SIZE = "1"
 
@@ -548,8 +556,6 @@ class EditProductSpecificationMainActivity : BaseActivity() {
                     mAdapter_size.updateList(mutableList_size)
                     mAdapter_size.notifyDataSetChanged()
 
-                    //判斷Next Step Btn is enable or disable
-                    changeStatusOfNextStepBtn()
                 }
 
             }).start()
@@ -574,15 +580,15 @@ class EditProductSpecificationMainActivity : BaseActivity() {
                 if (s.toString() == "") {
 
                     MMKV.mmkvWithID("addPro").putString("value_editTextProductSpecFirst", "")
-                    firstSpecGrpTitle_check = 0
 
                 } else {
 
                     MMKV.mmkvWithID("addPro")
                         .putString("value_editTextProductSpecFirst", s.toString())
-                    firstSpecGrpTitle_check = 1
+
 
                 }
+
             }
         }
         val second_textWatcher = object : TextWatcher {
@@ -599,15 +605,15 @@ class EditProductSpecificationMainActivity : BaseActivity() {
                 if (s.toString() == "") {
 
                     MMKV.mmkvWithID("addPro").putString("value_editTextProductSpecSecondt", "")
-                    secondSpecGrpTitle_check = 0
+
 
                 } else {
 
                     MMKV.mmkvWithID("addPro")
                         .putString("value_editTextProductSpecSecond", s.toString())
-                    secondSpecGrpTitle_check = 1
 
                 }
+
             }
         }
         binding.editTextProductSpecFirst.addTextChangedListener(first_textWatcher)
@@ -619,15 +625,25 @@ class EditProductSpecificationMainActivity : BaseActivity() {
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
 
-                    MMKV.mmkvWithID("addPro").putString(
-                        "value_editTextProductSpecFirst",
-                        binding.editTextProductSpecFirst.text.toString()
-                    )
+                    if( binding.editTextProductSpecFirst.text.toString().isNullOrEmpty()){
+                        binding.btnNextStep.isEnabled = false
+                        binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+                    }
+
+
+                    if(binding.editTextProductSpecSecond.text.toString() == binding.editTextProductSpecFirst.text.toString()){
+                        Toast.makeText(this, "規格名稱不可重複", Toast.LENGTH_SHORT).show()
+                        binding.editTextProductSpecFirst.setText("")
+                    }else {
+                        MMKV.mmkvWithID("addPro").putString(
+                            "value_editTextProductSpecFirst",
+                            binding.editTextProductSpecFirst.text.toString()
+                        )
+                    }
 
                     binding.editTextProductSpecFirst.hideKeyboard()
                     binding.editTextProductSpecFirst.clearFocus()
 
-                    changeStatusOfNextStepBtn()
 
                     true
                 }
@@ -639,15 +655,39 @@ class EditProductSpecificationMainActivity : BaseActivity() {
         binding.editTextProductSpecSecond.setOnEditorActionListener() { v, actionId, event ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
+                    if(binding.editTextProductSpecSecond.text.toString().isNullOrEmpty()){
+                        binding.btnNextStep.isEnabled = false
+                        binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+                    }
 
-                    MMKV.mmkvWithID("addPro").putString(
-                        "value_editTextProductSpecSecondt",
-                        binding.editTextProductSpecSecond.text.toString()
-                    )
+
+                    if(binding.editTextProductSpecSecond.text.toString() == binding.editTextProductSpecFirst.text.toString()){
+                        Toast.makeText(this, "規格名稱不可重複", Toast.LENGTH_SHORT).show()
+                        binding.editTextProductSpecSecond.setText("")
+                    }else{
+                        if(binding.editTextProductSpecFirst.text.isNotEmpty()&&mAdapter_spec.nextStepEnableOrNot()){
+                            if (binding.editTextProductSpecFirst.text.toString() == "") {
+
+                                MMKV.mmkvWithID("addPro").putString("value_editTextProductSpecSecondt", "")
+
+
+                            } else {
+
+                                MMKV.mmkvWithID("addPro")
+                                    .putString("value_editTextProductSpecSecond", binding.editTextProductSpecFirst.text.toString())
+
+                            }
+                        }else{
+                            binding.editTextProductSpecSecond.setText("")
+                            Toast.makeText(this@EditProductSpecificationMainActivity, "請先完成輸入第一層規格", Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
+
+
+
                     binding.editTextProductSpecSecond.hideKeyboard()
                     binding.editTextProductSpecSecond.clearFocus()
-
-                    changeStatusOfNextStepBtn()
 
                     true
                 }
@@ -659,25 +699,11 @@ class EditProductSpecificationMainActivity : BaseActivity() {
     fun clearAllSpecItem() {
         mutableList_spec.clear()
         mAdapter_spec.notifyDataSetChanged()
-
     }
 
     fun clearAllSizeItem() {
-
         mutableList_size.clear()
         mAdapter_size.notifyDataSetChanged()
-    }
-
-    fun changeStatusOfNextStepBtn() {
-
-        if ((firstSpecGrpTitle_check != 0 && mAdapter_spec.nextStepEnableOrNot())&&((firstSpecGrpTitle_check != 0 && mAdapter_spec.nextStepEnableOrNot()) || (secondSpecGrpTitle_check != 0 && mAdapter_size.nextStepEnableOrNot()))) {
-            binding.btnNextStep.isEnabled = true
-            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
-        } else {
-            binding.btnNextStep.isEnabled = false
-            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
-        }
-
     }
 
     fun View.hideKeyboard() {
@@ -686,16 +712,74 @@ class EditProductSpecificationMainActivity : BaseActivity() {
         inputManager.hideSoftInputFromWindow(windowToken, 0)
     }
 
-
     override fun onBackPressed() {
-
         val intent = Intent(this, EditProductActivity::class.java)
         startActivity(intent)
         finish()
-
     }
 
+    @SuppressLint("CheckResult")
+    fun initEvent() {
+        var boolean_first_spec: Boolean
+        var boolean_second_spec: Boolean
+
+        RxBus.getInstance().toMainThreadObservable(this, Lifecycle.Event.ON_DESTROY)
+            .subscribe({
+                when (it) {
+                    is EventCheckFirstSpecEnableBtnOrNot -> {
+                        boolean_first_spec = it.boolean
+
+                        when(boolean_first_spec){
+                            true->{
+                                checkButtonNextStep_single()
+
+                            }
+                            false->{
+                                checkButtonNextStep_single()
+
+                            }
+                        }
 
 
+                    }
+                    is EventCheckSecondSpecEnableBtnOrNot -> {
+                        boolean_second_spec=it.boolean
 
+                        when(boolean_second_spec){
+                            true->{
+                                checkButtonNextStep_double()
+                            }
+                            false->{
+                                checkButtonNextStep_double()
+                            }
+                        }
+
+                    }
+                }
+            }, {
+            it.printStackTrace()
+        })
+    }
+
+    fun checkButtonNextStep_single(){
+        //預設btnNextStep disable or enable
+        if (( binding.editTextProductSpecFirst.text.isNotEmpty())) {
+            binding.btnNextStep.isEnabled = true
+            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
+        } else {
+            binding.btnNextStep.isEnabled = false
+            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+        }
+    }
+
+    fun checkButtonNextStep_double(){
+        //預設btnNextStep disable or enable
+        if ( binding.editTextProductSpecFirst.text.isNotEmpty() && binding.editTextProductSpecSecond.text.isNotEmpty()) {
+            binding.btnNextStep.isEnabled = true
+            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
+        } else {
+            binding.btnNextStep.isEnabled = false
+            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+        }
+    }
 }

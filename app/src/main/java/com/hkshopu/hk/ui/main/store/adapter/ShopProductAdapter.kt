@@ -53,6 +53,7 @@ class ShopProductAdapter(var fragment: Fragment) : RecyclerView.Adapter<ShopProd
 
         holder.itemView.setOnClickListener{
 
+            MMKV_product_id = mData.get(holder.adapterPosition).id
             MMKV.mmkvWithID("http").putInt("ProductId", MMKV_product_id)
 
             val intent = Intent(fragment.context, MerchandiseActivity::class.java)

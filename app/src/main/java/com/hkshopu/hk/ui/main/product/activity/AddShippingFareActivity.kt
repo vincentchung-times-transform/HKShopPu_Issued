@@ -181,7 +181,6 @@ class AddShippingFareActivity : AppCompatActivity(){
 
         binding.btnShippingFareStore.setOnClickListener {
 
-            val intent = Intent(this, AddNewProductActivity::class.java)
             var datas_ship_method_and_fare : MutableList<ItemShippingFare> = mAdapters_shippingFare.get_shipping_method_datas()
 
             MMKV.mmkvWithID("addPro").putString("datas_packagesWeights", MMKV_datas_packagesWeights.toString())
@@ -256,6 +255,7 @@ class AddShippingFareActivity : AppCompatActivity(){
                 VM.syncShippingfare(this, MMKV_shop_id, jsonTutList_fare)
             }
 
+            val intent = Intent(this, AddNewProductActivity::class.java)
             startActivity(intent)
             finish()
 
