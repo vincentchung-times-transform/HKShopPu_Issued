@@ -433,7 +433,7 @@ public class Web {
             }
         });
     }
-    public void Do_ProductUpdate(String url, int product_category_id, int product_sub_category_id, String product_title, String product_description, int shipping_fee, int weight, String new_secondhand,int product_pic_list_size ,ArrayList<File> product_pic_list, String product_spec_list, int user_id, int length, int width, int height, String shipment_method, int longterm_stock_up, String product_status, String product_spec_on)  {
+    public void Do_ProductUpdate(String url, int product_id, int product_category_id, int product_sub_category_id, String product_title, int quantity, String product_description, int product_price, int shipping_fee, int weight, String new_secondhand,int product_pic_list_size ,ArrayList<File> product_pic_list, String product_spec_list, int user_id, int length, int width, int height, String shipment_method, int longterm_stock_up, String product_status, String product_spec_on) {
         Log.d(TAG, "Do_ProductAdd Url ＝ " + url);
 
         List<MultipartBody.Part> images = new ArrayList<>();
@@ -447,10 +447,13 @@ public class Web {
 
         MultipartBody.Builder requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
+                .addFormDataPart("product_id", String.valueOf(product_id))
                 .addFormDataPart("product_category_id", String.valueOf(product_category_id))
                 .addFormDataPart("product_sub_category_id", String.valueOf(product_sub_category_id))
                 .addFormDataPart("product_title", String.valueOf(product_title))
+                .addFormDataPart("quantity", String.valueOf(quantity))
                 .addFormDataPart("product_description", String.valueOf(product_description))
+                .addFormDataPart("product_price", String.valueOf(product_price))
                 .addFormDataPart("shipping_fee", String.valueOf(shipping_fee))
                 .addFormDataPart("weight", String.valueOf(weight))
                 .addFormDataPart("new_secondhand", String.valueOf(new_secondhand))

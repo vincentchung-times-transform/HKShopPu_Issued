@@ -57,7 +57,6 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
 
                 activity.runOnUiThread {
                     addEmptyItem()
-
                 }
 
             }).start()
@@ -97,9 +96,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
             editText_shipping_name.setOnEditorActionListener() { v, actionId, event ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
-
 //                        storeStatus()
-
                         value_shipping_name = editText_shipping_name.text.toString()
                         value_shipping_fare = editText_shipping_fare.text.toString()
                         if(switch_view.isOpened()){
@@ -107,7 +104,6 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                         }else{
                             value_shipping_isChecked = "off"
                         }
-
 
                         //檢查名稱是否重複
                         var check_duplicate = 0
@@ -153,7 +149,6 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                             value_shipping_isChecked = "off"
                         }
 
-
                         if (value_shipping_fare == "") {
                             value_shipping_fare = "0"
                             onItemUpdate(
@@ -163,16 +158,13 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                                 adapterPosition
                             )
 
-
                         } else {
-
                             onItemUpdate(
                                 value_shipping_name,
                                 value_shipping_fare.toInt(),
                                 value_shipping_isChecked,
                                 adapterPosition
                             )
-
                         }
                         editText_shipping_fare.clearFocus()
 
@@ -201,6 +193,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
 
                             value_shipping_isChecked = "on"
 
+
                             onItemUpdate(
                                 value_shipping_name,
                                 value_shipping_fare.toInt(),
@@ -210,13 +203,10 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
 
 
                             Thread(Runnable {
-
                                 activity.runOnUiThread {
                                     addEmptyItem()
                                 }
-
                             }).start()
-
 
                         }
 

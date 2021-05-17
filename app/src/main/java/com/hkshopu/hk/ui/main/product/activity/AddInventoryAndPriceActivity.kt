@@ -130,7 +130,6 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
     }
 
     fun initView() {
-        binding.titleInven.setText(R.string.title_editInventoryAndPrice)
 
         initSpecDatas()
 
@@ -192,9 +191,222 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 mutableList_InvenDatas[2]?.quantity =
                                     binding.secondLayerItemQuant03.text.toString().toInt()
                             }
-
+//                            4->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                            }
+//                            5->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                            }
+//                            6->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//
+//                            }
+//                            7->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//
+//                            }
+//                            8->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice08.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant08.text.toString().toInt()
+//
+//                            }
+//                            9->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice08.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant08.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice09.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant09.text.toString().toInt()
+//
+//                            }
+//                            10->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice08.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant08.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice09.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant09.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice10.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant10.text.toString().toInt()
+//
+//                            }
                         }
-
                     }
                     2 -> {
 
@@ -206,9 +418,9 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 mutableList_InvenDatas[0]?.quantity =
                                     binding.secondLayerItemQuant01.text.toString().toInt()
                                 mutableList_InvenDatas[1]?.price =
-                                    binding.secondLayerItemPrice04.text.toString().toInt()
+                                    binding.secondLayerItemPrice11.text.toString().toInt()
                                 mutableList_InvenDatas[1]?.quantity =
-                                    binding.secondLayerItemQuant04.text.toString().toInt()
+                                    binding.secondLayerItemQuant11.text.toString().toInt()
 
                             }
                             2 -> {
@@ -221,13 +433,13 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 mutableList_InvenDatas[1]?.quantity =
                                     binding.secondLayerItemQuant02.text.toString().toInt()
                                 mutableList_InvenDatas[2]?.price =
-                                    binding.secondLayerItemPrice04.text.toString().toInt()
+                                    binding.secondLayerItemPrice11.text.toString().toInt()
                                 mutableList_InvenDatas[2]?.quantity =
-                                    binding.secondLayerItemQuant04.text.toString().toInt()
+                                    binding.secondLayerItemQuant11.text.toString().toInt()
                                 mutableList_InvenDatas[3]?.price =
-                                    binding.secondLayerItemPrice05.text.toString().toInt()
+                                    binding.secondLayerItemPrice12.text.toString().toInt()
                                 mutableList_InvenDatas[3]?.quantity =
-                                    binding.secondLayerItemQuant05.text.toString().toInt()
+                                    binding.secondLayerItemQuant12.text.toString().toInt()
 
                             }
                             3 -> {
@@ -244,20 +456,439 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 mutableList_InvenDatas[2]?.quantity =
                                     binding.secondLayerItemQuant03.text.toString().toInt()
                                 mutableList_InvenDatas[3]?.price =
-                                    binding.secondLayerItemPrice04.text.toString().toInt()
+                                    binding.secondLayerItemPrice11.text.toString().toInt()
                                 mutableList_InvenDatas[3]?.quantity =
-                                    binding.secondLayerItemQuant04.text.toString().toInt()
+                                    binding.secondLayerItemQuant11.text.toString().toInt()
                                 mutableList_InvenDatas[4]?.price =
-                                    binding.secondLayerItemPrice05.text.toString().toInt()
+                                    binding.secondLayerItemPrice12.text.toString().toInt()
                                 mutableList_InvenDatas[4]?.quantity =
-                                    binding.secondLayerItemQuant05.text.toString().toInt()
+                                    binding.secondLayerItemQuant12.text.toString().toInt()
                                 mutableList_InvenDatas[5]?.price =
-                                    binding.secondLayerItemPrice06.text.toString().toInt()
+                                    binding.secondLayerItemPrice13.text.toString().toInt()
                                 mutableList_InvenDatas[5]?.quantity =
-                                    binding.secondLayerItemQuant06.text.toString().toInt()
+                                    binding.secondLayerItemQuant13.text.toString().toInt()
 
 
                             }
+//                            4->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//
+//
+//                            }
+//                            5->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice15.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant15.text.toString().toInt()
+//
+//
+//                            }
+//                            6->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.price =
+//                                    binding.secondLayerItemPrice15.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.quantity =
+//                                    binding.secondLayerItemQuant15.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.price =
+//                                    binding.secondLayerItemPrice16.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.quantity =
+//                                    binding.secondLayerItemQuant16.text.toString().toInt()
+//
+//                            }
+//                            7->{
+//
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.price =
+//                                    binding.secondLayerItemPrice15.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.quantity =
+//                                    binding.secondLayerItemQuant15.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.price =
+//                                    binding.secondLayerItemPrice16.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.quantity =
+//                                    binding.secondLayerItemQuant16.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.price =
+//                                    binding.secondLayerItemPrice17.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.quantity =
+//                                    binding.secondLayerItemQuant17.text.toString().toInt()
+//
+//
+//                            }
+//                            8->{
+//
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice08.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant08.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.price =
+//                                    binding.secondLayerItemPrice15.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.quantity =
+//                                    binding.secondLayerItemQuant15.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.price =
+//                                    binding.secondLayerItemPrice16.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.quantity =
+//                                    binding.secondLayerItemQuant16.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.price =
+//                                    binding.secondLayerItemPrice17.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.quantity =
+//                                    binding.secondLayerItemQuant17.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.price =
+//                                    binding.secondLayerItemPrice18.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.quantity =
+//                                    binding.secondLayerItemQuant18.text.toString().toInt()
+//
+//                            }
+//                            9->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice08.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant08.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice09.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant09.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.price =
+//                                    binding.secondLayerItemPrice15.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.quantity =
+//                                    binding.secondLayerItemQuant15.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.price =
+//                                    binding.secondLayerItemPrice16.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.quantity =
+//                                    binding.secondLayerItemQuant16.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.price =
+//                                    binding.secondLayerItemPrice17.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.quantity =
+//                                    binding.secondLayerItemQuant17.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.price =
+//                                    binding.secondLayerItemPrice18.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.quantity =
+//                                    binding.secondLayerItemQuant18.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.price =
+//                                    binding.secondLayerItemPrice19.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.quantity =
+//                                    binding.secondLayerItemQuant19.text.toString().toInt()
+//
+//                            }
+//                            10->{
+//
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice08.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant08.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice09.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant09.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice10.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant10.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.price =
+//                                    binding.secondLayerItemPrice15.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.quantity =
+//                                    binding.secondLayerItemQuant15.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.price =
+//                                    binding.secondLayerItemPrice16.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.quantity =
+//                                    binding.secondLayerItemQuant16.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.price =
+//                                    binding.secondLayerItemPrice17.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.quantity =
+//                                    binding.secondLayerItemQuant17.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.price =
+//                                    binding.secondLayerItemPrice18.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.quantity =
+//                                    binding.secondLayerItemQuant18.text.toString().toInt()
+//                                mutableList_InvenDatas[18]?.price =
+//                                    binding.secondLayerItemPrice19.text.toString().toInt()
+//                                mutableList_InvenDatas[18]?.quantity =
+//                                    binding.secondLayerItemQuant19.text.toString().toInt()
+//                                mutableList_InvenDatas[19]?.price =
+//                                    binding.secondLayerItemPrice20.text.toString().toInt()
+//                                mutableList_InvenDatas[19]?.quantity =
+//                                    binding.secondLayerItemQuant20.text.toString().toInt()
+//
+//                            }
 
                         }
 
@@ -273,13 +904,13 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 mutableList_InvenDatas[0]?.quantity =
                                     binding.secondLayerItemQuant01.text.toString().toInt()
                                 mutableList_InvenDatas[1]?.price =
-                                    binding.secondLayerItemPrice04.text.toString().toInt()
+                                    binding.secondLayerItemPrice11.text.toString().toInt()
                                 mutableList_InvenDatas[1]?.quantity =
-                                    binding.secondLayerItemQuant04.text.toString().toInt()
+                                    binding.secondLayerItemQuant11.text.toString().toInt()
                                 mutableList_InvenDatas[2]?.price =
-                                    binding.secondLayerItemPrice07.text.toString().toInt()
+                                    binding.secondLayerItemPrice21.text.toString().toInt()
                                 mutableList_InvenDatas[2]?.quantity =
-                                    binding.secondLayerItemQuant07.text.toString().toInt()
+                                    binding.secondLayerItemQuant21.text.toString().toInt()
 
                             }
                             2 -> {
@@ -293,21 +924,21 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 mutableList_InvenDatas[1]?.quantity =
                                     binding.secondLayerItemQuant02.text.toString().toInt()
                                 mutableList_InvenDatas[2]?.price =
-                                    binding.secondLayerItemPrice04.text.toString().toInt()
+                                    binding.secondLayerItemPrice11.text.toString().toInt()
                                 mutableList_InvenDatas[2]?.quantity =
-                                    binding.secondLayerItemQuant04.text.toString().toInt()
+                                    binding.secondLayerItemQuant11.text.toString().toInt()
                                 mutableList_InvenDatas[3]?.price =
-                                    binding.secondLayerItemPrice05.text.toString().toInt()
+                                    binding.secondLayerItemPrice12.text.toString().toInt()
                                 mutableList_InvenDatas[3]?.quantity =
-                                    binding.secondLayerItemQuant05.text.toString().toInt()
+                                    binding.secondLayerItemQuant12.text.toString().toInt()
                                 mutableList_InvenDatas[4]?.price =
-                                    binding.secondLayerItemPrice07.text.toString().toInt()
+                                    binding.secondLayerItemPrice21.text.toString().toInt()
                                 mutableList_InvenDatas[4]?.quantity =
-                                    binding.secondLayerItemQuant07.text.toString().toInt()
+                                    binding.secondLayerItemQuant21.text.toString().toInt()
                                 mutableList_InvenDatas[5]?.price =
-                                    binding.secondLayerItemPrice08.text.toString().toInt()
+                                    binding.secondLayerItemPrice22.text.toString().toInt()
                                 mutableList_InvenDatas[5]?.quantity =
-                                    binding.secondLayerItemQuant08.text.toString().toInt()
+                                    binding.secondLayerItemQuant22.text.toString().toInt()
 
 
                             }
@@ -324,32 +955,562 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                     binding.secondLayerItemPrice03.text.toString().toInt()
                                 mutableList_InvenDatas[2]?.quantity =
                                     binding.secondLayerItemQuant03.text.toString().toInt()
+
                                 mutableList_InvenDatas[3]?.price =
-                                    binding.secondLayerItemPrice04.text.toString().toInt()
+                                    binding.secondLayerItemPrice11.text.toString().toInt()
                                 mutableList_InvenDatas[3]?.quantity =
-                                    binding.secondLayerItemQuant04.text.toString().toInt()
+                                    binding.secondLayerItemQuant11.text.toString().toInt()
                                 mutableList_InvenDatas[4]?.price =
-                                    binding.secondLayerItemPrice05.text.toString().toInt()
+                                    binding.secondLayerItemPrice12.text.toString().toInt()
                                 mutableList_InvenDatas[4]?.quantity =
-                                    binding.secondLayerItemQuant05.text.toString().toInt()
+                                    binding.secondLayerItemQuant12.text.toString().toInt()
                                 mutableList_InvenDatas[5]?.price =
-                                    binding.secondLayerItemPrice06.text.toString().toInt()
+                                    binding.secondLayerItemPrice13.text.toString().toInt()
                                 mutableList_InvenDatas[5]?.quantity =
-                                    binding.secondLayerItemQuant06.text.toString().toInt()
+                                    binding.secondLayerItemQuant13.text.toString().toInt()
+
                                 mutableList_InvenDatas[6]?.price =
-                                    binding.secondLayerItemPrice07.text.toString().toInt()
+                                    binding.secondLayerItemPrice21.text.toString().toInt()
                                 mutableList_InvenDatas[6]?.quantity =
-                                    binding.secondLayerItemQuant07.text.toString().toInt()
+                                    binding.secondLayerItemQuant21.text.toString().toInt()
                                 mutableList_InvenDatas[7]?.price =
-                                    binding.secondLayerItemPrice08.text.toString().toInt()
+                                    binding.secondLayerItemPrice22.text.toString().toInt()
                                 mutableList_InvenDatas[7]?.quantity =
-                                    binding.secondLayerItemQuant08.text.toString().toInt()
+                                    binding.secondLayerItemQuant22.text.toString().toInt()
                                 mutableList_InvenDatas[8]?.price =
-                                    binding.secondLayerItemPrice09.text.toString().toInt()
+                                    binding.secondLayerItemPrice23.text.toString().toInt()
                                 mutableList_InvenDatas[8]?.quantity =
-                                    binding.secondLayerItemQuant09.text.toString().toInt()
+                                    binding.secondLayerItemQuant23.text.toString().toInt()
 
                             }
+//                            4->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice21.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant21.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice22.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant22.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.price =
+//                                    binding.secondLayerItemPrice23.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.quantity =
+//                                    binding.secondLayerItemQuant23.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.price =
+//                                    binding.secondLayerItemPrice24.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.quantity =
+//                                    binding.secondLayerItemQuant24.text.toString().toInt()
+//
+//                            }
+//                            5->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice15.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant15.text.toString().toInt()
+//
+//                                mutableList_InvenDatas[10]?.price =
+//                                    binding.secondLayerItemPrice31.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.quantity =
+//                                    binding.secondLayerItemQuant31.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.price =
+//                                    binding.secondLayerItemPrice32.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.quantity =
+//                                    binding.secondLayerItemQuant32.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.price =
+//                                    binding.secondLayerItemPrice33.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.quantity =
+//                                    binding.secondLayerItemQuant33.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.price =
+//                                    binding.secondLayerItemPrice34.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.quantity =
+//                                    binding.secondLayerItemQuant34.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.price =
+//                                    binding.secondLayerItemPrice35.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.quantity =
+//                                    binding.secondLayerItemQuant35.text.toString().toInt()
+//
+//                            }
+//                            6->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice08.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant08.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice09.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant09.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice10.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant10.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.price =
+//                                    binding.secondLayerItemPrice15.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.quantity =
+//                                    binding.secondLayerItemQuant15.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.price =
+//                                    binding.secondLayerItemPrice16.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.quantity =
+//                                    binding.secondLayerItemQuant16.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.price =
+//                                    binding.secondLayerItemPrice17.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.quantity =
+//                                    binding.secondLayerItemQuant17.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.price =
+//                                    binding.secondLayerItemPrice18.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.quantity =
+//                                    binding.secondLayerItemQuant18.text.toString().toInt()
+//                                mutableList_InvenDatas[18]?.price =
+//                                    binding.secondLayerItemPrice19.text.toString().toInt()
+//                                mutableList_InvenDatas[18]?.quantity =
+//                                    binding.secondLayerItemQuant19.text.toString().toInt()
+//                                mutableList_InvenDatas[19]?.price =
+//                                    binding.secondLayerItemPrice20.text.toString().toInt()
+//                                mutableList_InvenDatas[19]?.quantity =
+//                                    binding.secondLayerItemQuant20.text.toString().toInt()
+//                            }
+//                            7->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice08.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant08.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice09.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant09.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice10.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant10.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.price =
+//                                    binding.secondLayerItemPrice15.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.quantity =
+//                                    binding.secondLayerItemQuant15.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.price =
+//                                    binding.secondLayerItemPrice16.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.quantity =
+//                                    binding.secondLayerItemQuant16.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.price =
+//                                    binding.secondLayerItemPrice17.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.quantity =
+//                                    binding.secondLayerItemQuant17.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.price =
+//                                    binding.secondLayerItemPrice18.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.quantity =
+//                                    binding.secondLayerItemQuant18.text.toString().toInt()
+//                                mutableList_InvenDatas[18]?.price =
+//                                    binding.secondLayerItemPrice19.text.toString().toInt()
+//                                mutableList_InvenDatas[18]?.quantity =
+//                                    binding.secondLayerItemQuant19.text.toString().toInt()
+//                                mutableList_InvenDatas[19]?.price =
+//                                    binding.secondLayerItemPrice20.text.toString().toInt()
+//                                mutableList_InvenDatas[19]?.quantity =
+//                                    binding.secondLayerItemQuant20.text.toString().toInt()
+//                            }
+//                            8->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice08.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant08.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice09.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant09.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice10.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant10.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.price =
+//                                    binding.secondLayerItemPrice15.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.quantity =
+//                                    binding.secondLayerItemQuant15.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.price =
+//                                    binding.secondLayerItemPrice16.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.quantity =
+//                                    binding.secondLayerItemQuant16.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.price =
+//                                    binding.secondLayerItemPrice17.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.quantity =
+//                                    binding.secondLayerItemQuant17.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.price =
+//                                    binding.secondLayerItemPrice18.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.quantity =
+//                                    binding.secondLayerItemQuant18.text.toString().toInt()
+//                                mutableList_InvenDatas[18]?.price =
+//                                    binding.secondLayerItemPrice19.text.toString().toInt()
+//                                mutableList_InvenDatas[18]?.quantity =
+//                                    binding.secondLayerItemQuant19.text.toString().toInt()
+//                                mutableList_InvenDatas[19]?.price =
+//                                    binding.secondLayerItemPrice20.text.toString().toInt()
+//                                mutableList_InvenDatas[19]?.quantity =
+//                                    binding.secondLayerItemQuant20.text.toString().toInt()
+//                            }
+//                            9->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice08.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant08.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice09.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant09.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice10.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant10.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.price =
+//                                    binding.secondLayerItemPrice15.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.quantity =
+//                                    binding.secondLayerItemQuant15.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.price =
+//                                    binding.secondLayerItemPrice16.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.quantity =
+//                                    binding.secondLayerItemQuant16.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.price =
+//                                    binding.secondLayerItemPrice17.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.quantity =
+//                                    binding.secondLayerItemQuant17.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.price =
+//                                    binding.secondLayerItemPrice18.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.quantity =
+//                                    binding.secondLayerItemQuant18.text.toString().toInt()
+//                                mutableList_InvenDatas[18]?.price =
+//                                    binding.secondLayerItemPrice19.text.toString().toInt()
+//                                mutableList_InvenDatas[18]?.quantity =
+//                                    binding.secondLayerItemQuant19.text.toString().toInt()
+//                                mutableList_InvenDatas[19]?.price =
+//                                    binding.secondLayerItemPrice20.text.toString().toInt()
+//                                mutableList_InvenDatas[19]?.quantity =
+//                                    binding.secondLayerItemQuant20.text.toString().toInt()
+//                            }
+//                            10->{
+//                                mutableList_InvenDatas[0]?.price =
+//                                    binding.secondLayerItemPrice01.text.toString().toInt()
+//                                mutableList_InvenDatas[0]?.quantity =
+//                                    binding.secondLayerItemQuant01.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.price =
+//                                    binding.secondLayerItemPrice02.text.toString().toInt()
+//                                mutableList_InvenDatas[1]?.quantity =
+//                                    binding.secondLayerItemQuant02.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.price =
+//                                    binding.secondLayerItemPrice03.text.toString().toInt()
+//                                mutableList_InvenDatas[2]?.quantity =
+//                                    binding.secondLayerItemQuant03.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.price =
+//                                    binding.secondLayerItemPrice04.text.toString().toInt()
+//                                mutableList_InvenDatas[3]?.quantity =
+//                                    binding.secondLayerItemQuant04.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.price =
+//                                    binding.secondLayerItemPrice05.text.toString().toInt()
+//                                mutableList_InvenDatas[4]?.quantity =
+//                                    binding.secondLayerItemQuant05.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.price =
+//                                    binding.secondLayerItemPrice06.text.toString().toInt()
+//                                mutableList_InvenDatas[5]?.quantity =
+//                                    binding.secondLayerItemQuant06.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.price =
+//                                    binding.secondLayerItemPrice07.text.toString().toInt()
+//                                mutableList_InvenDatas[6]?.quantity =
+//                                    binding.secondLayerItemQuant07.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.price =
+//                                    binding.secondLayerItemPrice08.text.toString().toInt()
+//                                mutableList_InvenDatas[7]?.quantity =
+//                                    binding.secondLayerItemQuant08.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.price =
+//                                    binding.secondLayerItemPrice09.text.toString().toInt()
+//                                mutableList_InvenDatas[8]?.quantity =
+//                                    binding.secondLayerItemQuant09.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.price =
+//                                    binding.secondLayerItemPrice10.text.toString().toInt()
+//                                mutableList_InvenDatas[9]?.quantity =
+//                                    binding.secondLayerItemQuant10.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.price =
+//                                    binding.secondLayerItemPrice11.text.toString().toInt()
+//                                mutableList_InvenDatas[10]?.quantity =
+//                                    binding.secondLayerItemQuant11.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.price =
+//                                    binding.secondLayerItemPrice12.text.toString().toInt()
+//                                mutableList_InvenDatas[11]?.quantity =
+//                                    binding.secondLayerItemQuant12.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.price =
+//                                    binding.secondLayerItemPrice13.text.toString().toInt()
+//                                mutableList_InvenDatas[12]?.quantity =
+//                                    binding.secondLayerItemQuant13.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.price =
+//                                    binding.secondLayerItemPrice14.text.toString().toInt()
+//                                mutableList_InvenDatas[13]?.quantity =
+//                                    binding.secondLayerItemQuant14.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.price =
+//                                    binding.secondLayerItemPrice15.text.toString().toInt()
+//                                mutableList_InvenDatas[14]?.quantity =
+//                                    binding.secondLayerItemQuant15.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.price =
+//                                    binding.secondLayerItemPrice16.text.toString().toInt()
+//                                mutableList_InvenDatas[15]?.quantity =
+//                                    binding.secondLayerItemQuant16.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.price =
+//                                    binding.secondLayerItemPrice17.text.toString().toInt()
+//                                mutableList_InvenDatas[16]?.quantity =
+//                                    binding.secondLayerItemQuant17.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.price =
+//                                    binding.secondLayerItemPrice18.text.toString().toInt()
+//                                mutableList_InvenDatas[17]?.quantity =
+//                                    binding.secondLayerItemQuant18.text.toString().toInt()
+//                                mutableList_InvenDatas[18]?.price =
+//                                    binding.secondLayerItemPrice19.text.toString().toInt()
+//                                mutableList_InvenDatas[18]?.quantity =
+//                                    binding.secondLayerItemQuant19.text.toString().toInt()
+//                                mutableList_InvenDatas[19]?.price =
+//                                    binding.secondLayerItemPrice20.text.toString().toInt()
+//                                mutableList_InvenDatas[19]?.quantity =
+//                                    binding.secondLayerItemQuant20.text.toString().toInt()
+//                            }
 
                         }
 
@@ -451,22 +1612,22 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
         setTextWatcher_price(binding.textViewHKdolors01, binding.secondLayerItemPrice01, 0)
         setTextWatcher_price(binding.textViewHKdolors02, binding.secondLayerItemPrice02, 1)
         setTextWatcher_price(binding.textViewHKdolors03, binding.secondLayerItemPrice03, 2)
-        setTextWatcher_price(binding.textViewHKdolors04, binding.secondLayerItemPrice04, 3)
-        setTextWatcher_price(binding.textViewHKdolors05, binding.secondLayerItemPrice05, 4)
-        setTextWatcher_price(binding.textViewHKdolors06, binding.secondLayerItemPrice06, 5)
-        setTextWatcher_price(binding.textViewHKdolors07, binding.secondLayerItemPrice07, 6)
-        setTextWatcher_price(binding.textViewHKdolors08, binding.secondLayerItemPrice08, 7)
-        setTextWatcher_price(binding.textViewHKdolors09, binding.secondLayerItemPrice09, 8)
+        setTextWatcher_price(binding.textViewHKdolors11, binding.secondLayerItemPrice11, 3)
+        setTextWatcher_price(binding.textViewHKdolors12, binding.secondLayerItemPrice12, 4)
+        setTextWatcher_price(binding.textViewHKdolors13, binding.secondLayerItemPrice13, 5)
+        setTextWatcher_price(binding.textViewHKdolors21, binding.secondLayerItemPrice21, 6)
+        setTextWatcher_price(binding.textViewHKdolors22, binding.secondLayerItemPrice22, 7)
+        setTextWatcher_price(binding.textViewHKdolors23, binding.secondLayerItemPrice23, 8)
 
         setTextWatcher_quant(binding.secondLayerItemQuant01, 0)
         setTextWatcher_quant(binding.secondLayerItemQuant02, 1)
         setTextWatcher_quant(binding.secondLayerItemQuant03, 2)
-        setTextWatcher_quant(binding.secondLayerItemQuant04, 3)
-        setTextWatcher_quant(binding.secondLayerItemQuant05, 4)
-        setTextWatcher_quant(binding.secondLayerItemQuant06, 5)
-        setTextWatcher_quant(binding.secondLayerItemQuant07, 6)
-        setTextWatcher_quant(binding.secondLayerItemQuant08, 7)
-        setTextWatcher_quant(binding.secondLayerItemQuant09, 8)
+        setTextWatcher_quant(binding.secondLayerItemQuant11, 3)
+        setTextWatcher_quant(binding.secondLayerItemQuant12, 4)
+        setTextWatcher_quant(binding.secondLayerItemQuant13, 5)
+        setTextWatcher_quant(binding.secondLayerItemQuant21, 6)
+        setTextWatcher_quant(binding.secondLayerItemQuant22, 7)
+        setTextWatcher_quant(binding.secondLayerItemQuant23, 8)
 
 
         if(datas_spec_size != null &&  datas_size_size != null) {
@@ -579,20 +1740,20 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 binding.secondLayerItemContainer01.isVisible = true
                                 binding.secondLayerItemContainer02.isVisible = false
                                 binding.secondLayerItemContainer03.isVisible = false
-                                binding.secondLayerItemContainer04.isVisible = true
-                                binding.secondLayerItemContainer05.isVisible = false
-                                binding.secondLayerItemContainer06.isVisible = false
+                                binding.secondLayerItemContainer11.isVisible = true
+                                binding.secondLayerItemContainer12.isVisible = false
+                                binding.secondLayerItemContainer13.isVisible = false
 
                                 binding.secondLayerItemName01.text =  mutableList_size[0].spec_name
                                 binding.secondLayerItemPrice01.setText(mutableList_InvenDatas[0].price.toString())
                                 binding.secondLayerItemQuant01.setText(mutableList_InvenDatas[0].quantity.toString())
-                                binding.secondLayerItemName04.text =  mutableList_size[0].spec_name
-                                binding.secondLayerItemPrice04.setText(mutableList_InvenDatas[1].price.toString())
-                                binding.secondLayerItemQuant04.setText(mutableList_InvenDatas[1].quantity.toString())
+                                binding.secondLayerItemName11.text =  mutableList_size[0].spec_name
+                                binding.secondLayerItemPrice11.setText(mutableList_InvenDatas[1].price.toString())
+                                binding.secondLayerItemQuant11.setText(mutableList_InvenDatas[1].quantity.toString())
                                 mutableList_InvenDatas[0]?.price = binding.secondLayerItemPrice01.text.toString().toInt()
                                 mutableList_InvenDatas[0]?.quantity = binding.secondLayerItemQuant01.text.toString().toInt()
-                                mutableList_InvenDatas[1]?.price = binding.secondLayerItemPrice04.text.toString().toInt()
-                                mutableList_InvenDatas[1]?.quantity = binding.secondLayerItemQuant04.text.toString().toInt()
+                                mutableList_InvenDatas[1]?.price = binding.secondLayerItemPrice11.text.toString().toInt()
+                                mutableList_InvenDatas[1]?.quantity = binding.secondLayerItemQuant11.text.toString().toInt()
 
                             }
                             2->{
@@ -615,9 +1776,9 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 binding.secondLayerItemContainer01.isVisible = true
                                 binding.secondLayerItemContainer02.isVisible = true
                                 binding.secondLayerItemContainer03.isVisible = false
-                                binding.secondLayerItemContainer04.isVisible = true
-                                binding.secondLayerItemContainer05.isVisible = true
-                                binding.secondLayerItemContainer06.isVisible = false
+                                binding.secondLayerItemContainer11.isVisible = true
+                                binding.secondLayerItemContainer11.isVisible = true
+                                binding.secondLayerItemContainer11.isVisible = false
 
                                 binding.secondLayerItemName01.text =  mutableList_size[0].spec_name
                                 binding.secondLayerItemPrice01.setText(mutableList_InvenDatas[0].price.toString())
@@ -625,21 +1786,21 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 binding.secondLayerItemName02.text =  mutableList_size[1].spec_name
                                 binding.secondLayerItemPrice02.setText(mutableList_InvenDatas[1].price.toString())
                                 binding.secondLayerItemQuant02.setText(mutableList_InvenDatas[1].quantity.toString())
-                                binding.secondLayerItemName04.text =  mutableList_size[0].spec_name
-                                binding.secondLayerItemPrice04.setText(mutableList_InvenDatas[2].price.toString())
-                                binding.secondLayerItemQuant04.setText(mutableList_InvenDatas[2].quantity.toString())
-                                binding.secondLayerItemName05.text =  mutableList_size[1].spec_name
-                                binding.secondLayerItemPrice05.setText(mutableList_InvenDatas[3].price.toString())
-                                binding.secondLayerItemQuant05.setText(mutableList_InvenDatas[3].quantity.toString())
+                                binding.secondLayerItemName11.text =  mutableList_size[0].spec_name
+                                binding.secondLayerItemPrice11.setText(mutableList_InvenDatas[2].price.toString())
+                                binding.secondLayerItemQuant11.setText(mutableList_InvenDatas[2].quantity.toString())
+                                binding.secondLayerItemName12.text =  mutableList_size[1].spec_name
+                                binding.secondLayerItemPrice12.setText(mutableList_InvenDatas[3].price.toString())
+                                binding.secondLayerItemQuant12.setText(mutableList_InvenDatas[3].quantity.toString())
 
                                 mutableList_InvenDatas[0]?.price = binding.secondLayerItemPrice01.text.toString().toInt()
                                 mutableList_InvenDatas[0]?.quantity = binding.secondLayerItemQuant01.text.toString().toInt()
                                 mutableList_InvenDatas[1]?.price = binding.secondLayerItemPrice02.text.toString().toInt()
                                 mutableList_InvenDatas[1]?.quantity = binding.secondLayerItemQuant02.text.toString().toInt()
-                                mutableList_InvenDatas[2]?.price = binding.secondLayerItemPrice04.text.toString().toInt()
-                                mutableList_InvenDatas[2]?.quantity = binding.secondLayerItemQuant04.text.toString().toInt()
-                                mutableList_InvenDatas[3]?.price = binding.secondLayerItemPrice05.text.toString().toInt()
-                                mutableList_InvenDatas[3]?.quantity = binding.secondLayerItemQuant05.text.toString().toInt()
+                                mutableList_InvenDatas[2]?.price = binding.secondLayerItemPrice11.text.toString().toInt()
+                                mutableList_InvenDatas[2]?.quantity = binding.secondLayerItemQuant11.text.toString().toInt()
+                                mutableList_InvenDatas[3]?.price = binding.secondLayerItemPrice12.text.toString().toInt()
+                                mutableList_InvenDatas[3]?.quantity = binding.secondLayerItemQuant12.text.toString().toInt()
 
                             }
                             3->{
@@ -655,9 +1816,9 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 binding.secondLayerItemContainer01.isVisible = true
                                 binding.secondLayerItemContainer02.isVisible = true
                                 binding.secondLayerItemContainer03.isVisible = true
-                                binding.secondLayerItemContainer04.isVisible = true
-                                binding.secondLayerItemContainer05.isVisible = true
-                                binding.secondLayerItemContainer06.isVisible = true
+                                binding.secondLayerItemContainer11.isVisible = true
+                                binding.secondLayerItemContainer11.isVisible = true
+                                binding.secondLayerItemContainer11.isVisible = true
 
                                 binding.secondLayerItemName01.text =  mutableList_size[0].spec_name
                                 binding.secondLayerItemPrice01.setText(mutableList_InvenDatas[0]?.price.toString())
@@ -668,15 +1829,15 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 binding.secondLayerItemName03.text =  mutableList_size[2].spec_name
                                 binding.secondLayerItemPrice03.setText(mutableList_InvenDatas[2]?.price.toString())
                                 binding.secondLayerItemQuant03.setText(mutableList_InvenDatas[2]?.quantity.toString())
-                                binding.secondLayerItemName04.text =  mutableList_size[0].spec_name
-                                binding.secondLayerItemPrice04.setText(mutableList_InvenDatas[3]?.price.toString())
-                                binding.secondLayerItemQuant04.setText(mutableList_InvenDatas[3]?.quantity.toString())
-                                binding.secondLayerItemName05.text =  mutableList_size[1].spec_name
-                                binding.secondLayerItemPrice05.setText(mutableList_InvenDatas[4]?.price.toString())
-                                binding.secondLayerItemQuant05.setText(mutableList_InvenDatas[4]?.quantity.toString())
-                                binding.secondLayerItemName06.text =  mutableList_size[2].spec_name
-                                binding.secondLayerItemPrice06.setText(mutableList_InvenDatas[5]?.price.toString())
-                                binding.secondLayerItemQuant06.setText(mutableList_InvenDatas[5]?.quantity.toString())
+                                binding.secondLayerItemName11.text =  mutableList_size[0].spec_name
+                                binding.secondLayerItemPrice11.setText(mutableList_InvenDatas[3]?.price.toString())
+                                binding.secondLayerItemQuant11.setText(mutableList_InvenDatas[3]?.quantity.toString())
+                                binding.secondLayerItemName12.text =  mutableList_size[1].spec_name
+                                binding.secondLayerItemPrice12.setText(mutableList_InvenDatas[4]?.price.toString())
+                                binding.secondLayerItemQuant12.setText(mutableList_InvenDatas[4]?.quantity.toString())
+                                binding.secondLayerItemName13.text =  mutableList_size[2].spec_name
+                                binding.secondLayerItemPrice13.setText(mutableList_InvenDatas[5]?.price.toString())
+                                binding.secondLayerItemQuant13.setText(mutableList_InvenDatas[5]?.quantity.toString())
 
 
                                 mutableList_InvenDatas[0]?.price = binding.secondLayerItemPrice01.text.toString().toInt()
@@ -685,12 +1846,12 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 mutableList_InvenDatas[1]?.quantity = binding.secondLayerItemQuant02.text.toString().toInt()
                                 mutableList_InvenDatas[2]?.price = binding.secondLayerItemPrice03.text.toString().toInt()
                                 mutableList_InvenDatas[2]?.quantity = binding.secondLayerItemQuant03.text.toString().toInt()
-                                mutableList_InvenDatas[3]?.price = binding.secondLayerItemPrice04.text.toString().toInt()
-                                mutableList_InvenDatas[3]?.quantity = binding.secondLayerItemQuant04.text.toString().toInt()
-                                mutableList_InvenDatas[4]?.price = binding.secondLayerItemPrice05.text.toString().toInt()
-                                mutableList_InvenDatas[4]?.quantity = binding.secondLayerItemQuant05.text.toString().toInt()
-                                mutableList_InvenDatas[5]?.price = binding.secondLayerItemPrice06.text.toString().toInt()
-                                mutableList_InvenDatas[5]?.quantity = binding.secondLayerItemQuant06.text.toString().toInt()
+                                mutableList_InvenDatas[3]?.price = binding.secondLayerItemPrice11.text.toString().toInt()
+                                mutableList_InvenDatas[3]?.quantity = binding.secondLayerItemQuant11.text.toString().toInt()
+                                mutableList_InvenDatas[4]?.price = binding.secondLayerItemPrice12.text.toString().toInt()
+                                mutableList_InvenDatas[4]?.quantity = binding.secondLayerItemQuant12.text.toString().toInt()
+                                mutableList_InvenDatas[5]?.price = binding.secondLayerItemPrice13.text.toString().toInt()
+                                mutableList_InvenDatas[5]?.quantity = binding.secondLayerItemQuant13.text.toString().toInt()
 
 
                             }
@@ -726,30 +1887,30 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 binding.secondLayerItemContainer01.isVisible = true
                                 binding.secondLayerItemContainer02.isVisible = false
                                 binding.secondLayerItemContainer03.isVisible = false
-                                binding.secondLayerItemContainer04.isVisible = true
-                                binding.secondLayerItemContainer05.isVisible = false
-                                binding.secondLayerItemContainer06.isVisible = false
-                                binding.secondLayerItemContainer07.isVisible = true
-                                binding.secondLayerItemContainer08.isVisible = false
-                                binding.secondLayerItemContainer09.isVisible = false
+                                binding.secondLayerItemContainer11.isVisible = true
+                                binding.secondLayerItemContainer12.isVisible = false
+                                binding.secondLayerItemContainer13.isVisible = false
+                                binding.secondLayerItemContainer21.isVisible = true
+                                binding.secondLayerItemContainer22.isVisible = false
+                                binding.secondLayerItemContainer23.isVisible = false
 
                                 binding.secondLayerItemName01.text =  mutableList_size[0].spec_name
                                 binding.secondLayerItemPrice01.setText(mutableList_InvenDatas[0]?.price.toString())
                                 binding.secondLayerItemQuant01.setText(mutableList_InvenDatas[0]?.quantity.toString())
-                                binding.secondLayerItemName04.text =  mutableList_size[0].spec_name
-                                binding.secondLayerItemPrice04.setText(mutableList_InvenDatas[1]?.price.toString())
-                                binding.secondLayerItemQuant04.setText(mutableList_InvenDatas[1]?.quantity.toString())
-                                binding.secondLayerItemName07.text =  mutableList_size[0].spec_name
-                                binding.secondLayerItemPrice07.setText(mutableList_InvenDatas[2]?.price.toString())
-                                binding.secondLayerItemQuant07.setText(mutableList_InvenDatas[2]?.quantity.toString())
+                                binding.secondLayerItemName11.text =  mutableList_size[0].spec_name
+                                binding.secondLayerItemPrice11.setText(mutableList_InvenDatas[1]?.price.toString())
+                                binding.secondLayerItemQuant11.setText(mutableList_InvenDatas[1]?.quantity.toString())
+                                binding.secondLayerItemName21.text =  mutableList_size[0].spec_name
+                                binding.secondLayerItemPrice21.setText(mutableList_InvenDatas[2]?.price.toString())
+                                binding.secondLayerItemQuant21.setText(mutableList_InvenDatas[2]?.quantity.toString())
 
 
                                 mutableList_InvenDatas[0]?.price = binding.secondLayerItemPrice01.text.toString().toInt()
                                 mutableList_InvenDatas[0]?.quantity = binding.secondLayerItemQuant01.text.toString().toInt()
-                                mutableList_InvenDatas[1]?.price = binding.secondLayerItemPrice04.text.toString().toInt()
-                                mutableList_InvenDatas[1]?.quantity = binding.secondLayerItemQuant04.text.toString().toInt()
-                                mutableList_InvenDatas[2]?.price = binding.secondLayerItemPrice07.text.toString().toInt()
-                                mutableList_InvenDatas[2]?.quantity = binding.secondLayerItemQuant07.text.toString().toInt()
+                                mutableList_InvenDatas[1]?.price = binding.secondLayerItemPrice11.text.toString().toInt()
+                                mutableList_InvenDatas[1]?.quantity = binding.secondLayerItemQuant11.text.toString().toInt()
+                                mutableList_InvenDatas[2]?.price = binding.secondLayerItemPrice21.text.toString().toInt()
+                                mutableList_InvenDatas[2]?.quantity = binding.secondLayerItemQuant21.text.toString().toInt()
 
                             }
                             2->{
@@ -764,12 +1925,12 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 binding.secondLayerItemContainer01.isVisible = true
                                 binding.secondLayerItemContainer02.isVisible = true
                                 binding.secondLayerItemContainer03.isVisible = false
-                                binding.secondLayerItemContainer04.isVisible = true
-                                binding.secondLayerItemContainer05.isVisible = true
-                                binding.secondLayerItemContainer06.isVisible = false
-                                binding.secondLayerItemContainer07.isVisible = true
-                                binding.secondLayerItemContainer08.isVisible = true
-                                binding.secondLayerItemContainer09.isVisible = false
+                                binding.secondLayerItemContainer11.isVisible = true
+                                binding.secondLayerItemContainer12.isVisible = true
+                                binding.secondLayerItemContainer13.isVisible = false
+                                binding.secondLayerItemContainer21.isVisible = true
+                                binding.secondLayerItemContainer22.isVisible = true
+                                binding.secondLayerItemContainer23.isVisible = false
 
                                 binding.secondLayerItemName01.text =  mutableList_size[0].spec_name
                                 binding.secondLayerItemPrice01.setText(mutableList_InvenDatas[0]?.price.toString())
@@ -777,32 +1938,32 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 binding.secondLayerItemName02.text =  mutableList_size[1].spec_name
                                 binding.secondLayerItemPrice02.setText(mutableList_InvenDatas[1]?.price.toString())
                                 binding.secondLayerItemQuant02.setText(mutableList_InvenDatas[1]?.quantity.toString())
-                                binding.secondLayerItemName04.text =  mutableList_size[0].spec_name
-                                binding.secondLayerItemPrice04.setText(mutableList_InvenDatas[2]?.price.toString())
-                                binding.secondLayerItemQuant04.setText(mutableList_InvenDatas[2]?.quantity.toString())
-                                binding.secondLayerItemName05.text =  mutableList_size[1].spec_name
-                                binding.secondLayerItemPrice05.setText(mutableList_InvenDatas[3]?.price.toString())
-                                binding.secondLayerItemQuant05.setText(mutableList_InvenDatas[3]?.quantity.toString())
-                                binding.secondLayerItemName07.text =  mutableList_size[0].spec_name
-                                binding.secondLayerItemPrice07.setText(mutableList_InvenDatas[4]?.price.toString())
-                                binding.secondLayerItemQuant07.setText(mutableList_InvenDatas[4]?.quantity.toString())
-                                binding.secondLayerItemName08.text =  mutableList_size[1].spec_name
-                                binding.secondLayerItemPrice08.setText(mutableList_InvenDatas[5]?.price.toString())
-                                binding.secondLayerItemQuant08.setText(mutableList_InvenDatas[5]?.quantity.toString())
+                                binding.secondLayerItemName11.text =  mutableList_size[0].spec_name
+                                binding.secondLayerItemPrice11.setText(mutableList_InvenDatas[2]?.price.toString())
+                                binding.secondLayerItemQuant11.setText(mutableList_InvenDatas[2]?.quantity.toString())
+                                binding.secondLayerItemName12.text =  mutableList_size[1].spec_name
+                                binding.secondLayerItemPrice12.setText(mutableList_InvenDatas[3]?.price.toString())
+                                binding.secondLayerItemQuant12.setText(mutableList_InvenDatas[3]?.quantity.toString())
+                                binding.secondLayerItemName21.text =  mutableList_size[0].spec_name
+                                binding.secondLayerItemPrice21.setText(mutableList_InvenDatas[4]?.price.toString())
+                                binding.secondLayerItemQuant21.setText(mutableList_InvenDatas[4]?.quantity.toString())
+                                binding.secondLayerItemName22.text =  mutableList_size[1].spec_name
+                                binding.secondLayerItemPrice22.setText(mutableList_InvenDatas[5]?.price.toString())
+                                binding.secondLayerItemQuant22.setText(mutableList_InvenDatas[5]?.quantity.toString())
 
 
                                 mutableList_InvenDatas[0]?.price = binding.secondLayerItemPrice01.text.toString().toInt()
                                 mutableList_InvenDatas[0]?.quantity = binding.secondLayerItemQuant01.text.toString().toInt()
                                 mutableList_InvenDatas[1]?.price = binding.secondLayerItemPrice02.text.toString().toInt()
                                 mutableList_InvenDatas[1]?.quantity = binding.secondLayerItemQuant02.text.toString().toInt()
-                                mutableList_InvenDatas[2]?.price = binding.secondLayerItemPrice04.text.toString().toInt()
-                                mutableList_InvenDatas[2]?.quantity = binding.secondLayerItemQuant04.text.toString().toInt()
-                                mutableList_InvenDatas[3]?.price = binding.secondLayerItemPrice05.text.toString().toInt()
-                                mutableList_InvenDatas[3]?.quantity = binding.secondLayerItemQuant05.text.toString().toInt()
-                                mutableList_InvenDatas[4]?.price = binding.secondLayerItemPrice07.text.toString().toInt()
-                                mutableList_InvenDatas[4]?.quantity = binding.secondLayerItemQuant07.text.toString().toInt()
-                                mutableList_InvenDatas[5]?.price = binding.secondLayerItemPrice08.text.toString().toInt()
-                                mutableList_InvenDatas[5]?.quantity = binding.secondLayerItemQuant08.text.toString().toInt()
+                                mutableList_InvenDatas[2]?.price = binding.secondLayerItemPrice11.text.toString().toInt()
+                                mutableList_InvenDatas[2]?.quantity = binding.secondLayerItemQuant11.text.toString().toInt()
+                                mutableList_InvenDatas[3]?.price = binding.secondLayerItemPrice12.text.toString().toInt()
+                                mutableList_InvenDatas[3]?.quantity = binding.secondLayerItemQuant12.text.toString().toInt()
+                                mutableList_InvenDatas[4]?.price = binding.secondLayerItemPrice21.text.toString().toInt()
+                                mutableList_InvenDatas[4]?.quantity = binding.secondLayerItemQuant21.text.toString().toInt()
+                                mutableList_InvenDatas[5]?.price = binding.secondLayerItemPrice22.text.toString().toInt()
+                                mutableList_InvenDatas[5]?.quantity = binding.secondLayerItemQuant22.text.toString().toInt()
 
 
                             }
@@ -822,12 +1983,12 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 binding.secondLayerItemContainer01.isVisible = true
                                 binding.secondLayerItemContainer02.isVisible = true
                                 binding.secondLayerItemContainer03.isVisible = true
-                                binding.secondLayerItemContainer04.isVisible = true
-                                binding.secondLayerItemContainer05.isVisible = true
-                                binding.secondLayerItemContainer06.isVisible = true
-                                binding.secondLayerItemContainer07.isVisible = true
-                                binding.secondLayerItemContainer08.isVisible = true
-                                binding.secondLayerItemContainer09.isVisible = true
+                                binding.secondLayerItemContainer11.isVisible = true
+                                binding.secondLayerItemContainer12.isVisible = true
+                                binding.secondLayerItemContainer13.isVisible = true
+                                binding.secondLayerItemContainer21.isVisible = true
+                                binding.secondLayerItemContainer22.isVisible = true
+                                binding.secondLayerItemContainer23.isVisible = true
 
                                 binding.secondLayerItemName01.text =  mutableList_size[0].spec_name
                                 binding.secondLayerItemPrice01.setText(mutableList_InvenDatas[0]?.price.toString())
@@ -838,24 +1999,24 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 binding.secondLayerItemName03.text =  mutableList_size[2].spec_name
                                 binding.secondLayerItemPrice03.setText(mutableList_InvenDatas[2]?.price.toString())
                                 binding.secondLayerItemQuant03.setText(mutableList_InvenDatas[2]?.quantity.toString())
-                                binding.secondLayerItemName04.text =  mutableList_size[0].spec_name
-                                binding.secondLayerItemPrice04.setText(mutableList_InvenDatas[3]?.price.toString())
-                                binding.secondLayerItemQuant04.setText(mutableList_InvenDatas[3]?.quantity.toString())
-                                binding.secondLayerItemName05.text =  mutableList_size[1].spec_name
-                                binding.secondLayerItemPrice05.setText(mutableList_InvenDatas[4]?.price.toString())
-                                binding.secondLayerItemQuant05.setText(mutableList_InvenDatas[4]?.quantity.toString())
-                                binding.secondLayerItemName06.text =  mutableList_size[2].spec_name
-                                binding.secondLayerItemPrice06.setText(mutableList_InvenDatas[5]?.price.toString())
-                                binding.secondLayerItemQuant06.setText(mutableList_InvenDatas[5]?.quantity.toString())
-                                binding.secondLayerItemName07.text =  mutableList_size[0].spec_name
-                                binding.secondLayerItemPrice07.setText(mutableList_InvenDatas[6]?.price.toString())
-                                binding.secondLayerItemQuant07.setText(mutableList_InvenDatas[6]?.quantity.toString())
-                                binding.secondLayerItemName08.text =  mutableList_size[1].spec_name
-                                binding.secondLayerItemPrice08.setText(mutableList_InvenDatas[7]?.price.toString())
-                                binding.secondLayerItemQuant08.setText(mutableList_InvenDatas[7]?.quantity.toString())
-                                binding.secondLayerItemName09.text =  mutableList_size[2].spec_name
-                                binding.secondLayerItemPrice09.setText(mutableList_InvenDatas[8]?.price.toString())
-                                binding.secondLayerItemQuant09.setText(mutableList_InvenDatas[8]?.quantity.toString())
+                                binding.secondLayerItemName11.text =  mutableList_size[0].spec_name
+                                binding.secondLayerItemPrice11.setText(mutableList_InvenDatas[3]?.price.toString())
+                                binding.secondLayerItemQuant11.setText(mutableList_InvenDatas[3]?.quantity.toString())
+                                binding.secondLayerItemName12.text =  mutableList_size[1].spec_name
+                                binding.secondLayerItemPrice12.setText(mutableList_InvenDatas[4]?.price.toString())
+                                binding.secondLayerItemQuant12.setText(mutableList_InvenDatas[4]?.quantity.toString())
+                                binding.secondLayerItemName13.text =  mutableList_size[2].spec_name
+                                binding.secondLayerItemPrice13.setText(mutableList_InvenDatas[5]?.price.toString())
+                                binding.secondLayerItemQuant13.setText(mutableList_InvenDatas[5]?.quantity.toString())
+                                binding.secondLayerItemName21.text =  mutableList_size[0].spec_name
+                                binding.secondLayerItemPrice21.setText(mutableList_InvenDatas[6]?.price.toString())
+                                binding.secondLayerItemQuant21.setText(mutableList_InvenDatas[6]?.quantity.toString())
+                                binding.secondLayerItemName22.text =  mutableList_size[1].spec_name
+                                binding.secondLayerItemPrice22.setText(mutableList_InvenDatas[7]?.price.toString())
+                                binding.secondLayerItemQuant22.setText(mutableList_InvenDatas[7]?.quantity.toString())
+                                binding.secondLayerItemName23.text =  mutableList_size[2].spec_name
+                                binding.secondLayerItemPrice23.setText(mutableList_InvenDatas[8]?.price.toString())
+                                binding.secondLayerItemQuant23.setText(mutableList_InvenDatas[8]?.quantity.toString())
 
 
                                 mutableList_InvenDatas[0]?.price = binding.secondLayerItemPrice01.text.toString().toInt()
@@ -864,18 +2025,18 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                                 mutableList_InvenDatas[1]?.quantity = binding.secondLayerItemQuant02.text.toString().toInt()
                                 mutableList_InvenDatas[2]?.price = binding.secondLayerItemPrice03.text.toString().toInt()
                                 mutableList_InvenDatas[2]?.quantity = binding.secondLayerItemQuant03.text.toString().toInt()
-                                mutableList_InvenDatas[3]?.price = binding.secondLayerItemPrice04.text.toString().toInt()
-                                mutableList_InvenDatas[3]?.quantity = binding.secondLayerItemQuant04.text.toString().toInt()
-                                mutableList_InvenDatas[4]?.price = binding.secondLayerItemPrice05.text.toString().toInt()
-                                mutableList_InvenDatas[4]?.quantity = binding.secondLayerItemQuant05.text.toString().toInt()
-                                mutableList_InvenDatas[5]?.price = binding.secondLayerItemPrice06.text.toString().toInt()
-                                mutableList_InvenDatas[5]?.quantity = binding.secondLayerItemQuant06.text.toString().toInt()
-                                mutableList_InvenDatas[6]?.price = binding.secondLayerItemPrice07.text.toString().toInt()
-                                mutableList_InvenDatas[6]?.quantity = binding.secondLayerItemQuant07.text.toString().toInt()
-                                mutableList_InvenDatas[7]?.price = binding.secondLayerItemPrice08.text.toString().toInt()
-                                mutableList_InvenDatas[7]?.quantity = binding.secondLayerItemQuant08.text.toString().toInt()
-                                mutableList_InvenDatas[8]?.price = binding.secondLayerItemPrice09.text.toString().toInt()
-                                mutableList_InvenDatas[8]?.quantity = binding.secondLayerItemQuant09.text.toString().toInt()
+                                mutableList_InvenDatas[3]?.price = binding.secondLayerItemPrice11.text.toString().toInt()
+                                mutableList_InvenDatas[3]?.quantity = binding.secondLayerItemQuant11.text.toString().toInt()
+                                mutableList_InvenDatas[4]?.price = binding.secondLayerItemPrice12.text.toString().toInt()
+                                mutableList_InvenDatas[4]?.quantity = binding.secondLayerItemQuant12.text.toString().toInt()
+                                mutableList_InvenDatas[5]?.price = binding.secondLayerItemPrice13.text.toString().toInt()
+                                mutableList_InvenDatas[5]?.quantity = binding.secondLayerItemQuant13.text.toString().toInt()
+                                mutableList_InvenDatas[6]?.price = binding.secondLayerItemPrice21.text.toString().toInt()
+                                mutableList_InvenDatas[6]?.quantity = binding.secondLayerItemQuant21.text.toString().toInt()
+                                mutableList_InvenDatas[7]?.price = binding.secondLayerItemPrice22.text.toString().toInt()
+                                mutableList_InvenDatas[7]?.quantity = binding.secondLayerItemQuant22.text.toString().toInt()
+                                mutableList_InvenDatas[8]?.price = binding.secondLayerItemPrice23.text.toString().toInt()
+                                mutableList_InvenDatas[8]?.quantity = binding.secondLayerItemQuant23.text.toString().toInt()
 
                             }
 
@@ -1054,7 +2215,7 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
 
                 if(editText.text.toString() == "" ){
 
-//                    editText.setText("0")
+                    editText.setText("0")
                     editText.setTextColor(resources.getColor(R.color.gray_txt))
                     textView.setTextColor(resources.getColor(R.color.gray_txt))
                 }else{
@@ -1076,7 +2237,7 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
 
                     if(editText.text.toString() == "" ){
 
-//                        editText.setText("0")
+                        editText.setText("0")
                         editText.setTextColor(resources.getColor(R.color.gray_txt))
                         textView.setTextColor(resources.getColor(R.color.gray_txt))
 
@@ -1116,7 +2277,7 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
 
                 if(editText.text.toString() == "" ){
 
-//                    editText.setText("0")
+                    editText.setText("0")
                     editText.setTextColor(resources.getColor(R.color.gray_txt))
                 }else{
                     editText.setTextColor(resources.getColor(R.color.black))
@@ -1127,19 +2288,18 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
         }
         editText.addTextChangedListener(textWatcher)
 
-
         editText.singleLine = true
         editText.setOnEditorActionListener() { v, actionId, event ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
 
                     if(editText.text.toString() == "" ){
-//                        editText.setText("0")
+
+                        editText.setText("0")
                         editText.setTextColor(resources.getColor(R.color.gray_txt))
                     }else{
                         editText.setTextColor(resources.getColor(R.color.black))
                     }
-
 
                     editText.clearFocus()
                     editText.hideKeyboard()
@@ -1219,8 +2379,6 @@ class AddInventoryAndPriceActivity : BaseActivity(), TextWatcher{
         val intent = Intent(this, EditProductSpecificationMainActivity::class.java)
         startActivity(intent)
         finish()
-
     }
-
 
 }

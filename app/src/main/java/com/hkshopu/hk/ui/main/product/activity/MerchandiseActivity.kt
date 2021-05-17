@@ -302,20 +302,22 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
                             when(productInfoList.product_status){
                                 "active"->{
-                                    binding.btnLaunch.setImageResource(R.mipmap.btn_launch)
+                                    binding.btnLaunch.setImageResource(R.mipmap.btn_draft)
                                     product_status = productInfoList.product_status
                                 }
                                 "draft"->{
-                                    binding.btnLaunch.setImageResource(R.mipmap.btn_draft)
+                                    binding.btnLaunch.setImageResource(R.mipmap.btn_launch)
                                     product_status = productInfoList.product_status
                                 }
                             }
 
 
                             if(productInfoList.product_spec_on.equals("y")){
-                                binding.textViewProductPriceRange.setText(pick_max_and_min_num().toString())
+                                binding.textViewProductPriceRange.setText("HKD$${productInfoList.shipment_min_price}-HKD$${
+                                    productInfoList.shipment_max_price
+                                }")
                             }else{
-                                binding.textViewProductPriceRange.setText(productInfoList.product_price.toString())
+                                binding.textViewProductPriceRange.setText("HKD$${productInfoList.product_price.toString()}")
                             }
 
                             binding.textViewProductName.setText(productInfoList.product_title.toString())
@@ -326,12 +328,6 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                             binding.textViewSeletedCategory.setText(
                                 "${productInfoList.c_product_category} > ${
                                     productInfoList.c_sub_product_category
-                                }"
-                            )
-
-                            binding.textViewShippingFareRange.setText(
-                                "HKD$${productInfoList.shipment_min_price}-HKD$${
-                                    productInfoList.shipment_max_price
                                 }"
                             )
 

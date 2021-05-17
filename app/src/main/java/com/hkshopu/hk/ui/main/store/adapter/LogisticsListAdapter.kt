@@ -84,11 +84,13 @@ class LogisticsListAdapter :
 
         if (item.onoff.equals("on")) {
             viewHolder.OnOff.openSwitcher()
+        }else{
+            viewHolder.OnOff.closeSwitcher()
         }
 
-        value_shipping_name = viewHolder.name.text.toString()
+        var value_shipping_name_check = viewHolder.name.text.toString()
         if (cancel_inner) {
-            if (value_shipping_name.isNotEmpty()) {
+            if (value_shipping_name_check.isNotEmpty()) {
                 viewHolder.cancel.visibility = View.VISIBLE
             }else{
                 viewHolder.cancel.visibility = View.GONE
@@ -102,7 +104,7 @@ class LogisticsListAdapter :
         viewHolder.cancel.setOnClickListener {
             removeItem(position)
         }
-        value_shipping_name = viewHolder.name.text.toString()
+//        value_shipping_name = viewHolder.name.text.toString()
 
 
         //editText_shipping_name編輯鍵盤監控
@@ -129,6 +131,7 @@ class LogisticsListAdapter :
                             check_duplicate = check_duplicate + 0
                         }
                     }
+
                     if (check_duplicate > 0) {
                         viewHolder.name.setText("")
                         Toast.makeText(viewHolder.name.context, "貨運商不可重複", Toast.LENGTH_SHORT).show()
@@ -139,7 +142,7 @@ class LogisticsListAdapter :
                             value_shipping_isChecked,
                             position
                         )
-//                        Log.d("dfjjifjd", mData[position].onoff.toString())
+
                         viewHolder.name.clearFocus()
                     }
 
@@ -152,6 +155,8 @@ class LogisticsListAdapter :
         viewHolder.OnOff.setOnStateChangedListener(object :
             EasySwitcher.SwitchStateChangedListener {
             override fun onStateChanged(isOpen: Boolean) {
+
+                Log.d("isOpen",mData.toString())
 
 
                 if (isOpen) {
@@ -172,7 +177,6 @@ class LogisticsListAdapter :
                             position
                         )
 
-                        Log.d("dfjjifjd", mData[position].onoff.toString())
                         Handler(Looper.getMainLooper()).post(Runnable {
                             addEmptyItem()
                         })
@@ -211,10 +215,16 @@ class LogisticsListAdapter :
         val OnOff = itemView.find<EasySwitcher>(R.id.switchview)
 
         init {
+
             Handler(Looper.getMainLooper()).post(Runnable {
                 shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
                 addEmptyItem()
             })
+
+
+
+
+
 
         }
 

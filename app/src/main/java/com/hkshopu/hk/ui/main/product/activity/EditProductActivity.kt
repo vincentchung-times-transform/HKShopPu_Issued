@@ -64,6 +64,7 @@ class EditProductActivity : BaseActivity() {
     var mutableList_pics = mutableListOf<ItemPics>()
 
     var product_edit_session = false
+    var product_status : String = ""
 
     //宣告頁面資料變數
     var MMKV_user_id: Int = 0
@@ -767,7 +768,9 @@ class EditProductActivity : BaseActivity() {
                                             MMKV_proCate_id.toInt(),
                                             MMKV_proSubCate_id.toInt(),
                                             MMKV_editTextEntryProductName,
+                                            MMKV_editTextMerchanQunt.toInt(),
                                             MMKV_editTextEntryProductDiscription,
+                                            MMKV_editTextMerchanPrice.toInt(),
                                             0,
                                             MMKV_weight.toInt(),
                                             MMKV_checked_brandNew,
@@ -813,7 +816,9 @@ class EditProductActivity : BaseActivity() {
                                                 MMKV_proCate_id.toInt(),
                                                 MMKV_proSubCate_id.toInt(),
                                                 MMKV_editTextEntryProductName,
+                                                MMKV_editTextMerchanQunt.toInt(),
                                                 MMKV_editTextEntryProductDiscription,
+                                                MMKV_editTextMerchanPrice.toInt(),
                                                 0,
                                                 MMKV_weight.toInt(),
                                                 MMKV_checked_brandNew,
@@ -1392,7 +1397,9 @@ class EditProductActivity : BaseActivity() {
         product_category_id: Int,
         product_sub_category_id: Int,
         product_title: String,
+        quantity: Int,
         product_description: String,
+        product_price: Int,
         shipping_fee: Int,
         weight: Int,
         new_secondhand: String,
@@ -1457,10 +1464,13 @@ class EditProductActivity : BaseActivity() {
         })
         web.Do_ProductUpdate(
             url,
+            product_id,
             product_category_id,
             product_sub_category_id,
             product_title,
+            quantity,
             product_description,
+            product_price,
             shipping_fee,
             weight,
             new_secondhand,
@@ -1557,6 +1567,22 @@ class EditProductActivity : BaseActivity() {
                         MMKV.mmkvWithID("addPro").putString("fare_datas_filtered_size", productInfoList.product_shipment_list.size.toString())
                         MMKV.mmkvWithID("addPro").putString("fare_datas_certained_size", productInfoList.product_shipment_list.size.toString())
                         MMKV.mmkvWithID("addPro").putString("value_txtViewFareRange", "HKD$${productInfoList.shipment_min_price.toString()}-HKD$${productInfoList.shipment_max_price.toString()}" )
+
+
+                        when(productInfoList.product_status){
+                            "active"->{
+                                runOnUiThread {
+                                    binding.btnOnShelf.setImageResource(R.mipmap.btn_draft)
+                                    product_status = productInfoList.product_status
+                                }
+                            }
+                            "draft"->{
+                                runOnUiThread {
+                                    binding.btnOnShelf.setImageResource(R.mipmap.btn_launch)
+                                    product_status = productInfoList.product_status
+                                }
+                            }
+                        }
 
 
                         if(productInfoList.product_shipment_list.size>0){

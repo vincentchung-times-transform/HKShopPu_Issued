@@ -8,15 +8,14 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.hkshopu.hk.R
 import com.hkshopu.hk.component.CommonVariable
-
 import com.hkshopu.hk.component.EventGetShopCatSuccess
 import com.hkshopu.hk.data.bean.ShopAddressBean
 import com.hkshopu.hk.data.bean.ShopInfoBean
@@ -65,25 +64,20 @@ class ShopInfoFragment : Fragment(R.layout.fragment_shopinfo) {
         fragmentShopInfoBinding = binding
         initView()
         getShopInfo(url)
-        requireActivity()
-            .onBackPressedDispatcher
-            .addCallback(this, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    Log.d("ShopInfoFragment", "Fragment back pressed invoked")
-                    // Do custom work here
-
-                    // if you want onBackPressed() to be called as normal afterwards
-                    if (isEnabled) {
-                        getActivity()!!.supportFragmentManager.beginTransaction().remove(this@ShopInfoFragment).commit()
-
-                    } else {
-                        isEnabled = false
-//                        requireActivity().onBackPressed()
-                    }
-
+        getView()!!.isFocusableInTouchMode = true
+        getView()!!.requestFocus()
+        getView()!!.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    //go to previous fragemnt
+                    //perform your fragment transaction here
+                    //pass data as arguments
+                    getActivity()!!.supportFragmentManager.beginTransaction().remove(this@ShopInfoFragment).commit()
+                    return@OnKeyListener true
                 }
             }
-            )
+            false
+        })
     }
 
     fun initView() {

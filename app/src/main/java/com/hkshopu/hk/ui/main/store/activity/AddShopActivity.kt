@@ -47,6 +47,7 @@ class AddShopActivity : BaseActivity() {
     private val pickImage = 100
     private var imageUri: Uri? = null
     private var isSelectImage = false
+    private var isChecked = false
     var shopName: String = ""
     private var shop_category_id1: Int = 0
     private var shop_category_id2: Int = 0
@@ -87,9 +88,10 @@ class AddShopActivity : BaseActivity() {
                         Toast.makeText(this, it.ret_val.toString(), Toast.LENGTH_SHORT).show()
                         binding.ivStep2.setImageResource(R.mipmap.ic_step2_check)
                         binding.ivStep2Check.visibility = View.VISIBLE
+                        isChecked = true
 
                     } else {
-
+                        isChecked = false
                         Toast.makeText(this, it.ret_val.toString(), Toast.LENGTH_SHORT).show()
 
                     }
@@ -248,7 +250,7 @@ class AddShopActivity : BaseActivity() {
 //                }
 //                .show()
 
-//            StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
+            StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
 
         }
 
@@ -271,16 +273,20 @@ class AddShopActivity : BaseActivity() {
                 file = processImage()
             }
 //            var uri = Uri.fromFile(file);
+            if(isChecked){
+                editor.putString("shopname", shopName)
+            }
             editor.putString("image", encodeBitmapTobase64())
-            editor.putString("shopname", shopName)
             editor.putInt("shop_category_id1", shop_category_id1)
             editor.putInt("shop_category_id2", shop_category_id2)
             editor.putInt("shop_category_id3", shop_category_id3)
             editor.apply()
 
-            val intent = Intent(this, AddBankAccountActivity::class.java)
-            startActivity(intent)
-            finish()
+            if(isChecked) {
+                val intent = Intent(this, AddBankAccountActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
         binding.tvMoreStoresort.setOnClickListener {
             var bundle = Bundle()
@@ -375,7 +381,7 @@ class AddShopActivity : BaseActivity() {
 //            }
 //            .show()
 
-//        StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
+        StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
 
     }
 

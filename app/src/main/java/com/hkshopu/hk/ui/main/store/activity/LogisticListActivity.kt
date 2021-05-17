@@ -32,6 +32,7 @@ class LogisticListActivity : BaseActivity() {
     val shopId = MMKV.mmkvWithID("http").getInt("ShopId", 0)
     var url = ApiConstants.API_HOST + "/shop/" + shopId + "/shipmentSettings/get/"
     var isUpdate:Boolean = false
+    var  list: ArrayList<ShopLogisticBean> = ArrayList()
     private var mData: ArrayList<ShopLogisticBean> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +79,7 @@ class LogisticListActivity : BaseActivity() {
         val web = Web(object : WebListener {
             override fun onResponse(response: Response) {
                 var resStr: String? = ""
-                val list = ArrayList<ShopLogisticBean>()
+
                 list.clear()
 
                 try {
@@ -96,10 +97,15 @@ class LogisticListActivity : BaseActivity() {
                                 Gson().fromJson(jsonObject.toString(), ShopLogisticBean::class.java)
                             list.add(shopLogisticBean)
                         }
-                        adapter.setData(list)
-                        runOnUiThread {
-                            binding.recyclerview.adapter = adapter
+                        if(list.size == 0){
+                            binding.tvLogisticSave.isClickable = false
+                        }else {
+                            binding.tvLogisticSave.isClickable = true
+                            adapter.setData(list)
+                            runOnUiThread {
+                                binding.recyclerview.adapter = adapter
 
+                            }
                         }
 
 
