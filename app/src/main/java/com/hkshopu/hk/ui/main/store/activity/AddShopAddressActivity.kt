@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import com.hkshopu.hk.Base.BaseActivity
+import com.hkshopu.hk.R
 import com.hkshopu.hk.component.EventAddShopSuccess
 import com.hkshopu.hk.databinding.*
 import com.hkshopu.hk.net.ApiConstants
@@ -109,7 +110,19 @@ class AddShopAddressActivity : BaseActivity(){
         binding.layoutShopaddressEdit.setOnClickListener {
             KeyboardUtil.hideKeyboard(it)
         }
+        if (country.isEmpty()){
+            binding.editCountry.requestFocus()
+            binding.tvCreateshop.isClickable = false
+        }else if( admin.isEmpty()){
+            binding.editAdmin.requestFocus()
+            binding.tvCreateshop.isClickable = false
+        } else if(thoroughfare.isEmpty()) {
+            binding.editthoroughfare.requestFocus()
+            binding.tvCreateshop.isClickable = false
+        } else {
+            binding.tvCreateshop.isClickable = true
 
+        }
 
     }
 
@@ -141,6 +154,7 @@ class AddShopAddressActivity : BaseActivity(){
         }
 
         binding.tvCreateshop.setOnClickListener {
+
             file = processImage()
             var shopName = settings.getString("shopname", "")
             var shop_category_id1 = settings.getInt("shop_category_id1", 0)

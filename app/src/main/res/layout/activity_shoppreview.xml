@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:layout_marginTop="42dp"
-            android:src="@mipmap/ic_arrow_back_white" />
+            android:src="@mipmap/ic_back_notrans" />
 
         <ImageView
             android:id="@+id/iv_notify"

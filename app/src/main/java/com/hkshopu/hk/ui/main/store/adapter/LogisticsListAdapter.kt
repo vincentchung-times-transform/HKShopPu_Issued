@@ -62,7 +62,7 @@ class LogisticsListAdapter :
 
     fun removeItem(position: Int) {
         this.mData.removeAt(position)
-        notifyDataSetChanged()
+        notifyItemChanged(position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogisticsListLinearHolder {
@@ -140,7 +140,7 @@ class LogisticsListAdapter :
                         onItemUpdate(
                             value_shipping_name,
                             value_shipping_isChecked,
-                            position
+                            holder.absoluteAdapterPosition
                         )
 
                         viewHolder.name.clearFocus()
@@ -174,9 +174,7 @@ class LogisticsListAdapter :
                         onItemUpdate(
                             value_shipping_name,
                             value_shipping_isChecked,
-                            position
-                        )
-
+                            holder.adapterPosition)
                         Handler(Looper.getMainLooper()).post(Runnable {
                             addEmptyItem()
                         })
@@ -191,7 +189,7 @@ class LogisticsListAdapter :
                     onItemUpdate(
                         value_shipping_name,
                         value_shipping_isChecked,
-                        position
+                        holder.adapterPosition
                     )
 
                     Log.d("dfjjifjd", mData[position].onoff.toString())
@@ -319,6 +317,7 @@ class LogisticsListAdapter :
         mData[position].setShipmentDesc(update_txt)
         mData[position].setShopID(shop_id.toString())
         mData[position].setOnOff(is_checked)
+
         Handler(Looper.getMainLooper()).post(Runnable {
             notifyItemChanged(position)
         })

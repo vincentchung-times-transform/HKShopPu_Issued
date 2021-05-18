@@ -233,6 +233,9 @@ class ShopInfoModifyActivity : BaseActivity() {
                             binding.tvShopBrief.text = list[0].shop_description
                             binding!!.ivShopImg.load(list[0].shop_icon)
                             binding!!.ivShoppicB.load(list[0].shop_pic)
+                            if(list[0].shop_pic.length > 0) {
+                                binding.tvShoppicBAdd.setText(R.string.modify_newbg)
+                            }
 
                         }
 

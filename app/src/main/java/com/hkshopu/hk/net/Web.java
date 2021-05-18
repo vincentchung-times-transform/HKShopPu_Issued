@@ -152,6 +152,51 @@ public class Web {
         });
     }
 
+    public void Do_Register(String url,String account_name ,String email, String password,String confirm_password ,String first_name,String last_name,String gender,String birthday,String phone,String address,String region,String district,String street_name,String street_no,String floor,String room ) {
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("account_name", account_name)
+                .add("email", email)
+                .add("password", password)
+                .add("confirm_password", confirm_password)
+                .add("first_name", first_name)
+                .add("last_name", last_name)
+                .add("gender", gender)
+                .add("birthday", birthday)
+                .add("phone", phone)
+                .add("address", address)
+                .add("region", region)
+                .add("district", district)
+                .add("street_name", street_name)
+                .add("street_no", street_no)
+                .add("floor", floor)
+                .add("room", room)
+
+
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
+            }
+        });
+    }
+
     public void Do_ShopAdd(String url, final String shop_title, String user_id, int shop_category_id1, int shop_category_id2, int shop_category_id3,final String bank_code, String bank_name,final String bank_account_name, String bank_account,final String address_name, String address_country_code,final String address_phone, String address_is_phone_show,final String address_area, String address_district,final String address_road, String address_number,final String address_other, String address_floor , String address_room,File postImg) {
         Log.d(TAG, "Do_ShopAdd Url ＝ " + url);
 //        ArrayList<String> shop_category_id = new ArrayList<>();
@@ -347,18 +392,6 @@ public class Web {
     }
 
 
-    private static String bodyToString(final Request request){
-
-        try {
-            final Request copy = request.newBuilder().build();
-            final Buffer buffer = new Buffer();
-            copy.body().writeTo(buffer);
-            return buffer.readUtf8();
-        } catch (final IOException e) {
-            return "did not work";
-        }
-    }
-
     public void Do_ProductAdd(String url, int shop_id, int product_category_id, int product_sub_category_id, String product_title, int quantity, String product_description, int product_price, int shipping_fee, int weight, String new_secondhand,int product_pic_list_size ,ArrayList<File> product_pic_list, String product_spec_list, int user_id, int length, int width, int height, String shipment_method, int longterm_stock_up, String product_status, String product_spec_on) {
         Log.d(TAG, "Do_ProductAdd Url ＝ " + url);
 
@@ -508,46 +541,7 @@ public class Web {
         });
     }
 
-    private static OkHttpClient getUnsafeOkHttpClient() {
-        try {
-            // Create a trust manager that does not validate certificate chains
-            final TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-                @Override
-                public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                }
 
-                @Override
-                public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                }
-
-                @Override
-                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                    return new java.security.cert.X509Certificate[]{};
-                }
-            }};
-
-            // Install the all-trusting trust manager
-            final SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-            // Create an ssl socket factory with our all-trusting manager
-            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.sslSocketFactory(sslSocketFactory);
-            builder.hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
-            builder.connectTimeout(15, TimeUnit.SECONDS).build();
-
-            OkHttpClient okHttpClient = builder.build();
-            return okHttpClient;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
     private MultipartBody.Part prepareFilePart(String partName, File file){
@@ -559,29 +553,16 @@ public class Web {
 
 
     public void Do_ShopBankAccountUpdate(String url,String code,String name,String account,String account_name) {
-        JSONObject jsonObject=new JSONObject();
-        JSONArray jsonArray=new JSONArray();
-        try {
-//            jsonObject.put("id",id);
-            jsonObject.put("code",code);
-            jsonObject.put("name",name);
-            jsonObject.put("account",account);
-            jsonObject.put("account_name",account_name);
-//            jsonObject.put("is_default","n");
-            jsonArray.put(jsonObject);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        MultipartBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("bank_account_settings",jsonArray.toString())
+        RequestBody formBody = new FormBody.Builder()
+                .add("code",code)
+                .add("name",name)
+                .add("account",account)
+                .add("account_name",account_name)
                 .build();
-
-//        RequestBody requestBody = RequestBody.create(jsonObject.toString(),JSON);
         Request request = new Request.Builder()
                 .url(url)
-                .post(requestBody)
+                .post(formBody)
                 .build();
 
         Call call = okHttpClient.newCall(request);
@@ -645,6 +626,35 @@ public class Web {
                 listener.onResponse(response);
                 response.close();
                 call.cancel();
+            }
+        });
+    }
+
+    public void Do_ShopAddresspresetShow(String url,int shop_id,String show_status) {
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("shop_id",String.valueOf(shop_id))
+                .add("show_status", show_status)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onErrorResponse(e);
+                Log.d(TAG, "Return error ＝ " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                listener.onResponse(response);
+//                response.close();
+//                Log.d(TAG, "Return Content ＝ " + response.body().string());
             }
         });
     }
@@ -955,5 +965,58 @@ public class Web {
 //                Log.d(TAG, "Return Content ＝ " + response.body().string());
             }
         });
+    }
+
+    private static String bodyToString(final Request request){
+
+        try {
+            final Request copy = request.newBuilder().build();
+            final Buffer buffer = new Buffer();
+            copy.body().writeTo(buffer);
+            return buffer.readUtf8();
+        } catch (final IOException e) {
+            return "did not work";
+        }
+    }
+
+    private static OkHttpClient getUnsafeOkHttpClient() {
+        try {
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                }
+
+                @Override
+                public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                }
+
+                @Override
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return new java.security.cert.X509Certificate[]{};
+                }
+            }};
+
+            // Install the all-trusting trust manager
+            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            // Create an ssl socket factory with our all-trusting manager
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.sslSocketFactory(sslSocketFactory);
+            builder.hostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+            builder.connectTimeout(15, TimeUnit.SECONDS).build();
+
+            OkHttpClient okHttpClient = builder.build();
+            return okHttpClient;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

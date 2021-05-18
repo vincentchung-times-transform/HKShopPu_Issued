@@ -274,7 +274,7 @@
 
         <TextView
             android:id="@+id/tv_storesort1"
-            android:layout_width="72dp"
+            android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_below="@id/iv_storesort"
             android:layout_alignStart="@id/tv_storesort"
@@ -287,7 +287,7 @@
 
         <TextView
             android:id="@+id/tv_storesort2"
-            android:layout_width="72dp"
+            android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_below="@id/iv_storesort"
             android:layout_marginStart="8dp"
@@ -301,7 +301,7 @@
 
         <TextView
             android:id="@+id/tv_storesort3"
-            android:layout_width="72dp"
+            android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_below="@id/iv_storesort"
             android:layout_marginStart="8dp"

@@ -101,8 +101,8 @@
 
                         <ImageView
                             android:id="@+id/iv_shopImg_edit"
-                            android:layout_width="92dp"
-                            android:layout_height="92dp"
+                            android:layout_width="94dp"
+                            android:layout_height="94dp"
                             android:layout_centerInParent="true"
                             android:src="@mipmap/ic_edit_mask" />
                     </androidx.cardview.widget.CardView>

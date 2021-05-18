@@ -36,6 +36,7 @@ import com.hkshopu.hk.ui.user.vm.ShopVModel
 import com.hkshopu.hk.utils.extension.loadNovelCover
 import com.hkshopu.hk.utils.rxjava.RxBus
 import com.tencent.mmkv.MMKV
+import com.zilchzz.library.widgets.EasySwitcher
 import okhttp3.Response
 import org.jetbrains.anko.textColor
 import org.json.JSONArray
@@ -176,11 +177,75 @@ class ShopAddressListActivity : BaseActivity() {
             startActivity(intent)
             finish()
         }
+        var isAddressShow: String = ""
+        binding.switchview.setOnStateChangedListener(object :
+            EasySwitcher.SwitchStateChangedListener {
+            override fun onStateChanged(isOpen: Boolean) {
+
+                if(isOpen){
+                    isAddressShow ="Y"
+                    doShopAddressPresetShow(shopId,isAddressShow)
+                }else{
+                    isAddressShow ="N"
+                    doShopAddressPresetShow(shopId,isAddressShow)
+                }
+            }
+        })
 //        btn_Skip.setOnClickListener {
 //            val intent = Intent(this, ShopmenuActivity::class.java)
 //            startActivity(intent)
 //        }
 
+    }
+
+    private fun doShopAddressPresetShow(shop_id: Int,show_status:String) {
+
+        var url = ApiConstants.API_PATH + "shop/updateShopAddress_isAddressShow/"
+
+        Log.d("ShopAddressListActivity", "返回資料 Url：" + url)
+        val web = Web(object : WebListener {
+            override fun onResponse(response: Response) {
+                var resStr: String? = ""
+                try {
+                    resStr = response.body()!!.string()
+                    val json = JSONObject(resStr)
+                    Log.d("ShopAddressListActivity", "返回資料 resStr：" + resStr)
+
+                    val ret_val = json.get("ret_val")
+                    Log.d("ShopAddressListActivity", "返回資料 ret_val：" + ret_val)
+                    val status = json.get("status")
+                    if (status == 0) {
+                        runOnUiThread {
+
+                            Toast.makeText(
+                                this@ShopAddressListActivity,
+                                ret_val.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else {
+                        runOnUiThread {
+
+                            Toast.makeText(
+                                this@ShopAddressListActivity,
+                                ret_val.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                } catch (e: JSONException) {
+
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onErrorResponse(ErrorResponse: IOException?) {
+
+            }
+        })
+        web.Do_ShopAddresspresetShow(url, shop_id, show_status)
     }
     private fun doShopAddressDel(list: ArrayList<String>) {
 

@@ -60,7 +60,6 @@ class EditShippingFareActivity : AppCompatActivity(){
 
     var value_txtViewFareRange :String = ""
 
-    var product_edit_spec_session = false
     //資料變數宣告
     var MMKV_user_id: Int = 0
     var MMKV_shop_id: Int = 1
@@ -81,7 +80,6 @@ class EditShippingFareActivity : AppCompatActivity(){
         MMKV_user_id = MMKV.mmkvWithID("http").getInt("UserId", 0)
         MMKV_shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
         MMKV_product_id = MMKV.mmkvWithID("http").getInt("ProductId", 0)
-        product_edit_spec_session =  MMKV.mmkvWithID("http").getBoolean("product_edit_spec_session", false)
 
 
 
@@ -125,6 +123,7 @@ class EditShippingFareActivity : AppCompatActivity(){
             }
 
         }
+
 
 
         //商品運費項目

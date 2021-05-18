@@ -91,6 +91,7 @@ class AddShopActivity : BaseActivity() {
                         isChecked = true
 
                     } else {
+                        binding.ivStep2Check.visibility = View.INVISIBLE
                         isChecked = false
                         Toast.makeText(this, it.ret_val.toString(), Toast.LENGTH_SHORT).show()
 

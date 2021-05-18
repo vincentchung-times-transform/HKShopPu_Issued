@@ -103,7 +103,8 @@ class ShopFunctionFragment : Fragment(R.layout.fragment_shopfunction) {
     @SuppressLint("CheckResult")
     fun initEvent() {
 
-        var list: ArrayList<ShopCategoryBean>
+        var list: ArrayList<ShopCategoryBean> = arrayListOf()
+        list.clear()
         var category_id_list: ArrayList<String> = arrayListOf()
         RxBus.getInstance().toMainThreadObservable(activity!!, Lifecycle.Event.ON_DESTROY)
             .subscribe({

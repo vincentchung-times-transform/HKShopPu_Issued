@@ -1564,7 +1564,6 @@ class EditProductActivity : BaseActivity() {
 
                         //EditShippingFareActivity
                         MMKV.mmkvWithID("addPro").putString("fare_datas_size", productInfoList.product_shipment_list.size.toString())
-                        MMKV.mmkvWithID("addPro").putString("fare_datas_filtered_size", productInfoList.product_shipment_list.size.toString())
                         MMKV.mmkvWithID("addPro").putString("fare_datas_certained_size", productInfoList.product_shipment_list.size.toString())
                         MMKV.mmkvWithID("addPro").putString("value_txtViewFareRange", "HKD$${productInfoList.shipment_min_price.toString()}-HKD$${productInfoList.shipment_max_price.toString()}" )
 
@@ -1597,13 +1596,24 @@ class EditProductActivity : BaseActivity() {
                             MMKV.mmkvWithID("addPro").putString("value_fare_item${0}",json_shippingItem)
                         }
 
-
+                        //將從API取出的資料以ItemShippingFare的形式存取並裝成mutableList_itemShipingFare_filtered
                         for (i in 0..productInfoList.product_shipment_list.size - 1) {
+                            if(productInfoList.product_shipment_list.get(i).onoff.equals("on")){
+                                mutableList_itemShipingFare_filtered.add( ItemShippingFare(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price, R.drawable.custom_unit_transparent, productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
 
-                            mutableList_itemShipingFare_filtered.add( ItemShippingFare(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price, R.drawable.custom_unit_transparent, productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
+                            }
+                        }
+                        MMKV.mmkvWithID("addPro").putString("fare_datas_filtered_size", mutableList_itemShipingFare_filtered.size.toString())
+
+                        //mutableList_itemShipingFare_filtered一個個項目裝進mmkv，避免mmkv filtered item ID錯亂，保持以流水號型式
+                        for(i in 0..mutableList_itemShipingFare_filtered.size-1){
                             var json_shippingItem = GsonProvider.gson.toJson(mutableList_itemShipingFare_filtered.get(i))
                             MMKV.mmkvWithID("addPro").putString("value_fare_item_filtered${i}",json_shippingItem)
+
                         }
+                        //存完後清掉，避免後來的mutableList_itemShipingFare_filtered重複裝取
+                        mutableList_itemShipingFare_filtered.clear()
+
 
                         //取出所有Fare Item(拿掉btn_delete參數)
 

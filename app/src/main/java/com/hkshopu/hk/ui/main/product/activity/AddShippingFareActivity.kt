@@ -25,18 +25,23 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.hkshopu.hk.Base.response.Status
 import com.hkshopu.hk.R
-import com.hkshopu.hk.data.bean.InventoryItemSize
-import com.hkshopu.hk.data.bean.InventoryItemSpec
-import com.hkshopu.hk.data.bean.ItemShippingFare
-import com.hkshopu.hk.data.bean.ItemShippingFare_Certained
+import com.hkshopu.hk.data.bean.*
 import com.hkshopu.hk.databinding.ActivityMerchandiseBinding
 import com.hkshopu.hk.databinding.ActivityShippingFareBinding
+import com.hkshopu.hk.net.ApiConstants
 import com.hkshopu.hk.net.GsonProvider
+import com.hkshopu.hk.net.Web
+import com.hkshopu.hk.net.WebListener
 import com.hkshopu.hk.ui.main.product.adapter.InventoryAndPriceSpecAdapter
 import com.hkshopu.hk.ui.main.adapter.ShippingFareAdapter
 import com.hkshopu.hk.ui.user.vm.ShopVModel
 import com.tencent.mmkv.MMKV
+import okhttp3.Response
 import org.jetbrains.anko.singleLine
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.IOException
 
 class AddShippingFareActivity : AppCompatActivity(){
 
@@ -73,6 +78,7 @@ class AddShippingFareActivity : AppCompatActivity(){
         initVM()
         initView()
     }
+
     private fun initVM() {
 
         VM.syncShippingfareData.observe(
@@ -113,6 +119,10 @@ class AddShippingFareActivity : AppCompatActivity(){
         binding.editPackageWidth.setText(MMKV_datas_width)
         binding.editPackageHeight.setText(MMKV_datas_height)
 
+
+        var fare_datas_size = MMKV.mmkvWithID("addPro").getString("fare_datas_size","0")
+
+
         initRecyclerView_ShippingFareItem()
 
         try{
@@ -121,14 +131,27 @@ class AddShippingFareActivity : AppCompatActivity(){
             e.printStackTrace()
         }
 
-        generateCustomFare_uneditable()
+        if (fare_datas_size != null && fare_datas_size.toInt() >=1 ) {
+
+            for (i in 0..fare_datas_size.toInt()-1!!) {
+                mutableList_itemShipingFare.add(GsonProvider.gson.fromJson( MMKV.mmkvWithID("addPro").getString("value_fare_item${i}",""), ItemShippingFare::class.java))
+            }
+
+        }
+
 
         binding.btnEditFareOn.isVisible = true
         binding.btnEditFareOn.isEnabled = true
         binding.btnEditFareOff.isVisible = false
         binding.btnEditFareOff.isEnabled = false
-        binding.btnShippingFareStore.isEnabled = false
-        binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore_disable)
+
+        if(MMKV_datas_packagesWeights.isNotEmpty() && MMKV_datas_length.isNotEmpty() && MMKV_datas_width.isNotEmpty() && MMKV_datas_height.isNotEmpty()){
+            binding.btnShippingFareStore.isEnabled = true
+            binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore)
+        }else{
+            binding.btnShippingFareStore.isEnabled = false
+            binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore_disable)
+        }
 
 
         initClick()
@@ -440,9 +463,7 @@ class AddShippingFareActivity : AppCompatActivity(){
 
     fun initFareDatas() {
 
-        mutableList_itemShipingFare.add(ItemShippingFare("郵局", 0, R.drawable.custom_unit_transparent, "off", MMKV_shop_id))
-        mutableList_itemShipingFare.add(ItemShippingFare("順豐速運", 0, R.drawable.custom_unit_transparent, "off", MMKV_shop_id))
-        mutableList_itemShipingFare.add(ItemShippingFare("", 0, R.drawable.custom_unit_transparent, "off", MMKV_shop_id))
+
 
     }
 
@@ -462,8 +483,6 @@ class AddShippingFareActivity : AppCompatActivity(){
             mAdapters_shippingFare.updateList(mutableList_itemShipingFare)
             mAdapters_shippingFare.notifyDataSetChanged()
         }
-
-
 
     }
 
@@ -524,5 +543,6 @@ class AddShippingFareActivity : AppCompatActivity(){
         startActivity(intent)
         finish()
     }
+
 
 }

@@ -96,6 +96,8 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
             editText_shipping_name.setOnEditorActionListener() { v, actionId, event ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
+
+
 //                        storeStatus()
                         value_shipping_name = editText_shipping_name.text.toString()
                         value_shipping_fare = editText_shipping_fare.text.toString()
@@ -105,21 +107,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                             value_shipping_isChecked = "off"
                         }
 
-                        //檢查名稱是否重複
-                        var check_duplicate = 0
-
-                        for (i in 0..mutableList_shipMethod.size - 1) {
-                            if (value_shipping_name == mutableList_shipMethod[i].shipment_desc) {
-                                check_duplicate = check_duplicate + 1
-                            } else {
-                                check_duplicate = check_duplicate + 0
-                            }
-                        }
-                        if (check_duplicate > 0) {
-                            editText_shipping_name.setText("")
-                            Toast.makeText(itemView.context, "貨運商不可重複", Toast.LENGTH_SHORT).show()
-
-                        } else {
+                        if(editText_shipping_name.text.equals(mutableList_shipMethod.get(adapterPosition).shipment_desc)){
                             onItemUpdate(
                                 value_shipping_name,
                                 value_shipping_fare.toInt(),
@@ -127,7 +115,34 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                                 adapterPosition
                             )
                             editText_shipping_name.clearFocus()
+                        }else{
+                            //檢查名稱是否重複
+                            var check_duplicate = 0
+
+                            for (i in 0..mutableList_shipMethod.size - 1) {
+                                if (value_shipping_name == mutableList_shipMethod[i].shipment_desc) {
+                                    check_duplicate = check_duplicate + 1
+                                } else {
+                                    check_duplicate = check_duplicate + 0
+                                }
+                            }
+
+                            if (check_duplicate > 0) {
+                                editText_shipping_name.setText("")
+                                Toast.makeText(itemView.context, "貨運商不可重複", Toast.LENGTH_SHORT).show()
+
+                            } else {
+                                onItemUpdate(
+                                    value_shipping_name,
+                                    value_shipping_fare.toInt(),
+                                    value_shipping_isChecked,
+                                    adapterPosition
+                                )
+                                editText_shipping_name.clearFocus()
+                            }
                         }
+
+
 
                         true
                     }

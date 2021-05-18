@@ -23,7 +23,7 @@ class ShopCategoryActivity : BaseActivity() {
     private val VM = ShopVModel()
     private val adapter = CategoryMultiAdapter()
     var toShopFunction: Boolean = false
-    val list = ArrayList<ShopCategoryBean>()
+    val choosedlist = ArrayList<ShopCategoryBean>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityShopcategoryBinding.inflate(layoutInflater)
@@ -54,27 +54,28 @@ class ShopCategoryActivity : BaseActivity() {
         binding.recyclerview.layoutManager = layoutManager
         adapter.setData(CommonVariable.list)
         binding.recyclerview.adapter = adapter
+        choosedlist.clear()
         adapter.itemClick = {
 
 //            Log.d("ShopCategoryActivity", "Item ID：" + id_cat)
 //            Log.d("ShopCategoryActivity", "Item selected：" + it.isSelect)
             if (it.isSelect == true) {
-                list.add(it)
+                choosedlist.add(it)
             }
             if (it.isSelect == false) {
-                list.remove(it)
+                choosedlist.remove(it)
             }
-            if (list.isEmpty()) {
+            if (choosedlist.isEmpty()) {
                 binding.tvSelected.text = "未選擇分類"
                 binding.tvSelected.setTextColor(getColor(R.color.turquoise))
                 binding.tvSelected.setBackgroundResource(R.drawable.customborder_turquise)
             }else{
-                val items = list.size
+                val items = choosedlist.size
                 binding.tvSelected.text = "已選擇"+items+"項分類"
                 binding.tvSelected.setTextColor(getColor(R.color.white))
                 binding.tvSelected.setBackgroundResource(R.drawable.customborder_onboard_turquise_40p)
             }
-            if(list.size > 3){
+            if(choosedlist.size > 3){
                 binding.tvSelected.isClickable = false
                 runOnUiThread {
 
@@ -83,19 +84,16 @@ class ShopCategoryActivity : BaseActivity() {
             }else{
                 binding.tvSelected.isClickable = true
             }
-//            if (list.size == 1) {
-//                binding.tvSelected.text = "已選擇1項分類"
-//                binding.tvSelected.setTextColor(getColor(R.color.white))
-//                binding.tvSelected.setBackgroundResource(R.drawable.customborder_onboard_turquise_40p)
-//            } else if (list.size == 2) {
-//                binding.tvSelected.text = "已選擇2項分類"
-//                binding.tvSelected.setTextColor(getColor(R.color.white))
-//                binding.tvSelected.setBackgroundResource(R.drawable.customborder_onboard_turquise_40p)
-//            } else if (list.size == 3) {
-//                binding.tvSelected.text = "已選擇3項分類"
-//                binding.tvSelected.setTextColor(getColor(R.color.white))
-//                binding.tvSelected.setBackgroundResource(R.drawable.customborder_onboard_turquise_40p)
-//            }
+            if (choosedlist.size == 1) {
+                binding.tvSelected.setTextColor(getColor(R.color.white))
+                binding.tvSelected.setBackgroundResource(R.drawable.customborder_onboard_turquise_40p)
+            } else if (choosedlist.size == 2) {
+                binding.tvSelected.setTextColor(getColor(R.color.white))
+                binding.tvSelected.setBackgroundResource(R.drawable.customborder_onboard_turquise_40p)
+            } else if (choosedlist.size == 3) {
+                binding.tvSelected.setTextColor(getColor(R.color.white))
+                binding.tvSelected.setBackgroundResource(R.drawable.customborder_onboard_turquise_40p)
+            }
 
         }
     }
@@ -108,9 +106,9 @@ class ShopCategoryActivity : BaseActivity() {
         binding.tvSelected.setOnClickListener {
 
             if (toShopFunction) {
-                RxBus.getInstance().post(EventChangeShopCategory(list))
+                RxBus.getInstance().post(EventChangeShopCategory(choosedlist))
             } else {
-                RxBus.getInstance().post(EventShopCatSelected(list))
+                RxBus.getInstance().post(EventShopCatSelected(choosedlist))
 
             }
             finish()

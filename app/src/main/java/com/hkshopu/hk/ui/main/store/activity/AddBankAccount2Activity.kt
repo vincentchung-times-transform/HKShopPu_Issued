@@ -146,6 +146,7 @@ class AddBankAccount2Activity : BaseActivity(){
         account: String,
         account_name: String
     ) {
+
         val shopId = MMKV.mmkvWithID("http").getInt("ShopId", 0)
         var url = ApiConstants.API_PATH +"shop/"+ shopId + "/bankAccount/"
 
@@ -163,17 +164,18 @@ class AddBankAccount2Activity : BaseActivity(){
                     val status = json.get("status")
                     if (status == 0) {
                         runOnUiThread {
+                            Toast.makeText(
+                                this@AddBankAccount2Activity,
+                                ret_val.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             val intent = Intent(
                                 this@AddBankAccount2Activity,
                                 BankListActivity::class.java
                             )
                             startActivity(intent)
                             finish()
-                            Toast.makeText(
-                                this@AddBankAccount2Activity,
-                                ret_val.toString(),
-                                Toast.LENGTH_SHORT
-                            ).show()
+
                         }
                     } else {
                         runOnUiThread {

@@ -323,6 +323,9 @@ class EditProductSpecificationMainActivity : BaseActivity() {
         //second specification "spec" setting enable
         binding.btnEditspecificationEnableSpec.setOnClickListener {
 
+            binding.btnNextStep.disable()
+            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+
             binding.btnClearAllSpec.isVisible = true
             binding.btnEditspecificationEnableSize.disable()
 
@@ -358,6 +361,9 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
         //second specification "spec" item setting cancel
         binding.btnEditspecificationDisableSpec.setOnClickListener {
+
+            binding.btnNextStep.enable()
+            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
 
             binding.btnClearAllSpec.isVisible = false
             binding.btnEditspecificationEnableSize.enable()
@@ -483,6 +489,9 @@ class EditProductSpecificationMainActivity : BaseActivity() {
         //second specification "size" item settings cancel
         binding.btnEditspecificationDisableSize.setOnClickListener {
 
+            binding.btnNextStep.enable()
+            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
+
             binding.btnClearAllSize.isVisible = false
             binding.btnEditspecificationEnableSpec.enable()
 
@@ -516,17 +525,19 @@ class EditProductSpecificationMainActivity : BaseActivity() {
             }).start()
 
 
-            if(mAdapter_size.get_datas_size_size()==0 && mAdapter_spec.get_datas_spec_size()==0){
+
+            if(mAdapter_size.get_datas_size_size()==0){
                 binding.btnNextStep.disable()
                 binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
             }
-
-
 
         }
 
         //second specification "size" item settings enable
         binding.btnEditspecificationEnableSize.setOnClickListener {
+
+            binding.btnNextStep.disable()
+            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
 
             binding.btnClearAllSize.isVisible = true
             binding.btnEditspecificationEnableSpec.disable()
@@ -655,11 +666,14 @@ class EditProductSpecificationMainActivity : BaseActivity() {
         binding.editTextProductSpecSecond.setOnEditorActionListener() { v, actionId, event ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
-                    if(binding.editTextProductSpecSecond.text.toString().isNullOrEmpty()){
+
+                    if(binding.editTextProductSpecSecond.text.toString().isNullOrEmpty()||mAdapter_size.get_datas_size_size()==0){
                         binding.btnNextStep.isEnabled = false
                         binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+                    }else{
+                        binding.btnNextStep.isEnabled = true
+                        binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
                     }
-
 
                     if(binding.editTextProductSpecSecond.text.toString() == binding.editTextProductSpecFirst.text.toString()){
                         Toast.makeText(this, "規格名稱不可重複", Toast.LENGTH_SHORT).show()
@@ -764,8 +778,17 @@ class EditProductSpecificationMainActivity : BaseActivity() {
     fun checkButtonNextStep_single(){
         //預設btnNextStep disable or enable
         if (( binding.editTextProductSpecFirst.text.isNotEmpty())) {
-            binding.btnNextStep.isEnabled = true
-            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
+            if(binding.editTextProductSpecSecond.text.isNotEmpty() && mAdapter_size.get_datas_size_size()>0){
+                binding.btnNextStep.isEnabled = true
+                binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
+            }else if(binding.editTextProductSpecSecond.text.isEmpty() && mAdapter_size.get_datas_size_size()==0){
+                binding.btnNextStep.isEnabled = true
+                binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
+            }else{
+                binding.btnNextStep.isEnabled = false
+                binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+            }
+
         } else {
             binding.btnNextStep.isEnabled = false
             binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
@@ -774,7 +797,7 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
     fun checkButtonNextStep_double(){
         //預設btnNextStep disable or enable
-        if ( binding.editTextProductSpecFirst.text.isNotEmpty() && binding.editTextProductSpecSecond.text.isNotEmpty()) {
+        if ( binding.editTextProductSpecFirst.text.isNotEmpty() && mAdapter_spec.get_datas_spec_size()>0 && binding.editTextProductSpecSecond.text.isNotEmpty()) {
             binding.btnNextStep.isEnabled = true
             binding.btnNextStep.setImageResource(R.mipmap.btn_nextstep_enable)
         } else {
