@@ -183,7 +183,8 @@ class AddShippingFareActivity : AppCompatActivity(){
             binding.btnEditFareOn.isVisible = true
             binding.btnEditFareOn.isEnabled = true
 
-            generateCustomFare_uneditable()
+            mAdapters_shippingFare.onOff_editStatus(false)
+//            generateCustomFare_uneditable()
 
         }
 
@@ -198,7 +199,8 @@ class AddShippingFareActivity : AppCompatActivity(){
             binding.btnEditFareOff.isVisible = true
             binding.btnEditFareOff.isEnabled = true
 
-            generateCustomFare_editable()
+            mAdapters_shippingFare.onOff_editStatus(true)
+//            generateCustomFare_editable()
 
         }
 
@@ -477,7 +479,7 @@ class AddShippingFareActivity : AppCompatActivity(){
 
         if(mutableList_size>=2){
             for(i in 0..mutableList_size-2){
-                mutableList_itemShipingFare[i] = ItemShippingFare(mutableList_itemShipingFare[i].shipment_desc, mutableList_itemShipingFare[i].price, R.drawable.custom_unit_transparent, mutableList_itemShipingFare[i].onoff,  mutableList_itemShipingFare[i].shop_id)
+                mutableList_itemShipingFare[i] = ItemShippingFare(mutableList_itemShipingFare[i].shipment_desc, mutableList_itemShipingFare[i].price, mutableList_itemShipingFare[i].onoff,  mutableList_itemShipingFare[i].shop_id)
             }
 
             mAdapters_shippingFare.updateList(mutableList_itemShipingFare)
@@ -496,7 +498,7 @@ class AddShippingFareActivity : AppCompatActivity(){
 
         if(mutableList_size>=2){
             for(i in 0..mutableList_size-2){
-                mutableList_itemShipingFare[i] = ItemShippingFare(mutableList_itemShipingFare[i].shipment_desc, mutableList_itemShipingFare[i].price, R.mipmap.btn_delete_fare,  mutableList_itemShipingFare[i].onoff,  mutableList_itemShipingFare[i].shop_id)
+                mutableList_itemShipingFare[i] = ItemShippingFare(mutableList_itemShipingFare[i].shipment_desc, mutableList_itemShipingFare[i].price, mutableList_itemShipingFare[i].onoff,  mutableList_itemShipingFare[i].shop_id)
             }
 
             mAdapters_shippingFare.updateList(mutableList_itemShipingFare)

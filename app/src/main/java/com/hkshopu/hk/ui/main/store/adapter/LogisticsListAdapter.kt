@@ -62,7 +62,8 @@ class LogisticsListAdapter :
 
     fun removeItem(position: Int) {
         this.mData.removeAt(position)
-        notifyItemChanged(position)
+        notifyItemRemoved(position)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogisticsListLinearHolder {
@@ -102,10 +103,9 @@ class LogisticsListAdapter :
 
         }
         viewHolder.cancel.setOnClickListener {
-            removeItem(position)
+            removeItem(holder.absoluteAdapterPosition)
+            Log.d("ijsoifjisdf", "click")
         }
-//        value_shipping_name = viewHolder.name.text.toString()
-
 
         //editText_shipping_name編輯鍵盤監控
         viewHolder.name.singleLine = true
@@ -121,30 +121,50 @@ class LogisticsListAdapter :
                         value_shipping_isChecked = "off"
                     }
 
-                    //檢查名稱是否重複
-                    var check_duplicate = 0
-
-                    for (i in 0..mData.size - 1) {
-                        if (value_shipping_name == mData[i].shipment_desc) {
-                            check_duplicate = check_duplicate + 1
-                        } else {
-                            check_duplicate = check_duplicate + 0
-                        }
-                    }
-
-                    if (check_duplicate > 0) {
-                        viewHolder.name.setText("")
-                        Toast.makeText(viewHolder.name.context, "貨運商不可重複", Toast.LENGTH_SHORT).show()
-
-                    } else {
+                    if(value_shipping_name.equals(mData.get(holder.adapterPosition).shipment_desc)){
                         onItemUpdate(
                             value_shipping_name,
                             value_shipping_isChecked,
                             holder.absoluteAdapterPosition
                         )
+                        Handler(Looper.getMainLooper()).post(Runnable {
+                            addEmptyItem()
+                        })
+
 
                         viewHolder.name.clearFocus()
+                    }else{
+                        //檢查名稱是否重複
+                        var check_duplicate = 0
+
+                        for (i in 0..mData.size - 1) {
+                            if (value_shipping_name == mData[i].shipment_desc) {
+                                check_duplicate = check_duplicate + 1
+                            } else {
+                                check_duplicate = check_duplicate + 0
+                            }
+                        }
+
+                        if (check_duplicate > 0) {
+                            viewHolder.name.setText("")
+                            Toast.makeText(viewHolder.name.context, "貨運商不可重複", Toast.LENGTH_SHORT).show()
+
+                        } else {
+                            onItemUpdate(
+                                value_shipping_name,
+                                value_shipping_isChecked,
+                                holder.absoluteAdapterPosition
+                            )
+                            Handler(Looper.getMainLooper()).post(Runnable {
+                                addEmptyItem()
+                            })
+
+
+                            viewHolder.name.clearFocus()
+                        }
                     }
+
+
 
                     true
                 }
@@ -295,8 +315,6 @@ class LogisticsListAdapter :
             mData.remove(
                 shopLogisticBean
             )
-//            mData.removeAt(position)
-
 
             try {
                 Thread.sleep(300)

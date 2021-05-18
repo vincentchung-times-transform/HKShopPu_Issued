@@ -32,6 +32,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
 
     var mutableList_shipMethod = mutableListOf<ItemShippingFare>()
     var empty_item_num = 0
+    private var editStatus: Boolean = false
 
     var MMKV_shop_id : Int =MMKV.mmkvWithID("http").getInt("ShopId", 0)
 
@@ -52,6 +53,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
 
 
         init {
+
 
             Thread(Runnable {
 
@@ -107,13 +109,18 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                             value_shipping_isChecked = "off"
                         }
 
-                        if(editText_shipping_name.text.equals(mutableList_shipMethod.get(adapterPosition).shipment_desc)){
+                        if(value_shipping_name.equals(mutableList_shipMethod.get(adapterPosition).shipment_desc)){
                             onItemUpdate(
                                 value_shipping_name,
                                 value_shipping_fare.toInt(),
                                 value_shipping_isChecked,
                                 adapterPosition
                             )
+                            Thread(Runnable {
+                                activity.runOnUiThread {
+                                    addEmptyItem()
+                                }
+                            }).start()
                             editText_shipping_name.clearFocus()
                         }else{
                             //檢查名稱是否重複
@@ -138,6 +145,11 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                                     value_shipping_isChecked,
                                     adapterPosition
                                 )
+                                Thread(Runnable {
+                                    activity.runOnUiThread {
+                                        addEmptyItem()
+                                    }
+                                }).start()
                                 editText_shipping_name.clearFocus()
                             }
                         }
@@ -263,7 +275,7 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
         fun bind(item: ItemShippingFare){
 
             //綁定當地變數與dataModel中的每個值
-            imgv_delFare.setImageResource(item.btn_delete)
+            imgv_delFare.setImageResource(R.mipmap.btn_delete_fare)
             editText_shipping_name.setText(item.shipment_desc)
             editText_shipping_fare.setText(item.price.toString())
 
@@ -286,6 +298,19 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                 editText_shipping_fare.setHintTextColor(itemView.context.resources.getColor(R.color.gray_txt))
 
             }
+
+            var value_shipping_name_check = editText_shipping_name.text.toString()
+
+            if (editStatus) {
+                if (value_shipping_name_check.isNotEmpty()) {
+                    imgv_delFare.visibility = View.VISIBLE
+                }else{
+                    imgv_delFare.visibility = View.GONE
+                }
+            } else {
+                imgv_delFare.visibility = View.GONE
+            }
+
 
         }
 
@@ -333,7 +358,6 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                     ItemShippingFare(
                         "",
                         0,
-                        R.drawable.custom_unit_transparent,
                         "off",
                         MMKV_shop_id
                     )
@@ -351,7 +375,6 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                 ItemShippingFare(
                     "",
                     0,
-                    R.drawable.custom_unit_transparent,
                     "off",
                     MMKV_shop_id
                 )
@@ -389,7 +412,6 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
                 ItemShippingFare(
                     "",
                     0,
-                    R.drawable.custom_unit_transparent,
                     "off",
                     MMKV_shop_id
                 )
@@ -421,7 +443,6 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
         mutableList_shipMethod[position] = ItemShippingFare(
             update_txt,
             update_fare,
-            R.drawable.custom_unit_transparent,
             is_checked,
             MMKV_shop_id
         )
@@ -446,7 +467,6 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
         mutableList_shipMethod.removeAt(position)
         notifyItemRemoved(position)
 
-//        storeStatus()
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
@@ -459,7 +479,11 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
         return mutableList_shipMethod
     }
 
-
+    //更新資料用
+    fun onOff_editStatus(status: Boolean) {
+        editStatus = status
+        this.notifyDataSetChanged()
+    }
 
 }
 

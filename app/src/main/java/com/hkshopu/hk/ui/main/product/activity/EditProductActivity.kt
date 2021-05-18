@@ -1587,19 +1587,19 @@ class EditProductActivity : BaseActivity() {
                         if(productInfoList.product_shipment_list.size>0){
                             for (i in 0..productInfoList.product_shipment_list.size - 1) {
 
-                                var json_shippingItem = GsonProvider.gson.toJson(ItemShippingFare(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price, R.drawable.custom_unit_transparent, productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
+                                var json_shippingItem = GsonProvider.gson.toJson(ItemShippingFare(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price, productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
                                 MMKV.mmkvWithID("addPro").putString("value_fare_item${i}",json_shippingItem)
 
                             }
                         }else{
-                            var json_shippingItem = GsonProvider.gson.toJson(ItemShippingFare("", 0, R.drawable.custom_unit_transparent, "off", MMKV_shop_id))
+                            var json_shippingItem = GsonProvider.gson.toJson(ItemShippingFare("", 0, "off", MMKV_shop_id))
                             MMKV.mmkvWithID("addPro").putString("value_fare_item${0}",json_shippingItem)
                         }
 
                         //將從API取出的資料以ItemShippingFare的形式存取並裝成mutableList_itemShipingFare_filtered
                         for (i in 0..productInfoList.product_shipment_list.size - 1) {
                             if(productInfoList.product_shipment_list.get(i).onoff.equals("on")){
-                                mutableList_itemShipingFare_filtered.add( ItemShippingFare(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price, R.drawable.custom_unit_transparent, productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
+                                mutableList_itemShipingFare_filtered.add( ItemShippingFare(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price, productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
 
                             }
                         }

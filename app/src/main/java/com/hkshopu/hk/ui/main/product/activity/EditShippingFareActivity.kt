@@ -165,7 +165,9 @@ class EditShippingFareActivity : AppCompatActivity(){
             binding.btnEditFareOn.isVisible = true
             binding.btnEditFareOn.isEnabled = true
 
-            generateCustomFare_uneditable()
+            mAdapters_shippingFare.onOff_editStatus(false)
+
+//            generateCustomFare_uneditable()
 
         }
 
@@ -180,7 +182,9 @@ class EditShippingFareActivity : AppCompatActivity(){
             binding.btnEditFareOff.isVisible = true
             binding.btnEditFareOff.isEnabled = true
 
-            generateCustomFare_editable()
+            mAdapters_shippingFare.onOff_editStatus(true)
+
+//            generateCustomFare_editable()
 
         }
 
@@ -457,7 +461,7 @@ class EditShippingFareActivity : AppCompatActivity(){
 
         if(mutableList_size>=2){
             for(i in 0..mutableList_size-2){
-                mutableList_itemShipingFare[i] = ItemShippingFare(mutableList_itemShipingFare[i].shipment_desc, mutableList_itemShipingFare[i].price, R.drawable.custom_unit_transparent, mutableList_itemShipingFare[i].onoff,  mutableList_itemShipingFare[i].shop_id)
+                mutableList_itemShipingFare[i] = ItemShippingFare(mutableList_itemShipingFare[i].shipment_desc, mutableList_itemShipingFare[i].price, mutableList_itemShipingFare[i].onoff,  mutableList_itemShipingFare[i].shop_id)
             }
 
             mAdapters_shippingFare.updateList(mutableList_itemShipingFare)
@@ -471,21 +475,24 @@ class EditShippingFareActivity : AppCompatActivity(){
     //自訂費用項目(可編輯部分)
     fun generateCustomFare_editable() {
 
-        //進入"可編輯模式"新增資料或重新新增資料
-        mutableList_itemShipingFare = mAdapters_shippingFare.get_shipping_method_datas()
 
-        var mutableList_size = mAdapters_shippingFare.get_shipping_method_datas().size
+        Thread(Runnable {
 
-        if(mutableList_size>=2){
-            for(i in 0..mutableList_size-2){
-                mutableList_itemShipingFare[i] = ItemShippingFare(mutableList_itemShipingFare[i].shipment_desc, mutableList_itemShipingFare[i].price, R.mipmap.btn_delete_fare,  mutableList_itemShipingFare[i].onoff,  mutableList_itemShipingFare[i].shop_id)
+            //進入"可編輯模式"新增資料或重新新增資料
+            mutableList_itemShipingFare = mAdapters_shippingFare.get_shipping_method_datas()
+
+            var mutableList_size = mAdapters_shippingFare.get_shipping_method_datas().size
+
+            if(mutableList_size>=2){
+                for(i in 0..mutableList_size-2){
+                    mutableList_itemShipingFare[i] = ItemShippingFare(mutableList_itemShipingFare[i].shipment_desc, mutableList_itemShipingFare[i].price, mutableList_itemShipingFare[i].onoff,  mutableList_itemShipingFare[i].shop_id)
+                }
+                mAdapters_shippingFare.updateList(mutableList_itemShipingFare)
+                runOnUiThread {
+                    mAdapters_shippingFare.notifyDataSetChanged()
+                }
             }
-
-            mAdapters_shippingFare.updateList(mutableList_itemShipingFare)
-            mAdapters_shippingFare.notifyDataSetChanged()
-
-        }
-
+        }).start()
     }
 
     fun View.hideKeyboard() {

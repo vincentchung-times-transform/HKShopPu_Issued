@@ -78,8 +78,6 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
         initClick()
 
-
-
     }
 
     fun initClick() {
