@@ -184,7 +184,8 @@ class BuildAccountActivity : BaseActivity(), TextWatcher {
                                     val id = response.jsonObject.getString("id")
                                     val email = response.jsonObject.getString("email")
 
-                                    doSocialLogin(email,id,"","")                                } catch (e: Exception) {
+                                    doSocialLogin(email,id,"","")
+                                } catch (e: Exception) {
 
                                         e.printStackTrace()
                                 }

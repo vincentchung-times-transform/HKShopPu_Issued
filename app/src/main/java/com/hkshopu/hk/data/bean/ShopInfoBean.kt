@@ -23,6 +23,10 @@ class ShopInfoBean {
 
     @SerializedName("background_pic")
     var background_pic: String= ""
+
+    @SerializedName("shop_phone")
+    var shop_phone: String= ""
+
     @SerializedName("shop_email")
     var shop_email: String= ""
     @SerializedName("email_on")

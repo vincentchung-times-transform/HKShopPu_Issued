@@ -59,7 +59,11 @@ class PhoneEditActivity : BaseActivity(){
         }
 
         binding.switchview.openSwitcher()
-
+        if(binding.switchview.isOpened()){
+            isphoneShow ="Y"
+        }else{
+            isphoneShow ="N"
+        }
 
     }
 
@@ -92,7 +96,6 @@ class PhoneEditActivity : BaseActivity(){
         binding.switchview.setOnStateChangedListener(object :
             EasySwitcher.SwitchStateChangedListener {
             override fun onStateChanged(isOpen: Boolean) {
-
                 if(isOpen){
                     isphoneShow ="Y"
                 }else{
@@ -120,7 +123,9 @@ class PhoneEditActivity : BaseActivity(){
                     val ret_val = json.get("ret_val")
                     val status = json.get("status")
                     if (status == 0) {
-                        RxBus.getInstance().post(EventChangeShopPhoneSuccess(phone_pass))
+                        if(isphoneShow.equals("Y")) {
+                            RxBus.getInstance().post(EventChangeShopPhoneSuccess(phone_pass))
+                        }
                         finish()
                     } else {
                         runOnUiThread {

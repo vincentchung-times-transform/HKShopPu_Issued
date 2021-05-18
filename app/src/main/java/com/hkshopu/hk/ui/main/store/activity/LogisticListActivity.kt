@@ -83,7 +83,6 @@ class LogisticListActivity : BaseActivity() {
                 list.clear()
 
                 try {
-
                     resStr = response.body()!!.string()
                     val json = JSONObject(resStr)
                     Log.d("LogisticListActivity", "返回資料 resStr：" + resStr)

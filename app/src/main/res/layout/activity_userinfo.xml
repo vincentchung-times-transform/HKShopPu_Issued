@@ -172,11 +172,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="#00000000"
-                    android:singleLine="true"
-                    android:imeOptions="actionDone"
                     android:gravity="center_vertical"
                     android:hint="YYYY - MM - DD "
                     android:paddingLeft="18dp"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
                     android:textColorHint="@color/material_grey_700"
                     android:textSize="18sp" />
                 <ImageView

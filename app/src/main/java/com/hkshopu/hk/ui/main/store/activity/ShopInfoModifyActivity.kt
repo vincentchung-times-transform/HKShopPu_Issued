@@ -226,9 +226,7 @@ class ShopInfoModifyActivity : BaseActivity() {
 
                         runOnUiThread {
                             binding!!.tvShopName.text = list[0].shop_title
-                            if (addresslist.size > 0) {
-                                binding.tvShopPhone.text = addresslist[0].country_code+addresslist[0].phone
-                            }
+                            binding.tvShopPhone.text = list[0].shop_phone
                             binding.tvUserEmail.text = list[0].shop_email
                             binding.tvShopBrief.text = list[0].shop_description
                             binding!!.ivShopImg.load(list[0].shop_icon)

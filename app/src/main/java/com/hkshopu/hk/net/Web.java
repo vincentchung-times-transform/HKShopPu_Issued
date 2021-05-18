@@ -748,7 +748,7 @@ public class Web {
         RequestBody formBody = new FormBody.Builder()
                 .add("address_id",addressid)
                 .add("address_country_code", countrycode)
-                .add("address_phone", phone)
+                .add("shop_phone", phone)
                 .add("address_is_phone_show", is_phone_show)
                 .build();
         Request request = new Request.Builder()
