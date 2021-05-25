@@ -91,17 +91,21 @@ class ShopInfoModifyActivity : BaseActivity() {
                 when (it) {
                     is EventChangeShopTitleSuccess -> {
                         binding.tvShopName.text = it.shopname
+                        getShopInfo(url)
                     }
                     is EventAddShopBriefSuccess -> {
                         binding.tvShopBrief.text = it.description
+                        getShopInfo(url)
                     }
 
                     is EventChangeShopPhoneSuccess -> {
                         binding.tvShopPhone.text = it.phone
+                        getShopInfo(url)
                     }
 
                     is EventChangeShopEmailSuccess -> {
                         binding.tvUserEmail.text = it.email
+                        getShopInfo(url)
                     }
                 }
 
@@ -129,8 +133,10 @@ class ShopInfoModifyActivity : BaseActivity() {
 
         binding.ivChevronShopName.setOnClickListener {
             val addressId = addresslist[0].id
+            val shopName = list[0].shop_title
             var bundle = Bundle()
             bundle.putString("address_id",addressId)
+            bundle.putString("shop_name",shopName)
             val intent = Intent(this, ShopNameEditActivity::class.java)
             intent.putExtra("bundle",bundle)
             startActivity(intent)
@@ -153,8 +159,12 @@ class ShopInfoModifyActivity : BaseActivity() {
 
         binding.ivChevronShopPhone.setOnClickListener {
             val addressId = addresslist[0].id
+            val phone_old = list[0].shop_phone
+            val phone_is_show = list[0].shop_is_phone_show
             var bundle = Bundle()
             bundle.putString("address_id",addressId)
+            bundle.putString("phone_old",phone_old)
+            bundle.putString("phone_is_show",phone_is_show)
             val intent = Intent(this, PhoneEditActivity::class.java)
             intent.putExtra("bundle",bundle)
             startActivity(intent)
@@ -162,8 +172,12 @@ class ShopInfoModifyActivity : BaseActivity() {
 
         binding.ivChevronUserEmail.setOnClickListener {
             val addressId = addresslist[0].id
+            val email_old = list[0].shop_email
+            val email_on = list[0].email_on
             var bundle = Bundle()
             bundle.putString("address_id",addressId)
+            bundle.putString("email_old",email_old)
+            bundle.putString("email_on",email_on)
             val intent = Intent(this, EmailAdd1Activity::class.java)
             intent.putExtra("bundle",bundle)
             startActivity(intent)
@@ -234,6 +248,7 @@ class ShopInfoModifyActivity : BaseActivity() {
                             if(list[0].shop_pic.length > 0) {
                                 binding.tvShoppicBAdd.setText(R.string.modify_newbg)
                             }
+
 
                         }
 

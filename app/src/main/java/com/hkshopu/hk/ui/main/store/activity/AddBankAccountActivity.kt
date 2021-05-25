@@ -5,7 +5,10 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doAfterTextChanged
 import com.hkshopu.hk.Base.BaseActivity
@@ -48,15 +51,62 @@ class AddBankAccountActivity : BaseActivity(){
         binding.etBankcode.doAfterTextChanged {
             bankCode = binding.etBankcode.text.toString()
         }
+
+        binding.etBankcode.setOnTouchListener (object : View.OnTouchListener {
+            override fun onTouch(v: View, m: MotionEvent): Boolean {
+                // Perform tasks here
+                binding.etBankcode.hasFocus()
+                binding.ivAddbankaccountCheck.visibility = View.INVISIBLE
+                KeyboardUtil.showKeyboard(v)
+                return true
+            }
+        })
+
+
         binding.etBankname.doAfterTextChanged {
             bankName = binding.etBankname.text.toString()
         }
+
+        binding.etBankname.setOnTouchListener (object : View.OnTouchListener {
+            override fun onTouch(v: View, m: MotionEvent): Boolean {
+                // Perform tasks here
+                binding.etBankname.hasFocus()
+                binding.ivAddbankaccountCheck.visibility = View.INVISIBLE
+                KeyboardUtil.showKeyboard(v)
+                return true
+            }
+        })
+
+
+
         binding.etBankaccountname.doAfterTextChanged {
             accountName = binding.etBankaccountname.text.toString()
         }
+        binding.etBankaccountname.setOnTouchListener (object : View.OnTouchListener {
+            override fun onTouch(v: View, m: MotionEvent): Boolean {
+                // Perform tasks here
+                binding.etBankaccountname.hasFocus()
+                binding.ivAddbankaccountCheck.visibility = View.INVISIBLE
+                KeyboardUtil.showKeyboard(v)
+                return true
+            }
+        })
+
         binding.etBankaccountnumber.doAfterTextChanged {
             accountNumber = binding.etBankaccountnumber.text.toString()
         }
+
+
+        binding.etBankaccountnumber.setOnTouchListener (object : View.OnTouchListener {
+            override fun onTouch(v: View, m: MotionEvent): Boolean {
+                // Perform tasks here
+                binding.etBankaccountnumber.hasFocus()
+                binding.ivAddbankaccountCheck.visibility = View.INVISIBLE
+                KeyboardUtil.showKeyboard(v)
+                return true
+            }
+        })
+
 
         binding.layoutBankaccountEdit.setOnClickListener {
             KeyboardUtil.hideKeyboard(it)
@@ -102,6 +152,7 @@ class AddBankAccountActivity : BaseActivity(){
             $sErrorMsg${getString(R.string.bankcode_input)}
             
             """.trimIndent()
+
         }
         if (bankName.isEmpty()) {
             sErrorMsg = """
@@ -131,8 +182,9 @@ class AddBankAccountActivity : BaseActivity(){
                     .apply()
             val intent = Intent(this, AddShopAddressActivity::class.java)
             startActivity(intent)
-            finish()
+//            finish()
         } else {
+            binding.ivAddbankaccountCheck.visibility = View.INVISIBLE
             AlertDialog.Builder(this@AddBankAccountActivity)
                 .setTitle("")
                 .setMessage(sErrorMsg)

@@ -53,7 +53,7 @@ class ShopFunctionFragment : Fragment(R.layout.fragment_shopfunction) {
 
     private fun initClick() {
         binding!!.tvMoreList.setOnClickListener {
-            val intent = Intent(activity, MyMerchantsActivity::class.java)
+            val intent = Intent(activity, MySalesActivity::class.java)
             activity!!.startActivity(intent)
 
         }
@@ -73,6 +73,7 @@ class ShopFunctionFragment : Fragment(R.layout.fragment_shopfunction) {
         }
 
         binding!!.tvMoreStoresort.setOnClickListener {
+
             var bundle = Bundle()
             bundle.putBoolean("toShopFunction",true)
             val intent = Intent(activity, ShopCategoryActivity::class.java)
@@ -98,6 +99,11 @@ class ShopFunctionFragment : Fragment(R.layout.fragment_shopfunction) {
 
         }
 
+        binding!!.tvMoreHelp.setOnClickListener {
+            val intent = Intent(activity, HelpCenterActivity::class.java)
+            activity!!.startActivity(intent)
+
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -231,6 +237,8 @@ class ShopFunctionFragment : Fragment(R.layout.fragment_shopfunction) {
                             )
 
                             binding!!.tvStoresort1.visibility = View.VISIBLE
+                            binding!!.tvStoresort2.visibility = View.INVISIBLE
+                            binding!!.tvStoresort3.visibility = View.INVISIBLE
                             category_id_list.add(shop_category_id1.toString())
                         } else if (list.size == 2) {
                             shop_category_id1 = list[0].id
@@ -255,6 +263,7 @@ class ShopFunctionFragment : Fragment(R.layout.fragment_shopfunction) {
                             binding!!.tvStoresort2.visibility = View.VISIBLE
                             category_id_list.add(shop_category_id1.toString())
                             category_id_list.add(shop_category_id2.toString())
+                            binding!!.tvStoresort3.visibility = View.INVISIBLE
                         } else {
                             shop_category_id1 = list[0].id
                             shop_category_id2 = list[1].id
@@ -272,6 +281,7 @@ class ShopFunctionFragment : Fragment(R.layout.fragment_shopfunction) {
                                 )
                             )
                             binding!!.tvStoresort1.visibility = View.VISIBLE
+
                             binding!!.tvStoresort2.text = storesort2
                             binding!!.tvStoresort2.setBackgroundColor(
                                 Color.parseColor(

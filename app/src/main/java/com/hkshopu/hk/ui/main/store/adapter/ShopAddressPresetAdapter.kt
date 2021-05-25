@@ -2,6 +2,7 @@ package com.hkshopu.hk.ui.main.store.adapter
 
 import android.content.Intent
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -55,17 +56,20 @@ class ShopAddressPresetAdapter : RecyclerView.Adapter<ShopAddressPresetAdapter.S
     var presetClick: ((id: String) -> Unit)? = null
     override fun onBindViewHolder(holder: ShopAddressListLinearHolder, position: Int) {
         val viewHolder: ShopAddressListLinearHolder = holder
-
         val item = mData.get(position)
         viewHolder.name.text = item.name
         val phone = item.country_code+item.phone
         viewHolder.phone.text = phone
         val address = item.area + item.district + item.road + item.number + item.other + item.floor + item.room
         viewHolder.address.text = address
-//        if(item.is_default.equals("null")){
-//            viewHolder.preset.visibility = View.GONE
-//        }
-        if(item.is_default.equals("Y")) {
+
+        if(item.is_default.equals("N")) {
+            viewHolder.address.textColor = Color.parseColor("#48484A")
+            viewHolder.name.textColor = Color.parseColor("#48484A")
+            viewHolder.phone.textColor = Color.parseColor("#48484A")
+            viewHolder.layout_preset.setBackgroundResource(R.drawable.customborder_onboard_16dp)
+
+        }else{
             viewHolder.address.textColor = Color.parseColor("#FFFFFF")
             viewHolder.name.textColor = Color.parseColor("#FFFFFF")
             viewHolder.phone.textColor = Color.parseColor("#FFFFFF")
@@ -74,6 +78,7 @@ class ShopAddressPresetAdapter : RecyclerView.Adapter<ShopAddressPresetAdapter.S
         viewHolder.layout_preset.setOnClickListener {
             selected = position
             notifyDataSetChanged()
+
         }
         if(selected==position){
             viewHolder.address.textColor = Color.parseColor("#FFFFFF")

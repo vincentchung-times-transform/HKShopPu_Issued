@@ -10,11 +10,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doAfterTextChanged
 import com.hkshopu.hk.Base.BaseActivity
 import com.hkshopu.hk.R
+import com.hkshopu.hk.component.EventCheckShipmentEnableBtnOrNot
+import com.hkshopu.hk.component.EventSyncBank
 import com.hkshopu.hk.databinding.*
 import com.hkshopu.hk.net.ApiConstants
 import com.hkshopu.hk.net.Web
 import com.hkshopu.hk.net.WebListener
 import com.hkshopu.hk.ui.user.vm.AuthVModel
+import com.hkshopu.hk.utils.rxjava.RxBus
 import com.hkshopu.hk.widget.view.KeyboardUtil
 import com.tencent.mmkv.MMKV
 import okhttp3.Call
@@ -173,6 +176,10 @@ class AddBankAccount2Activity : BaseActivity(){
                                 this@AddBankAccount2Activity,
                                 BankListActivity::class.java
                             )
+
+                            RxBus.getInstance().post(EventSyncBank())
+
+
                             startActivity(intent)
                             finish()
 

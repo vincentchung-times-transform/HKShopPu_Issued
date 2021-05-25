@@ -7,7 +7,7 @@ class ShopLogisticBean {
     var id: Int= 0
 
     @SerializedName("shop_id")
-    var shop_id: String= ""
+    var shop_id: Int = 0
 
     @SerializedName("shipment_desc")
     var shipment_desc: String= ""
@@ -22,11 +22,11 @@ class ShopLogisticBean {
     fun setID(ID: Int) {
         this.id = ID
     }
-    fun getShopID(): String? {
+    fun getShopID(): Int? {
         return shop_id
     }
 
-    fun setShopID(Shop_id: String) {
+    fun setShopID(Shop_id: Int) {
         this.shop_id = Shop_id
     }
 

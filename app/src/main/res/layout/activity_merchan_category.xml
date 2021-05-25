@@ -7,6 +7,15 @@
     android:background="@color/color_shopbg"
     tools:context=".ui.main.product.activity.AddMerchanCategoryActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:elevation="10dp" />
+
     <RelativeLayout
         android:id="@+id/titleBar"
         android:layout_width="match_parent"

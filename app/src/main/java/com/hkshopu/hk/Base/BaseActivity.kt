@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import com.mallotec.reb.localeplugin.utils.LocaleHelper
+import com.tencent.mmkv.MMKV
 
 open class BaseActivity : AppCompatActivity(),LifecycleOwner {
     var isForground = true
@@ -16,11 +17,13 @@ open class BaseActivity : AppCompatActivity(),LifecycleOwner {
     override fun onResume() {
         super.onResume()
         isForground = true
+
     }
 
     override fun onPause() {
         super.onPause()
         isForground = false
+
     }
 
     fun toast(msg: String, duration: Int = Toast.LENGTH_SHORT) {

@@ -28,6 +28,16 @@
             android:text="@string/my_merchants"
             android:textSize="18sp" />
 
+        <ImageView
+            android:id="@+id/iv_productDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@id/iv_notify"
+            android:src="@mipmap/ic_shopdelete"
+            android:visibility="visible"/>
+
 
         <ImageView
             android:id="@+id/iv_notify"
@@ -90,6 +100,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="8dp"
+            android:visibility="gone"
             android:src="@mipmap/ic_microphone" />
     </RelativeLayout>
 

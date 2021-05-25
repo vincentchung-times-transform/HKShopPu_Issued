@@ -1,6 +1,5 @@
 package com.hkshopu.hk.ui.main.store.activity
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
@@ -12,6 +11,7 @@ import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doAfterTextChanged
 import com.hkshopu.hk.Base.BaseActivity
 import com.hkshopu.hk.R
@@ -31,7 +31,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 
-class AddShopAddress2Activity : BaseActivity(){
+class AddShopAddress2Activity : BaseActivity() {
     private lateinit var binding: ActivityShopaddressedit2Binding
 
     private val VM = AuthVModel()
@@ -61,63 +61,64 @@ class AddShopAddress2Activity : BaseActivity(){
     }
 
     private fun initView() {
-        binding.editShopname.requestFocus()
+
         binding.editShopname.doAfterTextChanged {
             companyName = binding.editShopname.text.toString()
-            changeImage()
+
         }
+
         binding.editShopphoneNumber.doAfterTextChanged {
             phone_number = binding.editShopphoneNumber.text.toString()
-            phone_country =binding.tvShopphoneCountry.text.toString()
+            phone_country = binding.tvShopphoneCountry.text.toString()
             phone = phone_country + phone_number
-            changeImage()
+
         }
 
-        binding.editShopname.doAfterTextChanged {
-            companyName = binding.editShopname.text.toString()
-            changeImage()
-        }
 
         binding.editCountry.doAfterTextChanged {
+
             country = binding.editCountry.text.toString()
-            changeImage()
+
         }
+
 
         binding.editAdmin.doAfterTextChanged {
             admin = binding.editAdmin.text.toString()
-            changeImage()
+
         }
 
 
         binding.editthoroughfare.doAfterTextChanged {
             thoroughfare = binding.editthoroughfare.text.toString()
-            changeImage()
+
         }
+
 
         binding.editfeature.doAfterTextChanged {
             feature = binding.editfeature.text.toString()
-            changeImage()
+
         }
 
         binding.editsubaddress.doAfterTextChanged {
             subaddress = binding.editsubaddress.text.toString()
-            changeImage()
+
         }
 
         binding.editfloor.doAfterTextChanged {
             floor = binding.editfloor.text.toString()
-            changeImage()
+
         }
 
         binding.editroom.doAfterTextChanged {
             room = binding.editroom.text.toString()
-            changeImage()
+
         }
 
         binding.layoutShopaddressEdit.setOnClickListener {
             KeyboardUtil.hideKeyboard(it)
         }
-        binding.ivSave.isEnabled = false
+//        binding.ivSave.isEnabled = false
+
 
     }
 
@@ -137,14 +138,10 @@ class AddShopAddress2Activity : BaseActivity(){
 //            }
 //        })
     }
-    fun EditText.showSoftKeyboard(){
+
+    fun EditText.showSoftKeyboard() {
         (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
             .showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
-    }
-
-    private fun changeImage() {
-        binding.ivSave.setImageResource(R.mipmap.ic_save_en)
-        binding.ivSave.isEnabled = true
     }
 
     var file: File? = null
@@ -156,31 +153,76 @@ class AddShopAddress2Activity : BaseActivity(){
 
 
         binding.ivSave.setOnClickListener {
+            var sErrorMsg = ""
+            if (companyName.isEmpty()) {
+                sErrorMsg = """
+            $sErrorMsg${getString(R.string.shopname_input)}
+            
+            """.trimMargin()
+            }
+            if (phone_number.isEmpty()) {
+                sErrorMsg = """
+            $sErrorMsg${getString(R.string.shopphone_input)}
+            
+            """.trimIndent()
+            }
+            if (country.isEmpty()) {
+                sErrorMsg = """
+            $sErrorMsg${getString(R.string.region_input)}
+            
+            """.trimIndent()
+            }
+            if (admin.isEmpty()) {
+                sErrorMsg = """
+            $sErrorMsg${getString(R.string.admin_input)}
+            
+            """.trimIndent()
+            }
+            if (thoroughfare.isEmpty()) {
+                sErrorMsg = """
+            $sErrorMsg${getString(R.string.thoroughfare_input)}
+            
+            """.trimMargin()
+            }
+            if (sErrorMsg.isEmpty()) {
+                binding.ivSave.setImageResource(R.mipmap.ic_save_en)
+                binding.ivSave.isEnabled = true
+                doAddShopAddress(
+                    companyName,
+                    phone_country,
+                    phone_number,
+                    "N",
+                    country,
+                    admin,
+                    thoroughfare,
+                    feature,
+                    subaddress,
+                    floor,
+                    room,
 
-            doAddShopAddress(
-                companyName,
-                phone_country,
-                phone_number,
-                "N",
-                country,
-                admin,
-                thoroughfare,
-                feature,
-                subaddress,
-                floor,
-                room,
+                    )
+            }else{
+                AlertDialog.Builder(this@AddShopAddress2Activity)
+                    .setTitle("")
+                    .setMessage(sErrorMsg)
+                    .setPositiveButton("確定"){
+                        // 此為 Lambda 寫法
+                            dialog, which ->dialog.cancel()
+                    }
+                    .show()
+            }
 
-            )
         }
 
     }
+
     fun processImage(): File? {
         val file: File
         val path = getExternalFilesDir(null).toString()
         file = File(path, "image" + ".jpg")
         var mImageUri = settings.getString("image", null);
         val decodedString: ByteArray = Base64.decode(mImageUri, Base64.DEFAULT)
-        val bitmap:Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+        val bitmap: Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
         val bos = ByteArrayOutputStream()
         bitmap.compress(CompressFormat.JPEG, 100 /*ignored for PNG*/, bos)
         val bitmapdata: ByteArray = bos.toByteArray()
@@ -190,7 +232,6 @@ class AddShopAddress2Activity : BaseActivity(){
         fos.close()
         return file
     }
-
 
 
     private fun doAddShopAddress(
@@ -207,8 +248,8 @@ class AddShopAddress2Activity : BaseActivity(){
         address_floor: String,
         address_room: String,
 
-    ) {
-        val url = ApiConstants.API_HOST+"/shop/"+ shopId+"/createShopAddress/"
+        ) {
+        val url = ApiConstants.API_HOST + "/shop/" + shopId + "/createShopAddress/"
         val web = Web(object : WebListener {
             override fun onResponse(response: Response) {
                 var resStr: String? = ""
@@ -219,7 +260,7 @@ class AddShopAddress2Activity : BaseActivity(){
                     Log.d("AddShopAddress2Activity", "返回資料 ret_val：" + json.get("ret_val"))
                     val ret_val = json.get("ret_val")
                     val status = json.get("status")
-                    if (status == 0){
+                    if (status == 0) {
 
                         val intent = Intent(
                             this@AddShopAddress2Activity,
@@ -264,7 +305,7 @@ class AddShopAddress2Activity : BaseActivity(){
             address_floor,
             address_room,
 
-        )
+            )
     }
 
 }

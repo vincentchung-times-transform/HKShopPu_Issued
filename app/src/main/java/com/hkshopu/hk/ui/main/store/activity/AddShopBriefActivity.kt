@@ -21,7 +21,6 @@ import com.hkshopu.hk.component.CommonVariable
 import com.hkshopu.hk.component.EventAddShopBriefSuccess
 import com.hkshopu.hk.component.EventGetShopCatSuccess
 import com.hkshopu.hk.data.bean.*
-
 import com.hkshopu.hk.databinding.ActivityAddshopbriefBinding
 import com.hkshopu.hk.net.ApiConstants
 import com.hkshopu.hk.net.Web
@@ -75,11 +74,8 @@ class AddShopBriefActivity : BaseActivity() {
     }
     private fun initView(){
         binding.tvAddshopbriefName.text = shoptitle
-
-
-
         binding.etAddshopbrief.doAfterTextChanged {
-            description =  binding.etAddshopbrief.text.toString()
+            description = binding.etAddshopbrief.text.toString().replace("\n", "", false)
         }
     }
     private fun initVM() {
@@ -147,17 +143,23 @@ class AddShopBriefActivity : BaseActivity() {
 
                                     binding.ivAddshopbriefPic.load(infolist[0].shop_icon)
                                     binding.ivShopimage.load(infolist[0].background_pic)
-
                                     binding.etAddshopbrief.setText(infolist[0].long_description)
 
                                 if(infolist[0].shop_email.length > 0) {
                                     binding.tvAddshopbriefContact.visibility = View.VISIBLE
                                     binding.ivAddshopbriefEmail.visibility = View.VISIBLE
+                                    binding.tvAddshopbriefEmail.visibility = View.VISIBLE
                                     binding.tvAddshopbriefEmail.text = infolist[0].shop_email
                                 }
 
-                                    binding.tvAddshopbriefContact.visibility = View.VISIBLE
 
+                                if(infolist[0].phone.length > 0) {
+
+                                    binding.tvAddshopbriefContact.visibility = View.VISIBLE
+                                    binding.ivAddshopbriefContact1.visibility = View.VISIBLE
+                                    binding.tvAddshopbriefPhone.text = infolist[0].phone
+                                    binding.tvAddshopbriefPhone.visibility = View.VISIBLE
+                                }
 
                                 val shopaddress: JSONArray = jsonObject.getJSONArray("shop_address")
                                 if (shopaddress.length() > 0) {
@@ -174,16 +176,11 @@ class AddShopBriefActivity : BaseActivity() {
                                                 binding.tvAddshopbriefAddress.visibility = View.VISIBLE
                                                 binding.tvAddshopbriefAddress.text = address_brief
 
-                                                if(infolist[0].phone.length > 0) {
-                                                    val phone_brief = list[i].country_code +"-"+infolist[0].phone
-                                                    binding.tvAddshopbriefContact.visibility = View.VISIBLE
-                                                    binding.ivAddshopbriefContact1.visibility = View.VISIBLE
-                                                    binding.tvAddshopbriefPhone.text = phone_brief
-                                                }
                                             }
                                         }
 
                                     }
+                                    binding.tvAddshopbriefContact.visibility = View.VISIBLE
                                 }
 
                             }
@@ -249,8 +246,8 @@ class AddShopBriefActivity : BaseActivity() {
                         val bitmap =
                             MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri)
                         if (bitmap != null) {
-                            binding.ivNoimage.visibility = View.INVISIBLE
-                            binding!!.ivShopimage.setImageBitmap(bitmap)
+                            binding.ivNoimage.visibility = View.GONE
+                            binding.ivShopimage.setImageBitmap(bitmap)
 
                             isSelectImage = true
                             val file = processImage()
@@ -265,8 +262,8 @@ class AddShopBriefActivity : BaseActivity() {
                         val bitmap = ImageDecoder.decodeBitmap(source)
                         if (bitmap != null) {
                             runOnUiThread {
-                                binding.ivNoimage.visibility = View.INVISIBLE
-                                binding!!.ivShopimage.setImageBitmap(bitmap)
+                                binding.ivNoimage.visibility = View.GONE
+                                binding.ivShopimage.setImageBitmap(bitmap)
                                 val file = processImage()
                                 doShopBgUpdate(file!!)
                             }

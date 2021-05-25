@@ -69,6 +69,12 @@ class MyStoreFragment : Fragment() {
         getShopProduct(url)
 
 
+        //清掉 MMKV.mmkvWithID("addPro").clear() MMKV.mmkvWithID("editPro").clear()
+        MMKV.mmkvWithID("addPro").clear()
+        MMKV.mmkvWithID("editPro").clear()
+
+
+
         storeBrief = v.find<RelativeLayout>(R.id.layout_store_brief)
         shopBrief = v.find<TextView>(R.id.tv_shop_brief)
         shopBrief_edit = v.find<TextView>(R.id.tv_shop_brief_more)
@@ -106,16 +112,25 @@ class MyStoreFragment : Fragment() {
 
     private fun initView(){
         val description = MMKV.mmkvWithID("http").getString("description","")
+
         Log.d(
             "MyStoreFragment",
             "資料 description：" + description
         )
-        if(description!!.length > 0 ){
+
+        if(description!!.length >0){
+
+            Log.d("fdjhfidjfidj", "簡介顯示")
             storeBrief.visibility = View.VISIBLE
+            shopBrief.visibility =View.VISIBLE
             shopBrief.text = description
 
         }else{
+            Log.d("fdjhfidjfidj", "沒有簡介")
             addShopBrief.visibility = View.VISIBLE
+            storeBrief.visibility = View.GONE
+            shopBrief.visibility =View.GONE
+
         }
     }
 
@@ -125,6 +140,7 @@ class MyStoreFragment : Fragment() {
             .subscribe({
                 when (it) {
                     is EventAddShopBriefSuccess -> {
+
                         addShopBrief.visibility = View.INVISIBLE
                         storeBrief.visibility = View.VISIBLE
                         shopBrief.text = it.description

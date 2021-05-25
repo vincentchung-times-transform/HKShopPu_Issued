@@ -2,9 +2,7 @@ package com.hkshopu.hk.ui.main.product.activity
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +11,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.hkshopu.hk.Base.BaseActivity
 import com.hkshopu.hk.Base.response.Status
 import com.hkshopu.hk.R
@@ -26,18 +22,15 @@ import com.hkshopu.hk.databinding.ActivityMerchandiseBinding
 import com.hkshopu.hk.net.ApiConstants
 import com.hkshopu.hk.net.Web
 import com.hkshopu.hk.net.WebListener
-import com.hkshopu.hk.ui.main.product.adapter.PicsAdapter
 import com.hkshopu.hk.ui.main.product.fragment.EditProductRemindDialogFragment
-import com.hkshopu.hk.ui.main.product.fragment.StoreOrNotDialogFragment
 import com.hkshopu.hk.ui.user.vm.ShopVModel
 import com.tencent.mmkv.MMKV
 import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.lang.reflect.Type
+import java.math.BigDecimal
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -65,9 +58,10 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
         setContentView(binding.root)
 
         MMKV_product_id = MMKV.mmkvWithID("http").getInt("ProductId", 0)
+
         getProductInfo(MMKV_product_id)
 
-
+        binding.progressBarMerchandise.isVisible = false
 
         initVM()
         initView()
@@ -119,27 +113,31 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
 
     private fun initViewPager() {
-        binding.productPicsPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
-            override fun onPageScrollStateChanged(state: Int) {
-            }
+        runOnUiThread {
+            binding.productPicsPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
+                override fun onPageScrollStateChanged(state: Int) {
+                }
 
-            }
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
 
-            override fun onPageSelected(position: Int) {
+                }
 
-            }
+                override fun onPageSelected(position: Int) {
 
-        })
+                }
 
-        binding.productPicsPager.adapter = MerchandiseActivity.ImageAdapter(list)
-        binding.productPicsPager.addOnPageChangeListener(this)
+            })
+
+            binding.productPicsPager.adapter = MerchandiseActivity.ImageAdapter(list)
+            binding.productPicsPager.addOnPageChangeListener(this)
+        }
+
         initPoints()
 
     }
@@ -159,7 +157,10 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                 point.layoutParams = ViewGroup.LayoutParams(36, 36)
             }
 
-            binding.productPicsIndicator.addView(point)
+            runOnUiThread {
+                binding.productPicsIndicator.addView(point)
+            }
+
             points.add(point)
         }
     }
@@ -246,12 +247,18 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                 val list = ArrayList<ProductInfoBean>()
 //                val product_id_list = ArrayList<String>()
                 try {
+
+                    runOnUiThread {
+                        binding.progressBarMerchandise.isVisible = true
+                    }
+
                     resStr = response.body()!!.string()
                     val json = JSONObject(resStr)
                     Log.d("getProductInfo", "返回資料 resStr：" + resStr)
                     Log.d("getProductInfo", "返回資料 ret_val：" + json.get("ret_val"))
                     val ret_val = json.get("ret_val")
                     if (ret_val.equals("已取得商品資訊!")) {
+
 
                         val jsonArray: JSONArray = json.getJSONArray("data")
                         Log.d("getProductInfo", "返回資料 jsonArray：" + jsonArray.toString())
@@ -289,115 +296,237 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
                         setBoardingData()
 
-                        runOnUiThread {
-                            binding.tvQuantity.setText(productInfoList.sum_quantity.toString())
-                            binding.textViewSoldQuantity.setText(productInfoList.sold_quantity.toString())
-                            binding.textViewLike.setText(productInfoList.like.toString())
-                            binding.tvLongestStockUpDays.setText(productInfoList.longterm_stock_up.toString())
+                        if(productInfoList.product_spec_on.equals("y")){
+
+
+                            if(productInfoList.sum_quantity.toString().length>=3){
+                                var one_thous = 1000
+                                var float = productInfoList.sum_quantity.toDouble()/one_thous.toDouble()
+                                var bigDecimal = float.toBigDecimal()
+                                runOnUiThread {
+                                    binding.tvQuantity.text = "${bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).toString()}k"
+                                }
+
+                            }else{
+                                runOnUiThread {
+                                    binding.tvQuantity.text =  "${productInfoList.sum_quantity.toString()}"
+                                }
+                            }
+
+
+                        }else{
+                            runOnUiThread {
+
+                                if(productInfoList.quantity.toString().length>=3){
+                                    var one_thous = 1000
+                                    var float = productInfoList.quantity.toDouble()/one_thous.toDouble()
+                                    var bigDecimal = float.toBigDecimal()
+                                    runOnUiThread {
+                                        binding.tvQuantity.text = "${bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).toString()}k"
+                                    }
+
+                                }else{
+                                    runOnUiThread {
+                                        binding.tvQuantity.text =  "${productInfoList.quantity.toString()}"
+                                    }
+                                }
+                            }
                         }
+
+
+                        if(productInfoList.sold_quantity.toString().length>=3){
+                            var one_thous = 1000
+                            var float = productInfoList.sold_quantity.toDouble()/one_thous.toDouble()
+                            var bigDecimal = float.toBigDecimal()
+                            runOnUiThread {
+                                binding.textViewSoldQuantity.text = "${bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).toString()}k"
+                            }
+
+                        }else{
+                            runOnUiThread {
+                                binding.textViewSoldQuantity.text =  "${productInfoList.sold_quantity.toString()}"
+                            }
+                        }
+
+                        if(productInfoList.like.toString().length>=3){
+                            var one_thous = 1000
+                            var float = productInfoList.like.toDouble()/one_thous.toDouble()
+                            var bigDecimal = float.toBigDecimal()
+                            runOnUiThread {
+                                binding.textViewLike.text = "${bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).toString()}k"
+                            }
+
+                        }else{
+                            runOnUiThread {
+                                binding.textViewLike.text =  "${productInfoList.like.toString()}"
+                            }
+                        }
+
+                        if(productInfoList.longterm_stock_up.toString().length>=3){
+                            var one_thous = 1000
+                            var float = productInfoList.longterm_stock_up.toDouble()/one_thous.toDouble()
+                            var bigDecimal = float.toBigDecimal()
+                            runOnUiThread {
+                                binding.tvLongestStockUpDays.text = "${bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).toString()}k"
+                            }
+
+                        }else{
+                            runOnUiThread {
+                                binding.tvLongestStockUpDays.text =  "${productInfoList.longterm_stock_up.toString()}"
+                            }
+                        }
+
+
+
+
 
                         runOnUiThread {
 
                             when(productInfoList.product_status){
                                 "active"->{
-                                    binding.btnLaunch.setImageResource(R.mipmap.btn_draft)
+
+                                    runOnUiThread {
+                                        binding.btnLaunch.setImageResource(R.mipmap.btn_draft)
+                                    }
+
                                     product_status = productInfoList.product_status
                                 }
                                 "draft"->{
-                                    binding.btnLaunch.setImageResource(R.mipmap.btn_launch)
+
+                                    runOnUiThread {
+                                        binding.btnLaunch.setImageResource(R.mipmap.btn_launch)
+                                    }
+
                                     product_status = productInfoList.product_status
                                 }
                             }
 
 
                             if(productInfoList.product_spec_on.equals("y")){
-                                binding.textViewProductPriceRange.setText("HKD$${productInfoList.shipment_min_price}-HKD$${
-                                    productInfoList.shipment_max_price
-                                }")
+                                runOnUiThread {
+                                    binding.textViewProductPriceRange.setText("HKD$${productInfoList.shipment_min_price}-HKD$${
+                                        productInfoList.shipment_max_price
+                                    }")
+                                }
+
                             }else{
-                                binding.textViewProductPriceRange.setText("HKD$${productInfoList.product_price.toString()}")
+                                runOnUiThread {
+                                    binding.textViewProductPriceRange.setText("HKD$${productInfoList.product_price.toString()}")
+                                }
                             }
 
-                            binding.textViewProductName.setText(productInfoList.product_title.toString())
-                            binding.textViewProductInformation.setText(productInfoList.product_description.toString())
-                            binding.textViewSoldQuantity.setText(productInfoList.sold_quantity.toString())
-                            binding.textViewLike.setText(productInfoList.like.toString())
+                            runOnUiThread {
+                                binding.textViewProductName.setText(productInfoList.product_title.toString())
+                                binding.textViewProductInformation.setText(productInfoList.product_description.toString())
 
-                            binding.textViewSeletedCategory.setText(
-                                "${productInfoList.c_product_category} > ${
-                                    productInfoList.c_sub_product_category
-                                }"
-                            )
+                                binding.textViewSeletedCategory.setText(
+                                    "${productInfoList.c_product_category} > ${
+                                        productInfoList.c_sub_product_category
+                                    }"
+                                )
+
+                            }
 
                             initViewPager()
 
                             if(productInfoList.product_spec_on.equals("y")){
 
-                                binding.invenContainer.isVisible = true
+                                runOnUiThread {
+                                    binding.invenContainer.isVisible = true
+                                }
+
 
                                 var mutableSet_spec_dec_1_items : MutableSet<String> = productInfoList.spec_dec_1_items.toMutableSet()
                                 var mutableSet_spec_dec_2_items : MutableSet<String> = productInfoList.spec_dec_2_items.toMutableSet()
 
-                                binding.firstLayerSpec01.setText(productInfoList.spec_desc_1.get(0))
-                                binding.firstLayerSpec02.setText(productInfoList.spec_desc_1.get(0))
-                                binding.firstLayerSpec03.setText(productInfoList.spec_desc_1.get(0))
 
-                                binding.firstLayerColumn01.setText(productInfoList.spec_desc_2.get(0))
-                                binding.firstLayerColumn02.setText(productInfoList.spec_desc_2.get(0))
-                                binding.firstLayerColumn03.setText(productInfoList.spec_desc_2.get(0))
+                                runOnUiThread {
+
+                                    binding.firstLayerSpec01.setText(productInfoList.spec_desc_1.get(0))
+                                    binding.firstLayerSpec02.setText(productInfoList.spec_desc_1.get(0))
+                                    binding.firstLayerSpec03.setText(productInfoList.spec_desc_1.get(0))
+
+                                    binding.firstLayerColumn01.setText(productInfoList.spec_desc_2.get(0))
+                                    binding.firstLayerColumn02.setText(productInfoList.spec_desc_2.get(0))
+                                    binding.firstLayerColumn03.setText(productInfoList.spec_desc_2.get(0))
+
+                                }
+
+
 
                                 if(mutableSet_spec_dec_1_items.size>0 && mutableSet_spec_dec_2_items.size>0){
                                     when(mutableSet_spec_dec_1_items.size){
                                         1->{
+                                            runOnUiThread {
 
-                                            binding.containerInvenItem01.isVisible = true
-                                            binding.containerInvenItem02.isVisible = false
-                                            binding.containerInvenItem03.isVisible = false
+                                                binding.containerInvenItem01.isVisible = true
+                                                binding.containerInvenItem02.isVisible = false
+                                                binding.containerInvenItem03.isVisible = false
+
+
+                                            }
+
 
                                             when(mutableSet_spec_dec_2_items.size){
 
                                                 1->{
-                                                    binding.secondLayerItemContainer01.isVisible = true
-                                                    binding.secondLayerItemContainer02.isVisible = false
-                                                    binding.secondLayerItemContainer03.isVisible = false
+                                                    runOnUiThread {
 
-                                                    binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
-                                                    binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                        binding.secondLayerItemContainer01.isVisible = true
+                                                        binding.secondLayerItemContainer02.isVisible = false
+                                                        binding.secondLayerItemContainer03.isVisible = false
+
+                                                        binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
+                                                        binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
+                                                        binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                        binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+
+                                                    }
+
 
                                                 }
                                                 2->{
-                                                    binding.secondLayerItemContainer01.isVisible = true
-                                                    binding.secondLayerItemContainer02.isVisible = true
-                                                    binding.secondLayerItemContainer03.isVisible = false
 
-                                                    binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
-                                                    binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                                    binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
+                                                    runOnUiThread {
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
-                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
-                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                        binding.secondLayerItemContainer01.isVisible = true
+                                                        binding.secondLayerItemContainer02.isVisible = true
+                                                        binding.secondLayerItemContainer03.isVisible = false
+
+                                                        binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
+                                                        binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
+                                                        binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
+
+                                                        binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                        binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                        binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                        binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+
+
+                                                    }
+
 
                                                 }
                                                 3->{
-                                                    binding.secondLayerItemContainer01.isVisible = true
-                                                    binding.secondLayerItemContainer02.isVisible = true
-                                                    binding.secondLayerItemContainer03.isVisible = true
 
-                                                    binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
-                                                    binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                                    binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
-                                                    binding.secondLayerItemName03.setText(productInfoList.spec_dec_2_items.get(2))
+                                                    runOnUiThread {
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
-                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
-                                                    binding.secondLayerItemPrice03.setText(productInfoList.price.get(2).toString())
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
-                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
-                                                    binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2).toString())
+                                                        binding.secondLayerItemContainer01.isVisible = true
+                                                        binding.secondLayerItemContainer02.isVisible = true
+                                                        binding.secondLayerItemContainer03.isVisible = true
+
+                                                        binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
+                                                        binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
+                                                        binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
+                                                        binding.secondLayerItemName03.setText(productInfoList.spec_dec_2_items.get(2))
+
+                                                        binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                        binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                        binding.secondLayerItemPrice03.setText(productInfoList.price.get(2).toString())
+                                                        binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                        binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                        binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2).toString())
+                                                    }
 
                                                 }
 
@@ -406,212 +535,227 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                         }
                                         2->{
 
-                                            binding.containerInvenItem01.isVisible = true
-                                            binding.containerInvenItem02.isVisible = true
-                                            binding.containerInvenItem03.isVisible = false
 
+                                            runOnUiThread {
+                                                binding.containerInvenItem01.isVisible = true
+                                                binding.containerInvenItem02.isVisible = true
+                                                binding.containerInvenItem03.isVisible = false
+                                            }
                                             when(mutableSet_spec_dec_2_items.size){
                                                 1->{
-                                                    binding.secondLayerItemContainer01.isVisible = true
-                                                    binding.secondLayerItemContainer02.isVisible = false
-                                                    binding.secondLayerItemContainer03.isVisible = false
-                                                    binding.secondLayerItemContainer04.isVisible = true
-                                                    binding.secondLayerItemContainer05.isVisible = false
-                                                    binding.secondLayerItemContainer06.isVisible = false
 
-                                                    binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
-                                                    binding.firstLayerTitle02.setText(productInfoList.spec_dec_1_items.get(1))
+                                                    runOnUiThread {
+                                                        binding.secondLayerItemContainer01.isVisible = true
+                                                        binding.secondLayerItemContainer02.isVisible = false
+                                                        binding.secondLayerItemContainer03.isVisible = false
+                                                        binding.secondLayerItemContainer04.isVisible = true
+                                                        binding.secondLayerItemContainer05.isVisible = false
+                                                        binding.secondLayerItemContainer06.isVisible = false
 
-                                                    binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                                    binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(1))
+                                                        binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
+                                                        binding.firstLayerTitle02.setText(productInfoList.spec_dec_1_items.get(1))
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
-                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(1).toString())
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
-                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(1).toString())
+                                                        binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
+                                                        binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(1))
+
+                                                        binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                        binding.secondLayerItemPrice04.setText(productInfoList.price.get(1).toString())
+                                                        binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                        binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(1).toString())
+                                                    }
+
 
 
                                                 }
                                                 2->{
+                                                    runOnUiThread {
+                                                        binding.secondLayerItemContainer01.isVisible = true
+                                                        binding.secondLayerItemContainer02.isVisible = true
+                                                        binding.secondLayerItemContainer03.isVisible = false
+                                                        binding.secondLayerItemContainer04.isVisible = true
+                                                        binding.secondLayerItemContainer05.isVisible = true
+                                                        binding.secondLayerItemContainer06.isVisible = false
 
-                                                    binding.secondLayerItemContainer01.isVisible = true
-                                                    binding.secondLayerItemContainer02.isVisible = true
-                                                    binding.secondLayerItemContainer03.isVisible = false
-                                                    binding.secondLayerItemContainer04.isVisible = true
-                                                    binding.secondLayerItemContainer05.isVisible = true
-                                                    binding.secondLayerItemContainer06.isVisible = false
+                                                        binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
+                                                        binding.firstLayerTitle02.setText(productInfoList.spec_dec_1_items.get(1))
 
-                                                    binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
-                                                    binding.firstLayerTitle02.setText(productInfoList.spec_dec_1_items.get(1))
+                                                        binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
+                                                        binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
+                                                        binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(2))
+                                                        binding.secondLayerItemName05.setText(productInfoList.spec_dec_2_items.get(3))
 
-                                                    binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                                    binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
-                                                    binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(2))
-                                                    binding.secondLayerItemName05.setText(productInfoList.spec_dec_2_items.get(3))
-
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
-                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
-                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(2).toString())
-                                                    binding.secondLayerItemPrice05.setText(productInfoList.price.get(3).toString())
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
-                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
-                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(2).toString())
-                                                    binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(3).toString())
+                                                        binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                        binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                        binding.secondLayerItemPrice04.setText(productInfoList.price.get(2).toString())
+                                                        binding.secondLayerItemPrice05.setText(productInfoList.price.get(3).toString())
+                                                        binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                        binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                        binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(2).toString())
+                                                        binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(3).toString())
+                                                    }
 
 
                                                 }
                                                 3->{
+                                                    runOnUiThread {
+                                                        binding.secondLayerItemContainer01.isVisible = true
+                                                        binding.secondLayerItemContainer02.isVisible = true
+                                                        binding.secondLayerItemContainer03.isVisible = true
+                                                        binding.secondLayerItemContainer04.isVisible = true
+                                                        binding.secondLayerItemContainer05.isVisible = true
+                                                        binding.secondLayerItemContainer06.isVisible = true
 
-                                                    binding.secondLayerItemContainer01.isVisible = true
-                                                    binding.secondLayerItemContainer02.isVisible = true
-                                                    binding.secondLayerItemContainer03.isVisible = true
-                                                    binding.secondLayerItemContainer04.isVisible = true
-                                                    binding.secondLayerItemContainer05.isVisible = true
-                                                    binding.secondLayerItemContainer06.isVisible = true
+                                                        binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
+                                                        binding.firstLayerTitle02.setText(productInfoList.spec_dec_1_items.get(1))
 
-                                                    binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
-                                                    binding.firstLayerTitle02.setText(productInfoList.spec_dec_1_items.get(1))
+                                                        binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
+                                                        binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
+                                                        binding.secondLayerItemName03.setText(productInfoList.spec_dec_2_items.get(2))
+                                                        binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(3))
+                                                        binding.secondLayerItemName05.setText(productInfoList.spec_dec_2_items.get(4))
+                                                        binding.secondLayerItemName06.setText(productInfoList.spec_dec_2_items.get(5))
 
-                                                    binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                                    binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
-                                                    binding.secondLayerItemName03.setText(productInfoList.spec_dec_2_items.get(2))
-                                                    binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(3))
-                                                    binding.secondLayerItemName05.setText(productInfoList.spec_dec_2_items.get(4))
-                                                    binding.secondLayerItemName06.setText(productInfoList.spec_dec_2_items.get(5))
-
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
-                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
-                                                    binding.secondLayerItemPrice03.setText(productInfoList.price.get(2).toString())
-                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(3).toString())
-                                                    binding.secondLayerItemPrice05.setText(productInfoList.price.get(4).toString())
-                                                    binding.secondLayerItemPrice06.setText(productInfoList.price.get(5).toString())
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
-                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
-                                                    binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2).toString())
-                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(3).toString())
-                                                    binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(4).toString())
-                                                    binding.secondLayerItemQuant06.setText(productInfoList.spec_quantity.get(5).toString())
+                                                        binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                        binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                        binding.secondLayerItemPrice03.setText(productInfoList.price.get(2).toString())
+                                                        binding.secondLayerItemPrice04.setText(productInfoList.price.get(3).toString())
+                                                        binding.secondLayerItemPrice05.setText(productInfoList.price.get(4).toString())
+                                                        binding.secondLayerItemPrice06.setText(productInfoList.price.get(5).toString())
+                                                        binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                        binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                        binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2).toString())
+                                                        binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(3).toString())
+                                                        binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(4).toString())
+                                                        binding.secondLayerItemQuant06.setText(productInfoList.spec_quantity.get(5).toString())
+                                                    }
 
                                                 }
                                             }
 
                                         }
                                         3->{
+                                            runOnUiThread {
+                                                binding.containerInvenItem01.isVisible = true
+                                                binding.containerInvenItem02.isVisible = true
+                                                binding.containerInvenItem03.isVisible = true
+                                            }
 
-                                            binding.containerInvenItem01.isVisible = true
-                                            binding.containerInvenItem02.isVisible = true
-                                            binding.containerInvenItem03.isVisible = true
 
                                             when(mutableSet_spec_dec_2_items.size){
                                                 1->{
-                                                    binding.secondLayerItemContainer01.isVisible = true
-                                                    binding.secondLayerItemContainer02.isVisible = false
-                                                    binding.secondLayerItemContainer03.isVisible = false
-                                                    binding.secondLayerItemContainer04.isVisible = true
-                                                    binding.secondLayerItemContainer05.isVisible = false
-                                                    binding.secondLayerItemContainer06.isVisible = false
-                                                    binding.secondLayerItemContainer07.isVisible = true
-                                                    binding.secondLayerItemContainer08.isVisible = false
-                                                    binding.secondLayerItemContainer09.isVisible = false
 
-                                                    binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
-                                                    binding.firstLayerTitle02.setText(productInfoList.spec_dec_1_items.get(1))
-                                                    binding.firstLayerTitle03.setText(productInfoList.spec_dec_1_items.get(2))
-                                                    binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                                    binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(1))
-                                                    binding.secondLayerItemName07.setText(productInfoList.spec_dec_2_items.get(2))
+                                                    runOnUiThread {
+                                                        binding.secondLayerItemContainer01.isVisible = true
+                                                        binding.secondLayerItemContainer02.isVisible = false
+                                                        binding.secondLayerItemContainer03.isVisible = false
+                                                        binding.secondLayerItemContainer04.isVisible = true
+                                                        binding.secondLayerItemContainer05.isVisible = false
+                                                        binding.secondLayerItemContainer06.isVisible = false
+                                                        binding.secondLayerItemContainer07.isVisible = true
+                                                        binding.secondLayerItemContainer08.isVisible = false
+                                                        binding.secondLayerItemContainer09.isVisible = false
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
-                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(1).toString())
-                                                    binding.secondLayerItemPrice07.setText(productInfoList.price.get(2).toString())
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
-                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(1).toString())
-                                                    binding.secondLayerItemQuant07.setText(productInfoList.spec_quantity.get(2).toString())
+                                                        binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
+                                                        binding.firstLayerTitle02.setText(productInfoList.spec_dec_1_items.get(1))
+                                                        binding.firstLayerTitle03.setText(productInfoList.spec_dec_1_items.get(2))
+                                                        binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
+                                                        binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(1))
+                                                        binding.secondLayerItemName07.setText(productInfoList.spec_dec_2_items.get(2))
 
+                                                        binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                        binding.secondLayerItemPrice04.setText(productInfoList.price.get(1).toString())
+                                                        binding.secondLayerItemPrice07.setText(productInfoList.price.get(2).toString())
+                                                        binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                        binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(1).toString())
+                                                        binding.secondLayerItemQuant07.setText(productInfoList.spec_quantity.get(2).toString())
+                                                    }
 
                                                 }
                                                 2->{
+                                                    runOnUiThread {
+                                                        binding.secondLayerItemContainer01.isVisible = true
+                                                        binding.secondLayerItemContainer02.isVisible = true
+                                                        binding.secondLayerItemContainer03.isVisible = false
+                                                        binding.secondLayerItemContainer04.isVisible = true
+                                                        binding.secondLayerItemContainer05.isVisible = true
+                                                        binding.secondLayerItemContainer06.isVisible = false
+                                                        binding.secondLayerItemContainer07.isVisible = true
+                                                        binding.secondLayerItemContainer08.isVisible = true
+                                                        binding.secondLayerItemContainer09.isVisible = false
 
-                                                    binding.secondLayerItemContainer01.isVisible = true
-                                                    binding.secondLayerItemContainer02.isVisible = true
-                                                    binding.secondLayerItemContainer03.isVisible = false
-                                                    binding.secondLayerItemContainer04.isVisible = true
-                                                    binding.secondLayerItemContainer05.isVisible = true
-                                                    binding.secondLayerItemContainer06.isVisible = false
-                                                    binding.secondLayerItemContainer07.isVisible = true
-                                                    binding.secondLayerItemContainer08.isVisible = true
-                                                    binding.secondLayerItemContainer09.isVisible = false
+                                                        binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
+                                                        binding.firstLayerTitle02.setText(productInfoList.spec_dec_1_items.get(1))
+                                                        binding.firstLayerTitle03.setText(productInfoList.spec_dec_1_items.get(2))
 
-                                                    binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
-                                                    binding.firstLayerTitle02.setText(productInfoList.spec_dec_1_items.get(1))
-                                                    binding.firstLayerTitle03.setText(productInfoList.spec_dec_1_items.get(2))
-
-                                                    binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                                    binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
-                                                    binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(2))
-                                                    binding.secondLayerItemName05.setText(productInfoList.spec_dec_2_items.get(3))
-                                                    binding.secondLayerItemName07.setText(productInfoList.spec_dec_2_items.get(4))
-                                                    binding.secondLayerItemName08.setText(productInfoList.spec_dec_2_items.get(5))
+                                                        binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
+                                                        binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
+                                                        binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(2))
+                                                        binding.secondLayerItemName05.setText(productInfoList.spec_dec_2_items.get(3))
+                                                        binding.secondLayerItemName07.setText(productInfoList.spec_dec_2_items.get(4))
+                                                        binding.secondLayerItemName08.setText(productInfoList.spec_dec_2_items.get(5))
 
 
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
-                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
-                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(2).toString())
-                                                    binding.secondLayerItemPrice05.setText(productInfoList.price.get(3).toString())
-                                                    binding.secondLayerItemPrice07.setText(productInfoList.price.get(4).toString())
-                                                    binding.secondLayerItemPrice08.setText(productInfoList.price.get(5).toString())
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
-                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
-                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(2).toString())
-                                                    binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(3).toString())
-                                                    binding.secondLayerItemQuant07.setText(productInfoList.spec_quantity.get(4).toString())
-                                                    binding.secondLayerItemQuant08.setText(productInfoList.spec_quantity.get(5).toString())
+                                                        binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                        binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                        binding.secondLayerItemPrice04.setText(productInfoList.price.get(2).toString())
+                                                        binding.secondLayerItemPrice05.setText(productInfoList.price.get(3).toString())
+                                                        binding.secondLayerItemPrice07.setText(productInfoList.price.get(4).toString())
+                                                        binding.secondLayerItemPrice08.setText(productInfoList.price.get(5).toString())
+                                                        binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                        binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                        binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(2).toString())
+                                                        binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(3).toString())
+                                                        binding.secondLayerItemQuant07.setText(productInfoList.spec_quantity.get(4).toString())
+                                                        binding.secondLayerItemQuant08.setText(productInfoList.spec_quantity.get(5).toString())
+                                                    }
+
 
                                                 }
                                                 3->{
+                                                    runOnUiThread {
+                                                        binding.secondLayerItemContainer01.isVisible = true
+                                                        binding.secondLayerItemContainer02.isVisible = true
+                                                        binding.secondLayerItemContainer03.isVisible = true
+                                                        binding.secondLayerItemContainer04.isVisible = true
+                                                        binding.secondLayerItemContainer05.isVisible = true
+                                                        binding.secondLayerItemContainer06.isVisible = true
+                                                        binding.secondLayerItemContainer07.isVisible = true
+                                                        binding.secondLayerItemContainer08.isVisible = true
+                                                        binding.secondLayerItemContainer09.isVisible = true
 
-                                                    binding.secondLayerItemContainer01.isVisible = true
-                                                    binding.secondLayerItemContainer02.isVisible = true
-                                                    binding.secondLayerItemContainer03.isVisible = true
-                                                    binding.secondLayerItemContainer04.isVisible = true
-                                                    binding.secondLayerItemContainer05.isVisible = true
-                                                    binding.secondLayerItemContainer06.isVisible = true
-                                                    binding.secondLayerItemContainer07.isVisible = true
-                                                    binding.secondLayerItemContainer08.isVisible = true
-                                                    binding.secondLayerItemContainer09.isVisible = true
+                                                        binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
+                                                        binding.firstLayerTitle02.setText(productInfoList.spec_dec_1_items.get(1))
+                                                        binding.firstLayerTitle03.setText(productInfoList.spec_dec_1_items.get(2))
 
-                                                    binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
-                                                    binding.firstLayerTitle02.setText(productInfoList.spec_dec_1_items.get(1))
-                                                    binding.firstLayerTitle03.setText(productInfoList.spec_dec_1_items.get(2))
+                                                        binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
+                                                        binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
+                                                        binding.secondLayerItemName03.setText(productInfoList.spec_dec_2_items.get(2))
+                                                        binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(3))
+                                                        binding.secondLayerItemName05.setText(productInfoList.spec_dec_2_items.get(4))
+                                                        binding.secondLayerItemName06.setText(productInfoList.spec_dec_2_items.get(5))
+                                                        binding.secondLayerItemName07.setText(productInfoList.spec_dec_2_items.get(6))
+                                                        binding.secondLayerItemName08.setText(productInfoList.spec_dec_2_items.get(7))
+                                                        binding.secondLayerItemName09.setText(productInfoList.spec_dec_2_items.get(8))
 
-                                                    binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                                    binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
-                                                    binding.secondLayerItemName03.setText(productInfoList.spec_dec_2_items.get(2))
-                                                    binding.secondLayerItemName04.setText(productInfoList.spec_dec_2_items.get(3))
-                                                    binding.secondLayerItemName05.setText(productInfoList.spec_dec_2_items.get(4))
-                                                    binding.secondLayerItemName06.setText(productInfoList.spec_dec_2_items.get(5))
-                                                    binding.secondLayerItemName07.setText(productInfoList.spec_dec_2_items.get(6))
-                                                    binding.secondLayerItemName08.setText(productInfoList.spec_dec_2_items.get(7))
-                                                    binding.secondLayerItemName09.setText(productInfoList.spec_dec_2_items.get(8))
-
-                                                    binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
-                                                    binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
-                                                    binding.secondLayerItemPrice03.setText(productInfoList.price.get(2).toString())
-                                                    binding.secondLayerItemPrice04.setText(productInfoList.price.get(3).toString())
-                                                    binding.secondLayerItemPrice05.setText(productInfoList.price.get(4).toString())
-                                                    binding.secondLayerItemPrice06.setText(productInfoList.price.get(5).toString())
-                                                    binding.secondLayerItemPrice07.setText(productInfoList.price.get(6).toString())
-                                                    binding.secondLayerItemPrice08.setText(productInfoList.price.get(7).toString())
-                                                    binding.secondLayerItemPrice09.setText(productInfoList.price.get(8).toString())
-                                                    binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
-                                                    binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
-                                                    binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2).toString())
-                                                    binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(3).toString())
-                                                    binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(4).toString())
-                                                    binding.secondLayerItemQuant06.setText(productInfoList.spec_quantity.get(5).toString())
-                                                    binding.secondLayerItemQuant07.setText(productInfoList.spec_quantity.get(6).toString())
-                                                    binding.secondLayerItemQuant08.setText(productInfoList.spec_quantity.get(7).toString())
-                                                    binding.secondLayerItemQuant09.setText(productInfoList.spec_quantity.get(8).toString())
+                                                        binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                        binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                        binding.secondLayerItemPrice03.setText(productInfoList.price.get(2).toString())
+                                                        binding.secondLayerItemPrice04.setText(productInfoList.price.get(3).toString())
+                                                        binding.secondLayerItemPrice05.setText(productInfoList.price.get(4).toString())
+                                                        binding.secondLayerItemPrice06.setText(productInfoList.price.get(5).toString())
+                                                        binding.secondLayerItemPrice07.setText(productInfoList.price.get(6).toString())
+                                                        binding.secondLayerItemPrice08.setText(productInfoList.price.get(7).toString())
+                                                        binding.secondLayerItemPrice09.setText(productInfoList.price.get(8).toString())
+                                                        binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                        binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                        binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2).toString())
+                                                        binding.secondLayerItemQuant04.setText(productInfoList.spec_quantity.get(3).toString())
+                                                        binding.secondLayerItemQuant05.setText(productInfoList.spec_quantity.get(4).toString())
+                                                        binding.secondLayerItemQuant06.setText(productInfoList.spec_quantity.get(5).toString())
+                                                        binding.secondLayerItemQuant07.setText(productInfoList.spec_quantity.get(6).toString())
+                                                        binding.secondLayerItemQuant08.setText(productInfoList.spec_quantity.get(7).toString())
+                                                        binding.secondLayerItemQuant09.setText(productInfoList.spec_quantity.get(8).toString())
+                                                    }
 
                                                 }
                                             }
@@ -620,63 +764,82 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
                                 }else if(mutableSet_spec_dec_1_items.size>0 && mutableSet_spec_dec_2_items.size==0){
 
-                                    binding.containerInvenItem01.isVisible = true
-                                    binding.containerFistLayerItemTitle.isVisible = false
-                                    binding.containerInvenItem02.isVisible = false
-                                    binding.containerInvenItem03.isVisible = false
+
+                                    runOnUiThread {
+                                        binding.containerInvenItem01.isVisible = true
+                                        binding.containerFistLayerItemTitle.isVisible = false
+                                        binding.containerInvenItem02.isVisible = false
+                                        binding.containerInvenItem03.isVisible = false
+                                    }
+
 
 
                                     when(mutableSet_spec_dec_1_items.size){
 
                                         1->{
-                                            binding.secondLayerItemContainer01.isVisible = true
-                                            binding.secondLayerItemContainer02.isVisible = false
-                                            binding.secondLayerItemContainer03.isVisible = false
 
-                                            binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
-                                            binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                            binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
-                                            binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                            runOnUiThread {
+                                                binding.secondLayerItemContainer01.isVisible = true
+                                                binding.secondLayerItemContainer02.isVisible = false
+                                                binding.secondLayerItemContainer03.isVisible = false
+
+                                                binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
+                                                binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
+                                                binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                            }
+
+
 
                                         }
                                         2->{
-                                            binding.secondLayerItemContainer01.isVisible = true
-                                            binding.secondLayerItemContainer02.isVisible = true
-                                            binding.secondLayerItemContainer03.isVisible = false
 
-                                            binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
-                                            binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                            binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
+                                            runOnUiThread {
+                                                binding.secondLayerItemContainer01.isVisible = true
+                                                binding.secondLayerItemContainer02.isVisible = true
+                                                binding.secondLayerItemContainer03.isVisible = false
 
-                                            binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
-                                            binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
-                                            binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
-                                            binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
+                                                binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
+                                                binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
+
+                                                binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                            }
+
+
 
                                         }
                                         3->{
-                                            binding.secondLayerItemContainer01.isVisible = true
-                                            binding.secondLayerItemContainer02.isVisible = true
-                                            binding.secondLayerItemContainer03.isVisible = true
 
-                                            binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
-                                            binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
-                                            binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
-                                            binding.secondLayerItemName03.setText(productInfoList.spec_dec_2_items.get(2))
 
-                                            binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
-                                            binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
-                                            binding.secondLayerItemPrice03.setText(productInfoList.price.get(2).toString())
-                                            binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
-                                            binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
-                                            binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2).toString())
+                                            runOnUiThread {
+                                                binding.secondLayerItemContainer01.isVisible = true
+                                                binding.secondLayerItemContainer02.isVisible = true
+                                                binding.secondLayerItemContainer03.isVisible = true
+
+                                                binding.firstLayerTitle01.setText(productInfoList.spec_dec_1_items.get(0))
+                                                binding.secondLayerItemName01.setText(productInfoList.spec_dec_2_items.get(0))
+                                                binding.secondLayerItemName02.setText(productInfoList.spec_dec_2_items.get(1))
+                                                binding.secondLayerItemName03.setText(productInfoList.spec_dec_2_items.get(2))
+
+                                                binding.secondLayerItemPrice01.setText(productInfoList.price.get(0).toString())
+                                                binding.secondLayerItemPrice02.setText(productInfoList.price.get(1).toString())
+                                                binding.secondLayerItemPrice03.setText(productInfoList.price.get(2).toString())
+                                                binding.secondLayerItemQuant01.setText(productInfoList.spec_quantity.get(0).toString())
+                                                binding.secondLayerItemQuant02.setText(productInfoList.spec_quantity.get(1).toString())
+                                                binding.secondLayerItemQuant03.setText(productInfoList.spec_quantity.get(2).toString())
+                                            }
 
                                         }
                                     }
                                 }
                             }else{
-
-                                binding.invenContainer.isVisible = false
+                                runOnUiThread {
+                                    binding.invenContainer.isVisible = false
+                                }
 
                             }
 
@@ -696,9 +859,12 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                         }
 
 
-                    } else {
-
                     }
+
+                    runOnUiThread {
+                        binding.progressBarMerchandise.isVisible = false
+                    }
+
 
                 } catch (e: JSONException) {
 
@@ -747,9 +913,17 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
             Observer {
                 when (it?.status) {
                     Status.Success -> {
+
+                        runOnUiThread {
+                            binding.progressBarMerchandise.isVisible = true
+                        }
+
                         if (it.ret_val.toString().equals("上架/下架成功!")) {
 
+
+
                             when(product_status){
+
                                 "active"->{
                                     runOnUiThread {
                                         Toast.makeText(this, "下架成功", Toast.LENGTH_LONG).show()
@@ -768,10 +942,15 @@ class MerchandiseActivity : BaseActivity(), ViewPager.OnPageChangeListener {
                                 }
                             }
 
+
                         } else {
 
                             Toast.makeText(this, it.ret_val.toString(), Toast.LENGTH_LONG).show()
 
+                        }
+
+                        runOnUiThread {
+                            binding.progressBarMerchandise.isVisible = false
                         }
 
                     }

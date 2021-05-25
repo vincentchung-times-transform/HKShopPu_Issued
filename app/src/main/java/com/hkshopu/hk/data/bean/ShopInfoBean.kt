@@ -27,6 +27,9 @@ class ShopInfoBean {
     @SerializedName("shop_phone")
     var shop_phone: String= ""
 
+    @SerializedName("shop_is_phone_show")
+    var shop_is_phone_show: String= ""
+
     @SerializedName("shop_email")
     var shop_email: String= ""
     @SerializedName("email_on")

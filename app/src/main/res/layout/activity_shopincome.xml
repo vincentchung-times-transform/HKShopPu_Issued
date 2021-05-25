@@ -122,7 +122,6 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/layout_shopeincomeTitle"
         android:src="@drawable/bg_learn_more"/>
     <LinearLayout
         android:layout_width="346dp"
@@ -154,13 +153,30 @@
             android:textColor="@color/dark_gray"
             android:gravity="center_horizontal"/>
 
-        <ImageView
-            android:id="@+id/btn_learn_more"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            android:src="@mipmap/understandmore"/>
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btn_know_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:src="@mipmap/ic_kowmore"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/btn_return"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:src="@mipmap/ic_return"
+                android:layout_weight="1"/>
+        </LinearLayout>
 
     </LinearLayout>
 

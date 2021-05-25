@@ -1,6 +1,7 @@
 package com.hkshopu.hk.ui.main.product.fragment
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
@@ -12,12 +13,13 @@ import android.widget.ImageView
 
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import com.hkshopu.hk.R
 import com.hkshopu.hk.ui.main.product.activity.EditProductActivity
 import com.hkshopu.hk.ui.main.store.activity.ShopmenuActivity
 import com.tencent.mmkv.MMKV
 
-class EditProductRemindDialogFragment(var baseActivity : Activity): DialogFragment(), View.OnClickListener {
+class EditProductRemindDialogFragment(var activity: Activity): DialogFragment(), View.OnClickListener {
 
 
     var signal : Boolean = false
@@ -71,7 +73,7 @@ class EditProductRemindDialogFragment(var baseActivity : Activity): DialogFragme
             }
             R.id.btn_edit_keep_goning->{
 
-                var currentActivity : Activity = baseActivity
+                var currentActivity : Activity = activity
 
                 val intent = Intent(currentActivity, EditProductActivity::class.java)
                 startActivity(intent)

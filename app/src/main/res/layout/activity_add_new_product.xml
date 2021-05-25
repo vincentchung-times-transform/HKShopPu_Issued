@@ -4,8 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/color_shopbg"
     tools:context=".ui.main.product.activity.AddNewProductActivity">
+
+
+    <ProgressBar
+        android:id="@+id/progressBar4"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
     <RelativeLayout
         android:id="@+id/titleBar"
         android:layout_alignParentTop="true"
@@ -542,6 +553,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:visibility="gone"
                 android:background="@drawable/customborder_addproduct"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -586,6 +598,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:visibility="gone"
                 android:background="@drawable/customborder_addproduct"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"

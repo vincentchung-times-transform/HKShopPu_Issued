@@ -58,6 +58,12 @@ class SpecificationSpecAdapter: RecyclerView.Adapter<SpecificationSpecAdapter.mV
             }
             editTextView.addTextChangedListener(textWatcher)
 
+            editTextView.setOnFocusChangeListener { v, hasFocus ->
+                if(hasFocus ){
+                    RxBus.getInstance().post(EventCheckFirstSpecEnableBtnOrNot(false))
+                }
+            }
+
             //editTextView編輯模式
             editTextView.singleLine = true
             editTextView.setOnEditorActionListener() { v, actionId, event ->
@@ -66,7 +72,7 @@ class SpecificationSpecAdapter: RecyclerView.Adapter<SpecificationSpecAdapter.mV
 
                         customSpecName = editTextView.text.toString()
 
-                        if(customSpecName.equals(unAssignList.get(position).spec_name)){
+                        if(customSpecName.equals(unAssignList.get(adapterPosition).spec_name)){
                             value_spec = editTextView.text.toString()
                             onItemUpdate(value_spec , adapterPosition)
 
@@ -99,6 +105,7 @@ class SpecificationSpecAdapter: RecyclerView.Adapter<SpecificationSpecAdapter.mV
 
                         //identify all the elements have name
                         var checkEnableBtnOrNot = nextStepEnableOrNot()
+
                         RxBus.getInstance().post(EventCheckFirstSpecEnableBtnOrNot(checkEnableBtnOrNot))
 
 
@@ -121,6 +128,7 @@ class SpecificationSpecAdapter: RecyclerView.Adapter<SpecificationSpecAdapter.mV
             when(v?.id) {
                 R.id.btn_cancel_specification ->{
                     onItemDissmiss(adapterPosition)
+                    RxBus.getInstance().post(EventCheckFirstSpecEnableBtnOrNot(false))
                 }
             }
         }
@@ -147,6 +155,7 @@ class SpecificationSpecAdapter: RecyclerView.Adapter<SpecificationSpecAdapter.mV
     //更新資料用
     fun updateList(list:MutableList<ItemSpecification>){
         unAssignList = list
+        notifyDataSetChanged()
     }
     override fun onItemDissmiss(position: Int) {
         unAssignList.removeAt(position)

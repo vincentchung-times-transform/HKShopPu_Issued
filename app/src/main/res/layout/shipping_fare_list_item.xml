@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginRight="10dp"
-                    android:src="@mipmap/btn_delete_fare"/>
+                    android:src="@drawable/custom_unit_transparent"/>
 
                 <EditText
                     android:id="@+id/editText_value_shipping_name"

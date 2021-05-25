@@ -43,6 +43,8 @@ class AddProductSpecificationMainActivity : BaseActivity() {
     var EDIT_MODE_SPEC = "0"
     var EDIT_MODE_SIZE = "0"
 
+    var rebuld_spec = false
+
     //頁面資料變數宣告
     var MMKV_user_id: Int = 0
     var MMKV_shop_id: Int = 1
@@ -63,8 +65,71 @@ class AddProductSpecificationMainActivity : BaseActivity() {
         MMKV_shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
         MMKV_product_id = MMKV.mmkvWithID("http").getInt("ProductId", 0)
 
+        rebuld_spec = MMKV.mmkvWithID("addPro").getBoolean("rebuld_spec", false)
 
-        initMMKV()
+        if(rebuld_spec){
+
+            //預設btnClearAllSpec和btnClearAllSpec隱藏
+            binding.btnClearAllSpec.isVisible = false
+            binding.btnClearAllSize.isVisible = false
+
+
+            //Spec and Size item recyclerview setting
+            binding.rViewSpecificationItemSpec.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.rViewSpecificationItemSpec.adapter = mAdapter_spec
+
+            binding.rviewSpecificationitemSize.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.rviewSpecificationitemSize.adapter = mAdapter_size
+
+
+            value_editTextProductSpecFirst = ""
+            value_editTextProductSpecSecond = ""
+            value_datas_spec_size = 0
+            value_datas_size_size = 0
+            binding.editTextProductSpecFirst.setText(value_editTextProductSpecFirst)
+            binding.editTextProductSpecSecond.setText(value_editTextProductSpecSecond)
+
+            Thread(Runnable {
+
+                mutableList_spec = mutableListOf()
+
+                runOnUiThread {
+                    //更新或新增item
+                    mAdapter_spec.updateList(mutableList_spec)
+                    binding.tvFirstLayerHint.setText("(${value_datas_spec_size}/10)")
+                }
+
+            }).start()
+
+
+            Thread(Runnable {
+
+                mutableList_size = mutableListOf()
+
+                runOnUiThread {
+                    //更新或新增item
+                    mAdapter_size.updateList(mutableList_size)
+                    binding.tvSecondLayerHint.setText("(${value_datas_size_size}/10)")
+                }
+
+
+
+            }).start()
+
+            try{
+                Thread.sleep(800)
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
+
+            binding.btnNextStep.isEnabled = false
+            binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+        }else{
+            initMMKV()
+        }
+
         initView()
         initEvent()
     }
@@ -100,21 +165,22 @@ class AddProductSpecificationMainActivity : BaseActivity() {
 
         Thread(Runnable {
 
-            for (i in 0..value_datas_spec_size - 1) {
-                var item_name = MMKV.mmkvWithID("addPro").getString("datas_spec_item${i}", "")
-                mutableList_spec.add(
-                    ItemSpecification(
-                        item_name.toString(),
-                        R.drawable.custom_unit_transparent
+            if(value_datas_spec_size>0){
+                for (i in 0..value_datas_spec_size - 1) {
+                    var item_name = MMKV.mmkvWithID("addPro").getString("datas_spec_item${i}", "")
+                    mutableList_spec.add(
+                        ItemSpecification(
+                            item_name.toString(),
+                            R.drawable.custom_unit_transparent
+                        )
                     )
-                )
-            }
+                }
 
-            runOnUiThread {
-                //更新或新增item
-                mAdapter_spec.updateList(mutableList_spec)
-                mAdapter_spec.notifyDataSetChanged()
-
+                runOnUiThread {
+                    //更新或新增item
+                    mAdapter_spec.updateList(mutableList_spec)
+                    binding.tvFirstLayerHint.setText("(${value_datas_spec_size}/10)")
+                }
             }
 
         }).start()
@@ -122,23 +188,25 @@ class AddProductSpecificationMainActivity : BaseActivity() {
 
         Thread(Runnable {
 
-            for (i in 0..value_datas_size_size - 1) {
-                var item_name = MMKV.mmkvWithID("addPro").getString("datas_size_item${i}", "")
-                mutableList_size.add(
-                    ItemSpecification(
-                        item_name.toString(),
-                        R.drawable.custom_unit_transparent
+            if(value_datas_size_size>0){
+                for (i in 0..value_datas_size_size - 1) {
+                    var item_name = MMKV.mmkvWithID("addPro").getString("datas_size_item${i}", "")
+                    mutableList_size.add(
+                        ItemSpecification(
+                            item_name.toString(),
+                            R.drawable.custom_unit_transparent
+                        )
                     )
-                )
+                }
+
+                runOnUiThread {
+
+                    //更新或新增item
+                    mAdapter_size.updateList(mutableList_size)
+                    binding.tvSecondLayerHint.setText("(${value_datas_size_size}/10)")
+                }
             }
 
-            runOnUiThread {
-
-                //更新或新增item
-                mAdapter_size.updateList(mutableList_size)
-                mAdapter_size.notifyDataSetChanged()
-
-            }
 
         }).start()
 
@@ -167,6 +235,7 @@ class AddProductSpecificationMainActivity : BaseActivity() {
     fun initClick() {
 
         binding.titleBackAddshop.setOnClickListener {
+            MMKV.mmkvWithID("addPro").putBoolean("rebuld_spec", true)
             val intent = Intent(this, AddNewProductActivity::class.java)
             startActivity(intent)
             finish()
@@ -182,7 +251,7 @@ class AddProductSpecificationMainActivity : BaseActivity() {
             clearAllSpecItem()
 
             checkButtonNextStep_single()
-
+            binding.tvFirstLayerHint.setText("(${mAdapter_spec.get_datas_spec_size()}/10)")
         }
         binding.btnClearAllSize.setOnClickListener {
 
@@ -190,7 +259,7 @@ class AddProductSpecificationMainActivity : BaseActivity() {
             clearAllSizeItem()
 
             checkButtonNextStep_double()
-
+            binding.tvSecondLayerHint.setText("(${mAdapter_size.get_datas_size_size()}/10)")
         }
 
         binding.btnNextStep.setOnClickListener {
@@ -226,7 +295,7 @@ class AddProductSpecificationMainActivity : BaseActivity() {
 
             }
 
-
+            MMKV.mmkvWithID("addPro").putBoolean("rebuld_spec", false)
             val intent = Intent(this, AddInventoryAndPriceActivity::class.java)
             startActivity(intent)
             finish()
@@ -240,7 +309,7 @@ class AddProductSpecificationMainActivity : BaseActivity() {
                 Toast.makeText(this, "請先輸入第一層商品規格名稱", Toast.LENGTH_SHORT).show()
             }else{
                 mutableList_spec = mAdapter_spec.get_spec_list()
-                if (mutableList_spec.size < 3) {
+                if (mutableList_spec.size < 10) {
 
                     if (EDIT_MODE_SPEC == "0") {
 
@@ -261,11 +330,15 @@ class AddProductSpecificationMainActivity : BaseActivity() {
                                 runOnUiThread {
                                     //更新或新增item
                                     mAdapter_spec.updateList(mutableList_spec)
-                                    mAdapter_spec.notifyDataSetChanged()
+                                    binding.btnNextStep.disable()
+                                    binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+
+                                    binding.tvFirstLayerHint.setText("(${mAdapter_spec.get_datas_spec_size()}/10)")
 
                                 }
 
                             }).start()
+                            MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", true)
                         }
 
 
@@ -287,18 +360,23 @@ class AddProductSpecificationMainActivity : BaseActivity() {
 
                                     //更新或新增item
                                     mAdapter_spec.updateList(mutableList_spec)
-                                    mAdapter_spec.notifyDataSetChanged()
+                                    binding.btnNextStep.disable()
+                                    binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+
+                                    binding.tvFirstLayerHint.setText("(${mAdapter_spec.get_datas_spec_size()}/10)")
 
                                 }
 
                             }).start()
+
+                            MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", true)
                         }
 
                     }
 
                 } else {
 
-                    Toast.makeText(this, "只能新增最多三個規格", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "只能新增最多十個規格", Toast.LENGTH_SHORT).show()
 
                 }
             }
@@ -336,11 +414,11 @@ class AddProductSpecificationMainActivity : BaseActivity() {
 
                     //更新或新增item
                     mAdapter_spec.updateList(mutableList_spec)
-                    mAdapter_spec.notifyDataSetChanged()
 
                 }
 
             }).start()
+            MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", true)
 
         }
 
@@ -376,13 +454,12 @@ class AddProductSpecificationMainActivity : BaseActivity() {
 
                     //更新或新增item
                     mAdapter_spec.updateList(mutableList_spec)
-                    mAdapter_spec.notifyDataSetChanged()
 
                 }
 
             }).start()
 
-            if(mAdapter_spec.get_datas_spec_size()==0){
+            if(mAdapter_spec.get_datas_spec_size()==0||mAdapter_spec.nextStepEnableOrNot().equals(false)){
                 binding.btnNextStep.disable()
                 binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
             }
@@ -399,7 +476,7 @@ class AddProductSpecificationMainActivity : BaseActivity() {
                 Toast.makeText(this, "請先完成輸入第一層規格內容", Toast.LENGTH_SHORT).show()
             }else{
                 mutableList_size = mAdapter_size.get_size_list()
-                if (mutableList_size.size < 3) {
+                if (mutableList_size.size < 10) {
 
                     if (EDIT_MODE_SIZE == "0") {
 
@@ -421,12 +498,14 @@ class AddProductSpecificationMainActivity : BaseActivity() {
 
                                     //更新或新增item
                                     mAdapter_size.updateList(mutableList_size)
-                                    mAdapter_size.notifyDataSetChanged()
+                                    binding.btnNextStep.disable()
+                                    binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
 
-
+                                    binding.tvSecondLayerHint.setText("(${mAdapter_size.get_datas_size_size()}/10)")
                                 }
 
                             }).start()
+                            MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", true)
 
                         }
 
@@ -453,12 +532,16 @@ class AddProductSpecificationMainActivity : BaseActivity() {
 
                                     //更新或新增item
                                     mAdapter_size.updateList(mutableList_size)
-                                    mAdapter_size.notifyDataSetChanged()
+                                    binding.btnNextStep.disable()
+                                    binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
+
+                                    binding.tvSecondLayerHint.setText("(${mAdapter_size.get_datas_size_size()}/10)")
 
                                 }
 
 
                             }).start()
+                            MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", true)
 
                         }
 
@@ -466,7 +549,7 @@ class AddProductSpecificationMainActivity : BaseActivity() {
                     }
 
                 } else {
-                    Toast.makeText(this, "只能新增最多三個規格", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "只能新增最多十個規格", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -504,14 +587,12 @@ class AddProductSpecificationMainActivity : BaseActivity() {
 
                     //更新或新增item
                     mAdapter_size.updateList(mutableList_size)
-                    mAdapter_size.notifyDataSetChanged()
-
                 }
 
             }).start()
 
 
-            if(mAdapter_size.get_datas_size_size()==0){
+            if(mAdapter_size.get_datas_size_size()==0||mAdapter_size.nextStepEnableOrNot().equals(false)){
                 binding.btnNextStep.disable()
                 binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
             }
@@ -553,11 +634,12 @@ class AddProductSpecificationMainActivity : BaseActivity() {
 
                     //更新或新增item
                     mAdapter_size.updateList(mutableList_size)
-                    mAdapter_size.notifyDataSetChanged()
 
                 }
 
             }).start()
+
+            MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", true)
 
         }
     }
@@ -716,6 +798,7 @@ class AddProductSpecificationMainActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
+        MMKV.mmkvWithID("addPro").putBoolean("rebuld_spec", true)
         val intent = Intent(this, AddNewProductActivity::class.java)
         startActivity(intent)
         finish()
@@ -738,11 +821,13 @@ class AddProductSpecificationMainActivity : BaseActivity() {
 
                             }
                             false->{
-                                checkButtonNextStep_single()
+                                binding.btnNextStep.isEnabled = false
+                                binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
 
                             }
                         }
 
+                        binding.tvFirstLayerHint.setText("(${mAdapter_spec.get_datas_spec_size()}/10)")
 
                     }
                     is EventCheckSecondSpecEnableBtnOrNot -> {
@@ -753,10 +838,12 @@ class AddProductSpecificationMainActivity : BaseActivity() {
                                 checkButtonNextStep_double()
                             }
                             false->{
-                                checkButtonNextStep_double()
+                                binding.btnNextStep.isEnabled = false
+                                binding.btnNextStep.setImageResource(R.mipmap.btn_nextstepdisable)
                             }
                         }
 
+                        binding.tvSecondLayerHint.setText("(${mAdapter_size.get_datas_size_size()}/10)")
                     }
                 }
             }, {

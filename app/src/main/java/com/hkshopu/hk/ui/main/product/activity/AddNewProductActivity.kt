@@ -24,9 +24,7 @@ import com.google.gson.GsonBuilder
 import com.hkshopu.hk.Base.BaseActivity
 import com.hkshopu.hk.R
 import com.hkshopu.hk.component.EventdeleverFragmentAfterUpdateStatus
-import com.hkshopu.hk.data.bean.ItemPics
-import com.hkshopu.hk.data.bean.ItemShippingFare
-import com.hkshopu.hk.data.bean.ItemShippingFare_Certained
+import com.hkshopu.hk.data.bean.*
 import com.hkshopu.hk.databinding.ActivityAddNewProductBinding
 import com.hkshopu.hk.net.ApiConstants
 import com.hkshopu.hk.net.GsonProvider
@@ -34,7 +32,7 @@ import com.hkshopu.hk.net.GsonProvider.gson
 import com.hkshopu.hk.net.Web
 import com.hkshopu.hk.net.WebListener
 import com.hkshopu.hk.ui.main.product.adapter.PicsAdapter
-import com.hkshopu.hk.ui.main.product.fragment.StoreOrNotDialogFragment
+import com.hkshopu.hk.ui.main.product.fragment.StoreOrNotDialogStoreProductsFragment
 import com.hkshopu.hk.ui.main.product.adapter.ShippingFareCheckedAdapter
 import com.hkshopu.hk.ui.user.vm.ShopVModel
 import com.hkshopu.hk.utils.rxjava.RxBus
@@ -93,7 +91,7 @@ class AddNewProductActivity : BaseActivity() {
 
     //宣告運費項目陣列變數
     var mutableList_itemShipingFare = mutableListOf<ItemShippingFare>()
-    var mutableList_itemShipingFare_filtered = mutableListOf<ItemShippingFare>()
+    var mutableList_itemShipingFare_filtered = mutableListOf<ItemShippingFare_Filtered>()
     var mutableList_itemShipingFare_certained = mutableListOf<ItemShippingFare_Certained>()
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -104,11 +102,14 @@ class AddNewProductActivity : BaseActivity() {
 
         MMKV_user_id = MMKV.mmkvWithID("http").getInt("UserId", 0)
         MMKV_shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
-        product_add_session =  MMKV.mmkvWithID("http").getBoolean("product_add_session", false)
+        product_add_session =  MMKV.mmkvWithID("addPro").getBoolean("product_add_session", false)
+        binding.progressBar4.isVisible = false
+
         Log.d("product_add_session", product_add_session.toString())
-        if(product_add_session.equals(false)) {
+
+        if(!product_add_session) {
             product_add_session = true
-            MMKV.mmkvWithID("http").putBoolean("product_add_session", product_add_session)
+            MMKV.mmkvWithID("addPro").putBoolean("product_add_session", product_add_session)
             getShopLogisticsList()
         }else{
             Thread(Runnable {
@@ -753,7 +754,7 @@ class AddNewProductActivity : BaseActivity() {
 
         binding.titleBackAddproduct.setOnClickListener {
 
-            StoreOrNotDialogFragment(activity).show(supportFragmentManager, "MyCustomFragment")
+            StoreOrNotDialogStoreProductsFragment(activity).show(supportFragmentManager, "MyCustomFragment")
 
         }
 
@@ -1173,9 +1174,10 @@ class AddNewProductActivity : BaseActivity() {
         MMKV_height = MMKV.mmkvWithID("addPro").getString("datas_height", "").toString()
         var fare_datas_size = MMKV.mmkvWithID("addPro").getString("fare_datas_size", "0").toString().toInt()
         var fare_datas_filtered_size = MMKV.mmkvWithID("addPro").getString("fare_datas_filtered_size","0").toString().toInt()
+        var fare_datas_certained_size = MMKV.mmkvWithID("addPro").getString("fare_datas_certained_size","0").toString().toInt()
         MMKV_value_txtViewFareRange = MMKV.mmkvWithID("addPro").getString("value_txtViewFareRange", "").toString()
         MMKV_jsonTutList_fare = MMKV.mmkvWithID("addPro").getString("jsonTutList_fare", MMKV_jsonTutList_fare).toString()
-        Log.d("MMKV_weight", "MMKV_weight : ${MMKV_weight}, MMKV_length : ${MMKV_length}, MMKV_width : ${MMKV_width}, MMKV_height : ${MMKV_height}, fare_datas_size : ${fare_datas_size}, fare_datas_filtered_size : ${fare_datas_filtered_size}, MMKV_value_txtViewFareRange: ${MMKV_value_txtViewFareRange}")
+        Log.d("MMKV_weight", "MMKV_weight : ${MMKV_weight}, MMKV_length : ${MMKV_length}, MMKV_width : ${MMKV_width}, MMKV_height : ${MMKV_height}, fare_datas_size : ${fare_datas_size}, MMKV_value_txtViewFareRange: ${MMKV_value_txtViewFareRange}")
         Log.d("MMKV_jsonTutList_fare", "MMKV_jsonTutList_fare : " + MMKV_jsonTutList_fare.toString())
 
         runOnUiThread {
@@ -1190,7 +1192,7 @@ class AddNewProductActivity : BaseActivity() {
                     binding.rViewFareItem.isVisible = true
                     binding.imgLineFare.isVisible = true
                 }
-
+                mutableList_itemShipingFare.clear()
                 //MMKV取出 Fare Item
                 for (i in 0..fare_datas_size-1) {
                     var json_invens : String? = MMKV.mmkvWithID("addPro").getString(
@@ -1204,24 +1206,43 @@ class AddNewProductActivity : BaseActivity() {
                     mutableList_itemShipingFare.add(value_fare_item)
                 }
 
+                mutableList_itemShipingFare_filtered.clear()
+                for (i in 0..fare_datas_filtered_size-1!!) {
+                    var json_invens : String? = MMKV.mmkvWithID("addPro").getString(
+                        "value_fare_item_filtered${i}",
+                        ""
+                    )
+                    val json = json_invens
+                    val value_fare_item_filtered = gson.fromJson(json, ItemShippingFare::class.java)
+                    mutableList_itemShipingFare_filtered.add(
+                        ItemShippingFare_Filtered(value_fare_item_filtered.shipment_desc, value_fare_item_filtered.price.toInt(), value_fare_item_filtered.onoff, value_fare_item_filtered.shop_id)
 
-                if(fare_datas_filtered_size >0){
+                    )
+                }
 
-                    Log.d("json_invens", fare_datas_filtered_size.toString())
+
+
+
+
+                mutableList_itemShipingFare_certained.clear()
+                if(fare_datas_certained_size >0){
+
+                    Log.d("json_invens", fare_datas_certained_size.toString())
                     //MMKV取出 Filtered Fare Item
-                    for (i in 0..fare_datas_filtered_size-1!!) {
-                        var json_invens : String? = MMKV.mmkvWithID("addPro").getString("value_fare_item_filtered${i}", "")
+                    for (i in 0..fare_datas_certained_size-1!!) {
+                        var json_invens : String? = MMKV.mmkvWithID("addPro").getString("value_fare_item_certained${i}", "")
                         val json = json_invens
-                        val value_fare_item_filtered = gson.fromJson(json, ItemShippingFare::class.java)
-                        mutableList_itemShipingFare_filtered.add(value_fare_item_filtered) //顯示在UI
+                        val value_fare_item_centained = gson.fromJson(json, ItemShippingFare_Certained::class.java)
+                        mutableList_itemShipingFare_certained.add(
+                            ItemShippingFare_Certained(value_fare_item_centained.shipment_desc, value_fare_item_centained.price.toInt().toString(), value_fare_item_centained.onoff, value_fare_item_centained.shop_id)
+
+                        ) //顯示在UI
                         Log.d("json_invens", i.toString())
-                        Log.d("json_invens", value_fare_item_filtered.toString())
+                        Log.d("json_invens", value_fare_item_centained.toString())
                     }
 
                     Log.d("MMKV_CheckValue", "mutableList_itemShipingFare: ${mutableList_itemShipingFare}")
-                    Log.d("MMKV_CheckValue", "mutableList_itemShipingFare_filtered : ${mutableList_itemShipingFare_filtered}")
-
-
+                    Log.d("MMKV_CheckValue", "mutableList_itemShipingFare_certained : ${mutableList_itemShipingFare_filtered}")
 
 
 
@@ -1233,15 +1254,13 @@ class AddNewProductActivity : BaseActivity() {
 
                     }
 
-                    Thread(Runnable {
-
-                        mAdapters_shippingFareChecked.updateList(mutableList_itemShipingFare_filtered)
-                        runOnUiThread {
-                            mAdapters_shippingFareChecked.notifyDataSetChanged()
-                        }
+                    mAdapters_shippingFareChecked.updateList(mutableList_itemShipingFare_certained)
 
 
-                    }).start()
+                    runOnUiThread {
+                        mAdapters_shippingFareChecked.notifyDataSetChanged()
+                    }
+
                 }else{
                     runOnUiThread {
                         binding.rViewFareItem.isVisible = false
@@ -1402,6 +1421,9 @@ class AddNewProductActivity : BaseActivity() {
 
                          }
                         RxBus.getInstance().post(EventdeleverFragmentAfterUpdateStatus("action"))
+
+                        MMKV.mmkvWithID("addPro").clear()
+                        MMKV.mmkvWithID("editPro").clear()
                         finish()
 
                     } else {
@@ -1441,7 +1463,7 @@ class AddNewProductActivity : BaseActivity() {
 
     override fun onBackPressed() {
 
-        StoreOrNotDialogFragment(activity).show(supportFragmentManager, "MyCustomFragment")
+        StoreOrNotDialogStoreProductsFragment(activity).show(supportFragmentManager, "MyCustomFragment")
     }
 
 
@@ -1456,6 +1478,10 @@ class AddNewProductActivity : BaseActivity() {
                 mutableList_itemShipingFare.clear()
 
                 try {
+                    runOnUiThread {
+                        binding.progressBar4.isVisible = true
+                    }
+
                     resStr = response.body()!!.string()
                     val json = JSONObject(resStr)
                     Log.d("LogisticListActivity", "返回資料 resStr：" + resStr)
@@ -1473,37 +1499,42 @@ class AddNewProductActivity : BaseActivity() {
 
                         for (i in 0..translations.length()-1) {
                             val jsonObject: JSONObject = translations.getJSONObject(i)
-                            val itemShippingFare: ItemShippingFare =
-                                Gson().fromJson(jsonObject.toString(), ItemShippingFare::class.java)
+                            val shopLogisticBean: ShopLogisticBean =
+                                Gson().fromJson(jsonObject.toString(), ShopLogisticBean::class.java)
 
-                            val jsonTutList_mutableList_itemShipingFare: String = GsonProvider.gson.toJson(ItemShippingFare(itemShippingFare.shipment_desc, itemShippingFare.price, itemShippingFare.onoff, MMKV_shop_id))
-                            MMKV.mmkvWithID("addPro").putString("value_fare_item${i}", jsonTutList_mutableList_itemShipingFare)
-                            Log.d("LogisticList",i.toString() )
-                            Log.d("LogisticList",ItemShippingFare(itemShippingFare.shipment_desc, itemShippingFare.price, itemShippingFare.onoff, MMKV_shop_id).toString() )
                             //取出所有Fare Item(拿掉btn_delete參數)
-                            mutableList_itemShipingFare_certained.add(ItemShippingFare_Certained(itemShippingFare.shipment_desc, itemShippingFare.price, itemShippingFare.onoff, MMKV_shop_id))
-                            var json_shippingItem_certained = GsonProvider.gson.toJson(
-                                ItemShippingFare_Certained(itemShippingFare.shipment_desc, itemShippingFare.price, itemShippingFare.onoff, MMKV_shop_id)
+                            mutableList_itemShipingFare.add(ItemShippingFare(shopLogisticBean.shipment_desc, "", shopLogisticBean.onoff, MMKV_shop_id))
+
+                            var json_shippingItem = GsonProvider.gson.toJson(
+                                ItemShippingFare(shopLogisticBean.shipment_desc, "", shopLogisticBean.onoff, MMKV_shop_id)
                             )
-                            MMKV.mmkvWithID("addPro").putString("value_fare_item_certained${i}",json_shippingItem_certained)
+                            val jsonTutList_mutableList_itemShipingFare: String = GsonProvider.gson.toJson(ItemShippingFare(shopLogisticBean.shipment_desc, "", shopLogisticBean.onoff, MMKV_shop_id))
+                            MMKV.mmkvWithID("addPro").putString("value_fare_item${i}", jsonTutList_mutableList_itemShipingFare)
 
                         }
 
+
+
                         //將從API取出的資料以ItemShippingFare的形式存取並裝成mutableList_itemShipingFare_filtered
                         for (i in 0..translations.length()-1) {
-                            if(mutableList_itemShipingFare_certained.get(i).onoff.equals("on")){
-                                mutableList_itemShipingFare_filtered.add(ItemShippingFare(mutableList_itemShipingFare_certained.get(i).shipment_desc, mutableList_itemShipingFare_certained.get(i).price, mutableList_itemShipingFare_certained.get(i).onoff, MMKV_shop_id))
-
+                            if( mutableList_itemShipingFare.get(i).price.isNullOrEmpty()){
+                                mutableList_itemShipingFare_filtered.add(ItemShippingFare_Filtered(mutableList_itemShipingFare.get(i).shipment_desc, 0, mutableList_itemShipingFare.get(i).onoff, MMKV_shop_id))
+                            }else{
+                                mutableList_itemShipingFare_filtered.add(ItemShippingFare_Filtered(mutableList_itemShipingFare.get(i).shipment_desc, mutableList_itemShipingFare.get(i).price.toInt(), mutableList_itemShipingFare.get(i).onoff, MMKV_shop_id))
                             }
                         }
                         MMKV.mmkvWithID("addPro").putString("fare_datas_filtered_size", mutableList_itemShipingFare_filtered.size.toString())
 
+
                         //mutableList_itemShipingFare_filtered一個個項目裝進mmkv，避免mmkv filtered item ID錯亂，保持以流水號型式
                         for (i in 0..mutableList_itemShipingFare_filtered.size-1) {
-                            var json_shippingItem = GsonProvider.gson.toJson(ItemShippingFare(mutableList_itemShipingFare_filtered.get(i).shipment_desc, mutableList_itemShipingFare_filtered.get(i).price, mutableList_itemShipingFare_filtered.get(i).onoff, MMKV_shop_id))
+                            var json_shippingItem = GsonProvider.gson.toJson(ItemShippingFare_Filtered(mutableList_itemShipingFare_filtered.get(i).shipment_desc, mutableList_itemShipingFare_filtered.get(i).price.toInt(), mutableList_itemShipingFare_filtered.get(i).onoff, MMKV_shop_id))
                             MMKV.mmkvWithID("addPro").putString("value_fare_item_filtered${i}",json_shippingItem)
+
                         }
+
                         //存完後清掉，避免後來的mutableList_itemShipingFare_filtered重複裝取
+
                         mutableList_itemShipingFare_filtered.clear()
 
 
@@ -1521,7 +1552,9 @@ class AddNewProductActivity : BaseActivity() {
                         initProFareDatas()
                     }
 
-
+                    runOnUiThread {
+                        binding.progressBar4.isVisible = false
+                    }
                 } catch (e: JSONException) {
 
                 } catch (e: IOException) {

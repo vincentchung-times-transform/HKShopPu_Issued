@@ -39,7 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="1dp"
-                    android:text="HK$"
+                    android:text="@string/hkd_dollarSign"
                     android:textColor="@color/dark_gray"
                     android:textSize="14sp" />
 

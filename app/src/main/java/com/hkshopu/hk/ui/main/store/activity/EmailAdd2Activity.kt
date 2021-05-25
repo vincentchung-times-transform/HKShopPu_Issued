@@ -32,7 +32,9 @@ class EmailAdd2Activity : BaseActivity(){
 
     private val VM = AuthVModel()
     var getstring : String? = null
+    var email_old: String = ""
     var email: String = ""
+    var email_on:String = ""
     var isEmailShow: String = ""
     var address_id:String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +42,8 @@ class EmailAdd2Activity : BaseActivity(){
         binding = ActivityEmailadd2Binding.inflate(layoutInflater)
         setContentView(binding.root)
         address_id = intent.getBundleExtra("bundle")!!.getString("address_id","")
+        email_old = intent.getBundleExtra("bundle")!!.getString("email_old","")
+        email_on = intent.getBundleExtra("bundle")!!.getString("email_on","")
         initView()
         initVM()
         initClick()
@@ -49,6 +53,7 @@ class EmailAdd2Activity : BaseActivity(){
 
 
     private fun initView() {
+        binding.etAddEmail.setText(email_old)
         binding.etAddEmail.doAfterTextChanged {
             email = binding.etAddEmail.text.toString()
         }
@@ -56,7 +61,15 @@ class EmailAdd2Activity : BaseActivity(){
             KeyboardUtil.hideKeyboard(it)
         }
 
-        binding.switchview.openSwitcher()
+        if(email_on.equals("Y")){
+            isEmailShow = "Y"
+            binding.switchview.openSwitcher()
+        }else{
+            isEmailShow = "N"
+            binding.switchview.closeSwitcher()
+        }
+
+//        binding.switchview.openSwitcher()
 
     }
     private fun initVM() {

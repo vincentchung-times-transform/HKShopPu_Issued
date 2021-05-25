@@ -64,19 +64,20 @@ class BankListAdapter : RecyclerView.Adapter<BankListAdapter.BankListLinearHolde
         return mData.size
     }
     var cancelClick: ((id: String) -> Unit)? = null
+    var toPresetClick: ((id: String) -> Unit)? = null
     override fun onBindViewHolder(holder: BankListLinearHolder, position: Int) {
         val viewHolder: BankListLinearHolder = holder
         val item = mData.get(position)
         viewHolder.code.text = item.code
         viewHolder.name.text = item.name
         viewHolder.number.text = item.account
-        if(item.is_default.equals("N")){
+        if(item.is_default.equals("Y")){
+            viewHolder.preset.visibility = View.VISIBLE
+        }else{
             viewHolder.preset.visibility = View.GONE
         }
         viewHolder.preset.setOnClickListener {
-            val intent = Intent(App.instance.applicationContext, BankPresetActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            App.instance.applicationContext.startActivity(intent)
+            toPresetClick?.invoke("go")
         }
         if(item.is_default.isEmpty()||item.is_default.equals("N")) {
             if (cancel_inner) {

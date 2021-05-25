@@ -10,8 +10,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -27,7 +25,7 @@ import com.hkshopu.hk.component.EventAddShopSuccess
 import com.hkshopu.hk.component.EventShopCatSelected
 import com.hkshopu.hk.data.bean.ShopCategoryBean
 import com.hkshopu.hk.databinding.ActivityAddshopBinding
-import com.hkshopu.hk.ui.main.product.fragment.StoreOrNotDialogFragment
+import com.hkshopu.hk.ui.main.product.fragment.StoreOrNotDialogStoreProductsFragment
 import com.hkshopu.hk.ui.user.vm.ShopVModel
 import com.hkshopu.hk.utils.rxjava.RxBus
 import com.hkshopu.hk.widget.view.KeyboardUtil
@@ -163,6 +161,8 @@ class AddShopActivity : BaseActivity() {
                             )
 
                             binding.tvStoresort1.visibility = View.VISIBLE
+                            binding.tvStoresort2.visibility = View.INVISIBLE
+                            binding.tvStoresort3.visibility = View.INVISIBLE
 
                         } else if (list.size == 2) {
                             shop_category_id1 = list[0].id
@@ -185,6 +185,7 @@ class AddShopActivity : BaseActivity() {
                                 )
                             )
                             binding.tvStoresort2.visibility = View.VISIBLE
+                            binding.tvStoresort3.visibility = View.INVISIBLE
                         } else {
                             shop_category_id1 = list[0].id
                             shop_category_id2 = list[1].id
@@ -251,7 +252,7 @@ class AddShopActivity : BaseActivity() {
 //                }
 //                .show()
 
-            StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
+            StoreOrNotDialogStoreProductsFragment(this).show(supportFragmentManager, "MyCustomFragment")
 
         }
 
@@ -286,9 +287,17 @@ class AddShopActivity : BaseActivity() {
             if(isChecked) {
                 val intent = Intent(this, AddBankAccountActivity::class.java)
                 startActivity(intent)
-                finish()
+//                finish()
             }
         }
+        binding.layoutStoresortAct.setOnClickListener {
+            var bundle = Bundle()
+            bundle.putBoolean("toShopFunction",false)
+            val intent = Intent(this, ShopCategoryActivity::class.java)
+            intent.putExtra("bundle",bundle)
+            startActivity(intent)
+        }
+
         binding.tvMoreStoresort.setOnClickListener {
             var bundle = Bundle()
             bundle.putBoolean("toShopFunction",false)
@@ -382,7 +391,7 @@ class AddShopActivity : BaseActivity() {
 //            }
 //            .show()
 
-        StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
+        StoreOrNotDialogStoreProductsFragment(this).show(supportFragmentManager, "MyCustomFragment")
 
     }
 

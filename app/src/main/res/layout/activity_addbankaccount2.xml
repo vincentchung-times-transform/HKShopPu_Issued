@@ -87,7 +87,7 @@
             android:hint="@string/bankname_input"
             android:inputType="text"
             android:paddingStart="20dp"
-            android:textColor="@color/color_somegray"
+            android:textColorHint="@color/color_somegray"
             android:textSize="14sp" />
 
         <EditText
@@ -103,7 +103,7 @@
             android:hint="@string/bankaccoountname_input"
             android:inputType="text"
             android:paddingStart="20dp"
-            android:textColor="@color/color_somegray"
+            android:textColorHint="@color/color_somegray"
             android:textSize="14sp" />
 
         <EditText
@@ -119,7 +119,7 @@
             android:hint="@string/bankaccount_input"
             android:inputType="number"
             android:paddingStart="20dp"
-            android:textColor="@color/color_somegray"
+            android:textColorHint="@color/color_somegray"
             android:textSize="14sp" />
 
         <TextView

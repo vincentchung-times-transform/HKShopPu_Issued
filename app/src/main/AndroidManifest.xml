@@ -265,6 +265,9 @@
         <activity android:name=".ui.main.product.activity.AddInventoryAndPriceActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
+<!--        <activity android:name=".ui.main.product.activity.AddInventoryAndPriceOldActivity"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:windowSoftInputMode="adjustPan"/>-->
         <activity android:name=".ui.main.product.activity.AddShippingFareActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
@@ -280,17 +283,20 @@
             android:name=".ui.main.product.activity.EditInventoryAndPriceActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+<!--        <activity-->
+<!--            android:name=".ui.main.product.activity.EditInventoryAndPriceOldActivity"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:windowSoftInputMode="adjustPan" />-->
         <activity
             android:name=".ui.main.product.activity.EditShippingFareActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.main.store.activity.MyMerchantsActivity"
+            android:name=".ui.main.product.activity.MyMerchantsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask" />
-
 
         <activity
             android:name=".ui.main.store.activity.LogisticListActivity"
@@ -298,7 +304,17 @@
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask" />
 
+        <activity
+            android:name=".ui.main.store.activity.HelpCenterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask" />
 
+        <activity
+            android:name=".ui.main.store.activity.MySalesActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask" />
 
         <meta-data
             android:name="com.google.android.gms.version"

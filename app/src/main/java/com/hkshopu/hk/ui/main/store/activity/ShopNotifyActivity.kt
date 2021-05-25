@@ -33,6 +33,9 @@ class ShopNotifyActivity : BaseActivity() {
         binding.ivBack.setOnClickListener {
             finish()
         }
+        binding.btnReturn.setOnClickListener {
+            finish()
+        }
 
     }
 

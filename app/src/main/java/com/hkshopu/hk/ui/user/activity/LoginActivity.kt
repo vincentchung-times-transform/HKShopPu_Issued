@@ -317,6 +317,20 @@ class LoginActivity : BaseActivity(), TextWatcher {
 
                         MMKV.mmkvWithID("http").putInt("UserId", user_id)
                             .putString("Email",email)
+
+                        val editor_email : SharedPreferences.Editor = settings_rememberEmail.edit()
+                        editor_email.apply {
+                            putString("rememberEmail", "true")
+                        }.apply()
+
+                        settings_rememberPassword = getSharedPreferences("rememberPassword", 0)
+
+                        val editor_password : SharedPreferences.Editor = settings_rememberPassword.edit()
+                        editor_password.apply {
+                            putString("rememberPassword", "true")
+                        }.apply()
+
+
                         val intent = Intent(this@LoginActivity, ShopmenuActivity::class.java)
                         startActivity(intent)
                         finish()

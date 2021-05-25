@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
       <module name="new-android.HKShopU.app" target="11" />
+      <module name="TestHKShopPu.HKShopU.app" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

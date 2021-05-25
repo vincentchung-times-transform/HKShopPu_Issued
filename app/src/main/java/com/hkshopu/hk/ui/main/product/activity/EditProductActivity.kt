@@ -25,6 +25,7 @@ import com.hkshopu.hk.Base.BaseActivity
 import com.hkshopu.hk.Base.response.Status
 import com.hkshopu.hk.R
 import com.hkshopu.hk.component.EventdeleverFragmentAfterUpdateStatus
+
 import com.hkshopu.hk.data.bean.*
 import com.hkshopu.hk.databinding.ActivityEditProductBinding
 import com.hkshopu.hk.net.ApiConstants
@@ -34,7 +35,7 @@ import com.hkshopu.hk.net.Web
 import com.hkshopu.hk.net.WebListener
 import com.hkshopu.hk.ui.main.product.adapter.PicsAdapter
 import com.hkshopu.hk.ui.main.product.adapter.ShippingFareCheckedAdapter
-import com.hkshopu.hk.ui.main.product.fragment.StoreOrNotDialogFragment
+import com.hkshopu.hk.ui.main.product.fragment.StoreOrNotDialogStoreProductsFragment
 import com.hkshopu.hk.ui.user.vm.ShopVModel
 import com.hkshopu.hk.utils.rxjava.RxBus
 import com.hkshopu.hk.widget.view.KeyboardUtil
@@ -64,7 +65,6 @@ class EditProductActivity : BaseActivity() {
     var mutableList_pics = mutableListOf<ItemPics>()
 
     var product_edit_session = false
-    var product_status : String = ""
 
     //宣告頁面資料變數
     var MMKV_user_id: Int = 0
@@ -98,7 +98,7 @@ class EditProductActivity : BaseActivity() {
 
     //宣告運費項目陣列變數
     var mutableList_itemShipingFare = mutableListOf<ItemShippingFare>()
-    var mutableList_itemShipingFare_filtered = mutableListOf<ItemShippingFare>()
+    var mutableList_itemShipingFare_filtered = mutableListOf<ItemShippingFare_Filtered>()
     var mutableList_itemShipingFare_certained = mutableListOf<ItemShippingFare_Certained>()
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -106,21 +106,23 @@ class EditProductActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        binding.progressBar3.isVisible = false
 
         MMKV_user_id = MMKV.mmkvWithID("http").getInt("UserId", 0)
         MMKV_shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
         MMKV_product_id = MMKV.mmkvWithID("http").getInt("ProductId", 0)
-        product_edit_session = MMKV.mmkvWithID("http").getBoolean("product_edit_session", false)
 
-        if(product_edit_session.equals(false)){
-            product_edit_session = true
-            MMKV.mmkvWithID("http").putBoolean("product_edit_session", product_edit_session)
-            getProductInfo(MMKV_product_id)
-        }else{
+        product_edit_session = MMKV.mmkvWithID("editPro").getBoolean("product_edit_session", false)
+        Log.d("product_edit_session_log", product_edit_session.toString())
+        if(product_edit_session){
             Thread(Runnable {
                 initMMKV_and_initViewValue()
             }).start()
+
+        }else{
+            product_edit_session = true
+            MMKV.mmkvWithID("editPro").putBoolean("product_edit_session", product_edit_session)
+            getProductInfo(MMKV_product_id)
         }
 
 
@@ -408,7 +410,13 @@ class EditProductActivity : BaseActivity() {
 
         binding.editTextMerchanPrice.setOnFocusChangeListener { v, hasFocus ->
             if(hasFocus){
-                binding.editTextMerchanPrice.setText("${MMKV_editTextMerchanPrice}")
+
+                if(MMKV_editTextMerchanPrice.equals("-1")){
+                    binding.editTextMerchanPrice.setText("")
+                }else{
+                    binding.editTextMerchanPrice.setText("${MMKV_editTextMerchanPrice}")
+                }
+
             }
         }
         binding.editTextMerchanPrice.singleLine = true
@@ -427,6 +435,7 @@ class EditProductActivity : BaseActivity() {
                         )
 
                     }else{
+
                         binding.editTextMerchanPrice.setText("")
                         MMKV_editTextMerchanPrice = binding.editTextMerchanPrice.text.toString()
                         MMKV.mmkvWithID("addPro").putString(
@@ -458,13 +467,13 @@ class EditProductActivity : BaseActivity() {
 
                 if(binding.editTextMerchanPrice.text.startsWith("HKD$ ")){
 
-
                     MMKV_editTextMerchanPrice =
                         binding.editTextMerchanPrice.text.toString().substring(5)
                     MMKV.mmkvWithID("addPro").putString(
                         "value_editTextMerchanPrice",
                         MMKV_editTextMerchanPrice
                     )
+
                 }else{
                     if(binding.editTextMerchanPrice.text.toString().length >= 2 && binding.editTextMerchanPrice.text.toString().startsWith("0")){
                         binding.editTextMerchanPrice.setText(binding.editTextMerchanPrice.text.toString().replace("0", "", false))
@@ -567,6 +576,8 @@ class EditProductActivity : BaseActivity() {
     fun initClick() {
 
         binding.btnOnShelf.setOnClickListener {
+
+
             when(MMKV_product_status){
                 "active"->{
                     VM.updateProductStatus(this, MMKV_product_id, "draft")
@@ -671,7 +682,7 @@ class EditProductActivity : BaseActivity() {
 
         binding.titleBackAddproduct.setOnClickListener {
 
-            StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
+            StoreOrNotDialogStoreProductsFragment(this).show(supportFragmentManager, "MyCustomFragment")
 
         }
 
@@ -788,7 +799,7 @@ class EditProductActivity : BaseActivity() {
                                         )
 
                                         product_edit_session=false
-                                        MMKV.mmkvWithID("http").putBoolean("product_edit_session", product_edit_session)
+                                        MMKV.mmkvWithID("editPro").putBoolean("product_edit_session", product_edit_session)
                                         Log.d(
                                             "doUpdateProduct",
                                             "MMKV_product_id: ${MMKV_product_id} ; " + "MMKV_proCate_id: ${MMKV_proCate_id} ; " + "MMKV_proSubCate_id: ${MMKV_proSubCate_id} ; " + "value_editTextEntryProductName: ${MMKV_editTextEntryProductName} ; " + "value_editTextMerchanQunt: ${MMKV_editTextMerchanQunt} ; " + "value_editTextEntryProductDiscription: ${MMKV_editTextEntryProductDiscription} ; " + "value_editTextMerchanPrice: ${MMKV_editTextMerchanPrice} ; " + "MMKV_weight: ${MMKV_weight} ; " + "value_checked_brandNew: ${MMKV_checked_brandNew} ; " + "pic_list.size: ${pic_list.size} ; " + "pic_list: ${pic_list} ; " + "${"{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }"} ; " + "MMKV_user_id: ${MMKV_user_id} ; " + "MMKV_length: ${MMKV_length} ; " + "MMKV_width: ${MMKV_width} ; " + "MMKV_width: ${MMKV_width} ; " + "MMKV_height: ${MMKV_height} ; " + "jsonTutList_fare: ${MMKV_jsonTutList_fare} ; " + "value_editMoreTimeInput: ${MMKV_editMoreTimeInput}"
@@ -836,7 +847,7 @@ class EditProductActivity : BaseActivity() {
                                             )
 
                                             product_edit_session=false
-                                            MMKV.mmkvWithID("http").putBoolean("product_edit_session", product_edit_session)
+                                            MMKV.mmkvWithID("editPro").putBoolean("product_edit_session", product_edit_session)
 
                                             Log.d(
                                                 "doUpdateProduct",
@@ -1129,7 +1140,10 @@ class EditProductActivity : BaseActivity() {
                     )
                     val json = json_invens
                     val value_fare_item_filtered = gson.fromJson(json, ItemShippingFare::class.java)
-                    mutableList_itemShipingFare_filtered.add(value_fare_item_filtered)
+                    mutableList_itemShipingFare_filtered.add(
+                        ItemShippingFare_Filtered(value_fare_item_filtered.shipment_desc, value_fare_item_filtered.price.toInt(), value_fare_item_filtered.onoff, value_fare_item_filtered.shop_id)
+
+                    )
                 }
 
                 mutableList_itemShipingFare_certained.clear()
@@ -1164,7 +1178,7 @@ class EditProductActivity : BaseActivity() {
                 if(fare_datas_filtered_size >0){
 
                     mAdapters_shippingFareChecked.updateList(
-                        mutableList_itemShipingFare_filtered
+                        mutableList_itemShipingFare_certained
                     )
                     runOnUiThread {
                         mAdapters_shippingFareChecked.notifyDataSetChanged()
@@ -1216,6 +1230,7 @@ class EditProductActivity : BaseActivity() {
             "inven_quant_range",
             MMKV_inven_quant_range
         ).toString()
+
         MMKV_editTextMerchanPrice = MMKV.mmkvWithID("addPro").getString(
             "value_editTextMerchanPrice",
             MMKV_editTextMerchanPrice
@@ -1235,7 +1250,7 @@ class EditProductActivity : BaseActivity() {
                 binding.editTextMerchanPrice.setText(MMKV_editTextMerchanPrice)
             }
         }
-        if(MMKV_editTextMerchanPrice.equals("-1")){
+        if(MMKV_editTextMerchanQunt.equals("-1")){
             runOnUiThread {
                 binding.editTextMerchanQunt.setText("")
             }
@@ -1323,7 +1338,6 @@ class EditProductActivity : BaseActivity() {
                                     runOnUiThread {
                                         Toast.makeText(this, "下架成功", Toast.LENGTH_LONG).show()
                                         binding.btnOnShelf.setImageResource(R.mipmap.btn_launch)
-                                        finish()
                                     }
 
                                 }
@@ -1339,6 +1353,8 @@ class EditProductActivity : BaseActivity() {
 
                             RxBus.getInstance().post(EventdeleverFragmentAfterUpdateStatus("action"))
 
+                            MMKV.mmkvWithID("addPro").clear()
+                            MMKV.mmkvWithID("editPro").clear()
                             finish()
 
                         } else {
@@ -1387,7 +1403,7 @@ class EditProductActivity : BaseActivity() {
 
 
     override fun onBackPressed() {
-        StoreOrNotDialogFragment(this).show(supportFragmentManager, "MyCustomFragment")
+        StoreOrNotDialogStoreProductsFragment(this).show(supportFragmentManager, "MyCustomFragment")
     }
 
 
@@ -1436,6 +1452,9 @@ class EditProductActivity : BaseActivity() {
                         }
 
                         RxBus.getInstance().post(EventdeleverFragmentAfterUpdateStatus("action"))
+                        MMKV.mmkvWithID("addPro").clear()
+                        MMKV.mmkvWithID("editPro").clear()
+
                         finish()
 
                     }else{
@@ -1446,7 +1465,6 @@ class EditProductActivity : BaseActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-
                     }
 //                        initRecyclerView()
 
@@ -1498,10 +1516,14 @@ class EditProductActivity : BaseActivity() {
                 val list = ArrayList<ProductInfoBean>()
 //                val product_id_list = ArrayList<String>()
                 try {
+
+                    runOnUiThread {
+                        binding.progressBar3.isVisible = true
+                    }
                     resStr = response.body()!!.string()
                     val json = JSONObject(resStr)
-                    Log.d("mutableList_pics", "返回資料 resStr：" + resStr)
-                    Log.d("mutableList_pics", "返回資料 ret_val：" + json.get("ret_val"))
+                    Log.d("getProductInfo", "返回資料 resStr：" + resStr)
+                    Log.d("getProductInfo", "返回資料 ret_val：" + json.get("ret_val"))
                     val ret_val = json.get("ret_val")
                     if (ret_val.equals("已取得商品資訊!")) {
 
@@ -1572,13 +1594,13 @@ class EditProductActivity : BaseActivity() {
                             "active"->{
                                 runOnUiThread {
                                     binding.btnOnShelf.setImageResource(R.mipmap.btn_draft)
-                                    product_status = productInfoList.product_status
+
                                 }
                             }
                             "draft"->{
                                 runOnUiThread {
                                     binding.btnOnShelf.setImageResource(R.mipmap.btn_launch)
-                                    product_status = productInfoList.product_status
+
                                 }
                             }
                         }
@@ -1587,19 +1609,19 @@ class EditProductActivity : BaseActivity() {
                         if(productInfoList.product_shipment_list.size>0){
                             for (i in 0..productInfoList.product_shipment_list.size - 1) {
 
-                                var json_shippingItem = GsonProvider.gson.toJson(ItemShippingFare(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price, productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
+                                var json_shippingItem = GsonProvider.gson.toJson(ItemShippingFare(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price.toString(), productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
                                 MMKV.mmkvWithID("addPro").putString("value_fare_item${i}",json_shippingItem)
 
                             }
                         }else{
-                            var json_shippingItem = GsonProvider.gson.toJson(ItemShippingFare("", 0, "off", MMKV_shop_id))
+                            var json_shippingItem = GsonProvider.gson.toJson(ItemShippingFare("", "", "off", MMKV_shop_id))
                             MMKV.mmkvWithID("addPro").putString("value_fare_item${0}",json_shippingItem)
                         }
 
                         //將從API取出的資料以ItemShippingFare的形式存取並裝成mutableList_itemShipingFare_filtered
                         for (i in 0..productInfoList.product_shipment_list.size - 1) {
                             if(productInfoList.product_shipment_list.get(i).onoff.equals("on")){
-                                mutableList_itemShipingFare_filtered.add( ItemShippingFare(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price, productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
+                                mutableList_itemShipingFare_filtered.add( ItemShippingFare_Filtered(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price.toInt(), productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
 
                             }
                         }
@@ -1618,8 +1640,8 @@ class EditProductActivity : BaseActivity() {
                         //取出所有Fare Item(拿掉btn_delete參數)
 
                         for (i in 0..productInfoList.product_shipment_list.size - 1) {
-                            mutableList_itemShipingFare_certained.add(ItemShippingFare_Certained(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price, productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
-                            var json_shippingItem_certained = GsonProvider.gson.toJson(ItemShippingFare_Certained(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price, productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
+                            mutableList_itemShipingFare_certained.add(ItemShippingFare_Certained(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price.toString(), productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
+                            var json_shippingItem_certained = GsonProvider.gson.toJson(ItemShippingFare_Certained(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price.toString(), productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
                             MMKV.mmkvWithID("addPro").putString("value_fare_item_certained${i}",json_shippingItem_certained)
                         }
 
@@ -1761,6 +1783,7 @@ class EditProductActivity : BaseActivity() {
 
 
                             for (i in 0..productInfoList.price.size - 1) {
+
                                 MMKV.mmkvWithID("addPro").putString(
                                     "spec_price${i}",
                                     productInfoList.price.get(i).toString()
@@ -1774,11 +1797,15 @@ class EditProductActivity : BaseActivity() {
                                 )
                             }
                         }
+
+
                         initMMKV_and_initViewValue()
 
                     }else{
                     }
-
+                    runOnUiThread {
+                        binding.progressBar3.isVisible = false
+                    }
                 } catch (e: JSONException) {
 
                 } catch (e: IOException) {

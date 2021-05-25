@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.hkshopu.hk.R
+import com.hkshopu.hk.component.EventCheckFirstSpecEnableBtnOrNot
 
 import com.hkshopu.hk.component.EventCheckSecondSpecEnableBtnOrNot
 import com.hkshopu.hk.data.bean.ItemSpecification
@@ -59,6 +60,12 @@ class SpecificationSizeAdapter: RecyclerView.Adapter<SpecificationSizeAdapter.mV
             }
             editTextView.addTextChangedListener(textWatcher)
 
+            editTextView.setOnFocusChangeListener { v, hasFocus ->
+                if(hasFocus ){
+                    RxBus.getInstance().post(EventCheckSecondSpecEnableBtnOrNot(false))
+                }
+            }
+
             //editTextView編輯鍵盤監控
             editTextView.singleLine = true
             editTextView.setOnEditorActionListener() { v, actionId, event ->
@@ -67,7 +74,7 @@ class SpecificationSizeAdapter: RecyclerView.Adapter<SpecificationSizeAdapter.mV
 
                         customSpecName = editTextView.text.toString()
 
-                        if(customSpecName.equals(unAssignList.get(position).spec_name)){
+                        if(customSpecName.equals(unAssignList.get(adapterPosition).spec_name)){
                             value_spec = editTextView.text.toString()
                             onItemUpdate(value_spec , adapterPosition)
 
@@ -123,6 +130,7 @@ class SpecificationSizeAdapter: RecyclerView.Adapter<SpecificationSizeAdapter.mV
             when(v?.id) {
                 R.id.btn_cancel_specification ->{
                     onItemDissmiss(adapterPosition)
+                    RxBus.getInstance().post(EventCheckSecondSpecEnableBtnOrNot(false))
                 }
             }
         }
@@ -149,6 +157,7 @@ class SpecificationSizeAdapter: RecyclerView.Adapter<SpecificationSizeAdapter.mV
     //更新資料用
     fun updateList(list01:MutableList<ItemSpecification>) {
         unAssignList = list01
+        notifyDataSetChanged()
     }
     override fun onItemDissmiss(position: Int) {
         unAssignList.removeAt(position)
@@ -184,6 +193,7 @@ class SpecificationSizeAdapter: RecyclerView.Adapter<SpecificationSizeAdapter.mV
                 }
             }
         }
+
 
         if(unAssignList.size > 0 && check_empty_num.equals(0)) {
             nextStepBtnStatus = true

@@ -107,7 +107,7 @@
     <string name="countryinput">＋國碼</string>
     <string name="hk">852</string>
     <string name="logout">登出</string>
-    <string name="currency">HKD</string>
+    <string name="currency">HKD$</string>
     <string name="ad">廣告與行銷活動</string>
     <string name="logistic">運輸設定</string>
     <string name="helpcenter">幫助中心</string>
@@ -455,8 +455,8 @@
 
     <string name="title_specification">新增規格</string>
     <string name="title_editSpecification">編輯規格</string>
-    <string name="txtview_category">新增商別類別<font color='red' size='10'><sub> * </sub></font></string>
-    <string name="txtview_addspecification">新增商別規格</string>
+    <string name="txtview_category">新增商品類別<font color='red' size='10'><sub> * </sub></font></string>
+    <string name="txtview_addspecification">新增商品規格</string>
     <string name="txtview_specification">商品規格</string>
     <string name="txtview_price">商品價格<font color='red' size='10'><sub> * </sub></font></string>
     <string name="txtview_quantity">商品數量<font color='red' size='10'><sub> * </sub></font></string>
@@ -485,7 +485,7 @@
     <string name="textView_setInventoryPrice">價格</string>
     <string name="textView_setInventoryQuantity">數量</string>
     <string name="textView_setInventorySoldQuantity">已賣出</string>
-    <string name="textView_title_spec">規格:</string>
+    <string name="textView_title_spec">規格</string>
     <string name="textView_clear_all_inventory"><u>全部清空</u></string>
 
     <!--    運費-->
@@ -534,6 +534,31 @@
 
     <!--    我的商品-->
     <string name="hkd_dollarSign">HKD$ </string>
+
+    <!--    店舖地址-->
+    <string name="region">地域</string>
+    <string name="region_input">請輸入地域</string>
+    <string name="admin">地區</string>
+    <string name="admin_input">請輸入地區</string>
+    <string name="thoroughfare">街道名稱</string>
+    <string name="thoroughfare_input">請輸入街道名稱</string>
+    <string name="feature">街道門牌</string>
+
+    <!--    刪除店舖-->
+    <string name="store_delete_apply">申請刪除店鋪</string>
+    <string name="store_delete_apply_note">店鋪一旦刪除，商品都會自動下架！ 確定要刪除此店鋪嗎？</string>
+    <string name="store_delete">已確認刪除店鋪</string>
+    <string name="store_orders">請先完成進行中的訂單再申請刪除店鋪</string>
+    <string name="store_restore">若是需要恢復店鋪，請前往幫助中心查看恢復方式。</string>
+
+    <!--    刪除商品-->
+    <string name="product_delete_apply">刪除產品</string>
+    <string name="product_delete_apply_note">商品一旦刪除，即不會再恢復囉！ 確定要刪除此商品嗎？</string>
+
+    <!--    上下架商品-->
+    <string name="product_active_apply">確定要上架商品嗎？</string>
+    <string name="product_draft_apply">確定要下架商品嗎？</string>
+    <string name="product_draft_apply_note">下架商品後仍能在“未上架”中找到儲存的資訊。</string>
 
 
 </resources>

@@ -36,11 +36,15 @@ class PhoneEditActivity : BaseActivity(){
     var phone_pass: String = ""
     var isphoneShow: String = ""
     var address_id:String = ""
+    var phone_old: String =""
+    var phone_is_show: String =""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPhoneeditBinding.inflate(layoutInflater)
         setContentView(binding.root)
         address_id = intent.getBundleExtra("bundle")!!.getString("address_id","")
+        phone_old = intent.getBundleExtra("bundle")!!.getString("phone_old","")
+        phone_is_show = intent.getBundleExtra("bundle")!!.getString("phone_is_show","")
         initView()
         initVM()
         initClick()
@@ -48,6 +52,7 @@ class PhoneEditActivity : BaseActivity(){
     }
 
     private fun initView() {
+        binding.editShopphoneNumber.setText(phone_old)
         binding.editShopphoneNumber.doAfterTextChanged {
             phone_number = binding.editShopphoneNumber.text.toString()
             phone_country = binding.tvShopphoneCountry.text.toString()
@@ -58,10 +63,11 @@ class PhoneEditActivity : BaseActivity(){
             KeyboardUtil.hideKeyboard(it)
         }
 
-        binding.switchview.openSwitcher()
-        if(binding.switchview.isOpened()){
+        if(phone_is_show.equals("Y")){
+            binding.switchview.openSwitcher()
             isphoneShow ="Y"
         }else{
+            binding.switchview.openSwitcher()
             isphoneShow ="N"
         }
 
@@ -123,9 +129,9 @@ class PhoneEditActivity : BaseActivity(){
                     val ret_val = json.get("ret_val")
                     val status = json.get("status")
                     if (status == 0) {
-                        if(isphoneShow.equals("Y")) {
-                            RxBus.getInstance().post(EventChangeShopPhoneSuccess(phone_pass))
-                        }
+//                        if(isphoneShow.equals("Y")) {
+                            RxBus.getInstance().post(EventChangeShopPhoneSuccess(phone_number))
+//                        }
                         finish()
                     } else {
                         runOnUiThread {
