@@ -50,8 +50,6 @@ class EditProductSpecificationMainActivity : BaseActivity() {
     var EDIT_MODE_SPEC = "0"
     var EDIT_MODE_SIZE = "0"
 
-    var reset_spec_datas = true
-
     //頁面資料變數宣告
     var MMKV_user_id: Int = 0
     var MMKV_shop_id: Int = 1
@@ -68,21 +66,15 @@ class EditProductSpecificationMainActivity : BaseActivity() {
         binding = ActivityAddProductDescriptionMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", false)
-
         MMKV_user_id = MMKV.mmkvWithID("http").getInt("UserId", 0)
         MMKV_shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
         MMKV_product_id = MMKV.mmkvWithID("http").getInt("ProductId", 0)
 
-        reset_spec_datas = MMKV.mmkvWithID("editPro").getBoolean("reset_spec_datas", true)
+        MMKV.mmkvWithID("editPro_temp").putBoolean("rebuild_datas", false)
 
-        if(reset_spec_datas.equals(true)){
-            getProductInfo_forInvenDatas(MMKV_product_id)
-        }else{
-            Thread(Runnable {
-                initMMKV()
-            }).start()
-        }
+        Thread(Runnable {
+            initMMKV()
+        }).start()
 
         initView()
         initEvent()
@@ -90,85 +82,7 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
     fun initMMKV() {
 
-
-        value_editTextProductSpecFirst =
-            MMKV.mmkvWithID("addPro").getString("value_editTextProductSpecFirst", "").toString()
-        value_editTextProductSpecSecond =
-            MMKV.mmkvWithID("addPro").getString("value_editTextProductSpecSecond", "").toString()
-        value_datas_spec_size =
-            MMKV.mmkvWithID("addPro").getString("datas_spec_size", "0").toString().toInt()
-        value_datas_size_size =
-            MMKV.mmkvWithID("addPro").getString("datas_size_size", "0").toString().toInt()
-
-        runOnUiThread {
-            binding.editTextProductSpecFirst.setText(value_editTextProductSpecFirst)
-            binding.editTextProductSpecSecond.setText(value_editTextProductSpecSecond)
-        }
-
-
-
-        if(value_datas_spec_size>0){
-            for (i in 0..value_datas_spec_size - 1) {
-                var item_name = MMKV.mmkvWithID("addPro").getString("datas_spec_item${i}", "")
-                mutableList_spec.add(
-                    ItemSpecification(
-                        item_name.toString(),
-                        R.drawable.custom_unit_transparent
-                    )
-                )
-            }
-            runOnUiThread {
-                //更新或新增item
-                mAdapter_spec.updateList(mutableList_spec)
-                binding.tvFirstLayerHint.setText("(${value_datas_spec_size}/10)")
-
-            }
-        }
-
-
-        if(value_datas_size_size>0){
-            for (i in 0..value_datas_size_size - 1) {
-                var item_name = MMKV.mmkvWithID("addPro").getString("datas_size_item${i}", "")
-                mutableList_size.add(
-                    ItemSpecification(
-                        item_name.toString(),
-                        R.drawable.custom_unit_transparent
-                    )
-                )
-            }
-
-            runOnUiThread {
-
-                //更新或新增item
-                mAdapter_size.updateList(mutableList_size)
-                binding.tvSecondLayerHint.setText("(${value_datas_size_size}/10)")
-
-            }
-
-        }
-
-        try{
-            Thread.sleep(800)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
-
-        if(value_datas_spec_size>0 && value_datas_size_size==0){
-            runOnUiThread {
-                checkButtonNextStep_single()
-            }
-
-        }else if (value_datas_spec_size>0 && value_datas_size_size>0){
-            runOnUiThread {
-                checkButtonNextStep_double()
-            }
-        }
-
-    }
-
-    fun initView() {
-        binding.titleSpec.setText(R.string.title_editSpecification)
-        //預設btnClearAllSpec和btnClearAllSpec隱藏
+        var get_temp = MMKV.mmkvWithID("editPro_temp").getBoolean("get_temp", false)
 
         binding.btnClearAllSpec.isVisible = false
         binding.btnClearAllSize.isVisible = false
@@ -183,6 +97,149 @@ class EditProductSpecificationMainActivity : BaseActivity() {
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.rviewSpecificationitemSize.adapter = mAdapter_size
 
+
+
+        if(get_temp){
+
+            value_editTextProductSpecFirst =
+                MMKV.mmkvWithID("editPro_temp").getString("value_editTextProductSpecFirst", "").toString()
+            value_editTextProductSpecSecond =
+                MMKV.mmkvWithID("editPro_temp").getString("value_editTextProductSpecSecond", "").toString()
+            value_datas_spec_size =
+                MMKV.mmkvWithID("editPro_temp").getString("datas_spec_size", "0").toString().toInt()
+            value_datas_size_size =
+                MMKV.mmkvWithID("editPro_temp").getString("datas_size_size", "0").toString().toInt()
+
+            binding.editTextProductSpecFirst.setText(value_editTextProductSpecFirst)
+            binding.editTextProductSpecSecond.setText(value_editTextProductSpecSecond)
+
+            Thread(Runnable {
+
+                if(value_datas_spec_size>0){
+                    for (i in 0..value_datas_spec_size - 1) {
+                        var item_name = MMKV.mmkvWithID("editPro_temp").getString("datas_spec_item${i}", "")
+                        mutableList_spec.add(
+                            ItemSpecification(
+                                item_name.toString(),
+                                R.drawable.custom_unit_transparent
+                            )
+                        )
+                    }
+
+                    runOnUiThread {
+                        //更新或新增item
+                        mAdapter_spec.updateList(mutableList_spec)
+                        binding.tvFirstLayerHint.setText("(${value_datas_spec_size}/10)")
+
+                        checkButtonNextStep_single()
+                    }
+                }
+
+                if(!value_editTextProductSpecSecond.isNullOrEmpty()){
+
+                    if(value_datas_size_size>0){
+                        for (i in 0..value_datas_size_size - 1) {
+                            var item_name = MMKV.mmkvWithID("editPro_temp").getString("datas_size_item${i}", "")
+                            mutableList_size.add(
+                                ItemSpecification(
+                                    item_name.toString(),
+                                    R.drawable.custom_unit_transparent
+                                )
+                            )
+                        }
+
+                        runOnUiThread {
+
+                            //更新或新增item
+                            mAdapter_size.updateList(mutableList_size)
+                            binding.tvSecondLayerHint.setText("(${value_datas_size_size}/10)")
+
+                            checkButtonNextStep_double()
+                        }
+                    }
+                }
+
+            }).start()
+
+
+        }else{
+
+
+            value_editTextProductSpecFirst =
+                MMKV.mmkvWithID("editPro").getString("value_editTextProductSpecFirst", "").toString()
+            value_editTextProductSpecSecond =
+                MMKV.mmkvWithID("editPro").getString("value_editTextProductSpecSecond", "").toString()
+            value_datas_spec_size =
+                MMKV.mmkvWithID("editPro").getString("datas_spec_size", "0").toString().toInt()
+            value_datas_size_size =
+                MMKV.mmkvWithID("editPro").getString("datas_size_size", "0").toString().toInt()
+
+            binding.editTextProductSpecFirst.setText(value_editTextProductSpecFirst)
+            binding.editTextProductSpecSecond.setText(value_editTextProductSpecSecond)
+
+
+            Thread(Runnable {
+
+                if(value_datas_spec_size>0){
+                    for (i in 0..value_datas_spec_size - 1) {
+                        var item_name = MMKV.mmkvWithID("editPro").getString("datas_spec_item${i}", "")
+                        mutableList_spec.add(
+                            ItemSpecification(
+                                item_name.toString(),
+                                R.drawable.custom_unit_transparent
+                            )
+                        )
+                    }
+
+                    runOnUiThread {
+                        //更新或新增item
+                        mAdapter_spec.updateList(mutableList_spec)
+                        binding.tvFirstLayerHint.setText("(${value_datas_spec_size}/10)")
+
+                        checkButtonNextStep_single()
+                    }
+                }
+
+
+                if(!value_editTextProductSpecSecond.isNullOrEmpty()){
+                    if(value_datas_size_size>0){
+                        for (i in 0..value_datas_size_size - 1) {
+
+                            var item_name = MMKV.mmkvWithID("editPro").getString("datas_size_item${i}", "")
+                            mutableList_size.add(
+                                ItemSpecification(
+                                    item_name.toString(),
+                                    R.drawable.custom_unit_transparent
+                                )
+                            )
+                        }
+
+
+                        runOnUiThread {
+
+                            //更新或新增item
+                            mAdapter_size.updateList(mutableList_size)
+                            binding.tvSecondLayerHint.setText("(${value_datas_size_size}/10)")
+
+                            checkButtonNextStep_double()
+                        }
+
+                    }
+                }
+
+
+            }).start()
+
+
+        }
+
+
+    }
+
+    fun initView() {
+        binding.titleSpec.setText(R.string.title_editSpecification)
+        //預設btnClearAllSpec和btnClearAllSpec隱藏
+
         initEditText()
         initClick()
     }
@@ -192,7 +249,8 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
         binding.titleBackAddshop.setOnClickListener {
 
-            MMKV.mmkvWithID("editPro").putBoolean("reset_spec_datas", true)
+
+            MMKV.mmkvWithID("editPro_temp").clear()
 
             val intent = Intent(this, EditProductActivity::class.java)
             startActivity(intent)
@@ -227,6 +285,7 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
         binding.btnNextStep.setOnClickListener {
 
+
             var datas_spec_item: MutableList<ItemSpecification> = mAdapter_spec.get_spec_list()
             var datas_size_item: MutableList<ItemSpecification> = mAdapter_size.get_size_list()
             var datas_spec_size: Int = mAdapter_spec.get_datas_spec_size()
@@ -237,28 +296,27 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
 
             //MMKV input datas
-            MMKV.mmkvWithID("addPro").putString("datas_spec_size", datas_spec_size.toString())
-            MMKV.mmkvWithID("addPro").putString("datas_size_size", datas_size_size.toString())
-            MMKV.mmkvWithID("addPro")
+            MMKV.mmkvWithID("editPro_temp").putString("datas_spec_size", datas_spec_size.toString())
+            MMKV.mmkvWithID("editPro_temp").putString("datas_size_size", datas_size_size.toString())
+            MMKV.mmkvWithID("editPro_temp")
                 .putString("value_editTextProductSpecFirst", datas_spec_title_first)
-            MMKV.mmkvWithID("addPro")
+            MMKV.mmkvWithID("editPro_temp")
                 .putString("value_editTextProductSpecSecond", datas_spec_title_second)
 
 
             for (i in 0..datas_spec_size - 1) {
 
-                MMKV.mmkvWithID("addPro")
+                MMKV.mmkvWithID("editPro_temp")
                     .putString("datas_spec_item${i}", datas_spec_item.get(i).spec_name.toString())
             }
 
             for (i in 0..datas_size_size - 1) {
 
-                MMKV.mmkvWithID("addPro")
+                MMKV.mmkvWithID("editPro_temp")
                     .putString("datas_size_item${i}", datas_size_item.get(i).spec_name.toString())
 
             }
 
-            MMKV.mmkvWithID("editPro").putBoolean("reset_spec_datas", false)
 
             val intent = Intent(this, EditInventoryAndPriceActivity::class.java)
             startActivity(intent)
@@ -304,11 +362,13 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
                                     binding.tvFirstLayerHint.setText("(${mAdapter_spec.get_datas_spec_size()}/10)")
 
+                                    RxBus.getInstance().post(EventInvenSpecDatasRebuild(true))
+
                                 }
 
                             }).start()
 
-                            MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", true)
+
 
                         }
 
@@ -341,11 +401,13 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
                                     binding.tvFirstLayerHint.setText("(${mAdapter_spec.get_datas_spec_size()}/10)")
 
+                                    RxBus.getInstance().post(EventInvenSpecDatasRebuild(true))
+
                                 }
 
                             }).start()
 
-                            MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", true)
+
 
                         }
 
@@ -396,7 +458,7 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
             }).start()
 
-            MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", true)
+
 
         }
 
@@ -486,10 +548,12 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
                                     binding.tvSecondLayerHint.setText("(${mAdapter_size.get_datas_size_size()}/10)")
 
+                                    RxBus.getInstance().post(EventInvenSpecDatasRebuild(true))
+
                                 }
 
                             }).start()
-                            MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", true)
+
 
                         }
 
@@ -526,11 +590,13 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
                                     binding.tvSecondLayerHint.setText("(${mAdapter_size.get_datas_size_size()}/10)")
 
+                                    RxBus.getInstance().post(EventInvenSpecDatasRebuild(true))
+
                                 }
 
 
                             }).start()
-                            MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", true)
+
                         }
 
 
@@ -625,7 +691,7 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
             }).start()
 
-            MMKV.mmkvWithID("addPro").putBoolean("rebuild_datas", true)
+
 
         }
     }
@@ -644,17 +710,17 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
             override fun afterTextChanged(s: Editable?) {
 
-                if (s.toString() == "") {
-
-                    MMKV.mmkvWithID("addPro").putString("value_editTextProductSpecFirst", "")
-
-                } else {
-
-                    MMKV.mmkvWithID("addPro")
-                        .putString("value_editTextProductSpecFirst", s.toString())
-
-
-                }
+//                if (s.toString() == "") {
+//
+//                    MMKV.mmkvWithID("editPro").putString("value_editTextProductSpecFirst", "")
+//
+//                } else {
+//
+//                    MMKV.mmkvWithID("editPro")
+//                        .putString("value_editTextProductSpecFirst", s.toString())
+//
+//
+//                }
 
             }
         }
@@ -669,17 +735,17 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
             override fun afterTextChanged(s: Editable?) {
 
-                if (s.toString() == "") {
-
-                    MMKV.mmkvWithID("addPro").putString("value_editTextProductSpecSecondt", "")
-
-
-                } else {
-
-                    MMKV.mmkvWithID("addPro")
-                        .putString("value_editTextProductSpecSecond", s.toString())
-
-                }
+//                if (s.toString() == "") {
+//
+//                    MMKV.mmkvWithID("editPro").putString("value_editTextProductSpecSecondt", "")
+//
+//
+//                } else {
+//
+//                    MMKV.mmkvWithID("editPro")
+//                        .putString("value_editTextProductSpecSecond", s.toString())
+//
+//                }
 
             }
         }
@@ -701,11 +767,6 @@ class EditProductSpecificationMainActivity : BaseActivity() {
                     if(binding.editTextProductSpecSecond.text.toString() == binding.editTextProductSpecFirst.text.toString()){
                         Toast.makeText(this, "規格名稱不可重複", Toast.LENGTH_SHORT).show()
                         binding.editTextProductSpecFirst.setText("")
-                    }else {
-                        MMKV.mmkvWithID("addPro").putString(
-                            "value_editTextProductSpecFirst",
-                            binding.editTextProductSpecFirst.text.toString()
-                        )
                     }
 
                     binding.editTextProductSpecFirst.hideKeyboard()
@@ -735,23 +796,10 @@ class EditProductSpecificationMainActivity : BaseActivity() {
                         Toast.makeText(this, "規格名稱不可重複", Toast.LENGTH_SHORT).show()
                         binding.editTextProductSpecSecond.setText("")
                     }else{
-                        if(binding.editTextProductSpecFirst.text.isNotEmpty()&&mAdapter_spec.nextStepEnableOrNot()){
-                            if (binding.editTextProductSpecFirst.text.toString() == "") {
-
-                                MMKV.mmkvWithID("addPro").putString("value_editTextProductSpecSecondt", "")
-
-
-                            } else {
-
-                                MMKV.mmkvWithID("addPro")
-                                    .putString("value_editTextProductSpecSecond", binding.editTextProductSpecFirst.text.toString())
-
-                            }
-                        }else{
+                        if(binding.editTextProductSpecFirst.text.isEmpty()&&!mAdapter_spec.nextStepEnableOrNot()){
                             binding.editTextProductSpecSecond.setText("")
-                            Toast.makeText(this@EditProductSpecificationMainActivity, "請先完成輸入第一層規格", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "請先完成輸入第一層規格", Toast.LENGTH_SHORT).show()
                         }
-
                     }
 
 
@@ -769,11 +817,15 @@ class EditProductSpecificationMainActivity : BaseActivity() {
     fun clearAllSpecItem() {
         mutableList_spec.clear()
         mAdapter_spec.notifyDataSetChanged()
+
+        RxBus.getInstance().post(EventInvenSpecDatasRebuild(true))
     }
 
     fun clearAllSizeItem() {
         mutableList_size.clear()
         mAdapter_size.notifyDataSetChanged()
+
+        RxBus.getInstance().post(EventInvenSpecDatasRebuild(true))
     }
 
     fun View.hideKeyboard() {
@@ -784,7 +836,7 @@ class EditProductSpecificationMainActivity : BaseActivity() {
 
     override fun onBackPressed() {
 
-        MMKV.mmkvWithID("editPro").putBoolean("reset_spec_datas", true)
+        MMKV.mmkvWithID("editPro_temp").clear()
 
         val intent = Intent(this, EditProductActivity::class.java)
         startActivity(intent)
@@ -828,10 +880,16 @@ class EditProductSpecificationMainActivity : BaseActivity() {
                         }
                         binding.tvSecondLayerHint.setText("(${mAdapter_size.get_datas_size_size()}/10)")
                     }
+                    is EventInvenSpecDatasRebuild ->{
+
+                        MMKV.mmkvWithID("editPro_temp").putBoolean("rebuild_datas", true)
+
+                    }
+
                 }
             }, {
-            it.printStackTrace()
-        })
+                it.printStackTrace()
+            })
     }
 
     fun checkButtonNextStep_single(){
@@ -865,124 +923,4 @@ class EditProductSpecificationMainActivity : BaseActivity() {
         }
     }
 
-    private fun getProductInfo_forInvenDatas(product_id: Int) {
-
-        val url = ApiConstants.API_HOST+"product/${product_id}/product_info_forAndroid/"
-        val web = Web(object : WebListener {
-            @RequiresApi(Build.VERSION_CODES.P)
-            override fun onResponse(response: Response) {
-                var resStr: String? = ""
-                val list = ArrayList<ProductInfoBean>()
-//                val product_id_list = ArrayList<String>()
-                try {
-                    resStr = response.body()!!.string()
-                    val json = JSONObject(resStr)
-                    Log.d("mutableList_pics", "返回資料 resStr：" + resStr)
-                    Log.d("mutableList_pics", "返回資料 ret_val：" + json.get("ret_val"))
-                    val ret_val = json.get("ret_val")
-                    if (ret_val.equals("已取得商品資訊!")) {
-
-                        val jsonArray: JSONArray = json.getJSONArray("data")
-                        Log.d("getProductInfo", "返回資料 jsonArray：" + jsonArray.toString())
-
-                        for (i in 0 until jsonArray.length()) {
-                            val jsonObject: JSONObject = jsonArray.getJSONObject(i)
-                            productInfoList = Gson().fromJson(
-                                jsonObject.toString(),
-                                ProductInfoBean::class.java
-                            )
-                        }
-
-                        Log.d("getProductInfo", "返回資料 productInfoList：" + productInfoList.toString())
-
-                        if(productInfoList.product_spec_on.equals("on")){
-                            //EditProductSpecificationMainActivity
-                            MMKV.mmkvWithID("addPro").putString(
-                                "value_editTextProductSpecFirst",
-                                productInfoList.spec_desc_1.get(0)
-                            )
-                            MMKV.mmkvWithID("addPro").putString(
-                                "value_editTextProductSpecSecond",
-                                productInfoList.spec_desc_2.get(0)
-                            )
-
-                            var mutableSet_spec_dec_1_items: MutableSet<String> =
-                                productInfoList.spec_dec_1_items.toMutableSet()
-                            var mutableSet_spec_dec_2_items: MutableSet<String> =
-                                productInfoList.spec_dec_2_items.toMutableSet()
-                            var mutableList_spec_dec_1_items: MutableList<String> =
-                                mutableSet_spec_dec_1_items.toMutableList()
-                            var mutableList_spec_dec_2_items: MutableList<String> =
-                                mutableSet_spec_dec_2_items.toMutableList()
-
-                            MMKV.mmkvWithID("addPro").putString(
-                                "datas_spec_size",
-                                mutableSet_spec_dec_1_items.size.toString()
-                            )
-                            MMKV.mmkvWithID("addPro").putString(
-                                "datas_size_size",
-                                mutableSet_spec_dec_2_items.size.toString()
-                            )
-
-                            for (i in 0..mutableSet_spec_dec_1_items.size - 1) {
-                                MMKV.mmkvWithID("addPro").putString(
-                                    "datas_spec_item${i}",
-                                    mutableList_spec_dec_1_items.get(i)
-                                )
-                            }
-
-
-                            for (i in 0..mutableSet_spec_dec_2_items.size - 1) {
-                                MMKV.mmkvWithID("addPro").putString(
-                                    "datas_size_item${i}",
-                                    mutableList_spec_dec_2_items.get(i)
-                                )
-                            }
-
-                            MMKV.mmkvWithID("addPro").putString(
-                                "datas_price_size",
-                                productInfoList.price.size.toString()
-                            )
-                            MMKV.mmkvWithID("addPro").putString(
-                                "datas_quant_size",
-                                productInfoList.spec_quantity.size.toString()
-                            )
-
-
-                            for (i in 0..productInfoList.price.size - 1) {
-
-                                MMKV.mmkvWithID("addPro").putString(
-                                    "spec_price${i}",
-                                    productInfoList.price.get(i).toString()
-                                )
-                            }
-
-                            for (i in 0..productInfoList.spec_quantity.size - 1) {
-                                MMKV.mmkvWithID("addPro").putString(
-                                    "spec_quantity${i}",
-                                    productInfoList.spec_quantity.get(i).toString()
-                                )
-                            }
-                        }
-
-
-
-                        initMMKV()
-
-                    }
-
-                } catch (e: JSONException) {
-
-                } catch (e: IOException) {
-                    e.printStackTrace()
-
-                }
-            }
-
-            override fun onErrorResponse(ErrorResponse: IOException?) {
-
-            }
-        })
-        web.Get_Data(url)
-    }
 }

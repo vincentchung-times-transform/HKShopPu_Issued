@@ -38,6 +38,10 @@ class EventCheckShipmentEnableBtnOrNot(val boolean : Boolean)
 class EventCheckFirstSpecEnableBtnOrNot(val boolean : Boolean)
 class EventCheckSecondSpecEnableBtnOrNot(val boolean : Boolean)
 class EventCheckInvenSpecEnableBtnOrNot(val boolean : Boolean)
+class EventInvenSpecDatasRebuild(val boolean : Boolean)
+
+
+class EventTransferToFragmentAfterUpdate(val index : Int)
 
 //Other Events (Not Used)
 

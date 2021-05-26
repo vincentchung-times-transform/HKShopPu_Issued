@@ -1,17 +1,20 @@
 package com.hkshopu.hk.ui.main.product.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hkshopu.hk.Base.BaseActivity
 import com.hkshopu.hk.R
-import com.hkshopu.hk.component.EventProductDelete
-import com.hkshopu.hk.component.EventProductSearch
+import com.hkshopu.hk.component.*
+import com.hkshopu.hk.data.bean.ProductChildCategoryBean
 import com.hkshopu.hk.data.bean.ResourceMerchant
 import com.hkshopu.hk.databinding.ActivityMymechantsBinding
 import com.hkshopu.hk.utils.rxjava.RxBus
@@ -39,8 +42,11 @@ class MyMerchantsActivity : BaseActivity() {
         initFragment()
         initClick()
         initEditView()
+        initEvent()
     }
     private fun initFragment() {
+
+
         binding!!.mviewPager.adapter = object : FragmentStateAdapter(this) {
 
             override fun createFragment(position: Int): Fragment {
@@ -50,6 +56,8 @@ class MyMerchantsActivity : BaseActivity() {
             override fun getItemCount(): Int {
                 return ResourceMerchant.tabList.size
             }
+
+
         }
         TabLayoutMediator(binding!!.tabs, binding!!.mviewPager) { tab, position ->
             tab.text = getString(ResourceMerchant.tabList[position])
@@ -112,6 +120,8 @@ class MyMerchantsActivity : BaseActivity() {
 
 
         binding.ivBack.setOnClickListener {
+
+//            RxBus.getInstance().post(EventdeleverFragmentAfterUpdateStatus("action"))
             finish()
         }
 
@@ -132,6 +142,29 @@ class MyMerchantsActivity : BaseActivity() {
 //            val intent = Intent(this, ShopmenuActivity::class.java)
 //            startActivity(intent)
 //        }
+
+    }
+
+
+    @SuppressLint("CheckResult")
+    fun initEvent() {
+        var index: Int
+
+        RxBus.getInstance().toMainThreadObservable(this, Lifecycle.Event.ON_DESTROY)
+            .subscribe({
+                when (it) {
+                    is EventTransferToFragmentAfterUpdate -> {
+
+                        index = it.index
+
+                        binding!!.mviewPager.setCurrentItem(index, false)
+
+                    }
+
+                }
+            }, {
+                it.printStackTrace()
+            })
 
     }
 

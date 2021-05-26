@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.hkshopu.hk.R
 import com.hkshopu.hk.component.EventCheckFirstSpecEnableBtnOrNot
+import com.hkshopu.hk.component.EventInvenSpecDatasRebuild
 import com.hkshopu.hk.component.EventProductCatSelected
 
 import com.hkshopu.hk.data.bean.ItemSpecification
@@ -160,6 +161,8 @@ class SpecificationSpecAdapter: RecyclerView.Adapter<SpecificationSpecAdapter.mV
     override fun onItemDissmiss(position: Int) {
         unAssignList.removeAt(position)
         notifyItemRemoved(position)
+
+        RxBus.getInstance().post(EventInvenSpecDatasRebuild(true))
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {

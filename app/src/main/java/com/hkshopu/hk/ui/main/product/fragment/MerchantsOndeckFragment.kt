@@ -144,7 +144,7 @@ class MerchantsOndeckFragment: Fragment() {
             }
 
             override fun onErrorResponse(ErrorResponse: IOException?) {
-
+                Log.d("getMyProductsList", "ErrorResponse：" + ErrorResponse)
             }
         })
         web.Get_Data(url)

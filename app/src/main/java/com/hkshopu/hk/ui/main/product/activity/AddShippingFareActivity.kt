@@ -4,10 +4,12 @@ import MyLinearLayoutManager
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -16,6 +18,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.hkshopu.hk.Base.response.Status
@@ -26,6 +29,7 @@ import com.hkshopu.hk.data.bean.*
 import com.hkshopu.hk.databinding.ActivityShippingFareBinding
 import com.hkshopu.hk.net.GsonProvider
 import com.hkshopu.hk.ui.main.adapter.ShippingFareAdapter
+import com.hkshopu.hk.ui.main.product.adapter.PicsAdapter
 import com.hkshopu.hk.ui.user.vm.ShopVModel
 import com.hkshopu.hk.utils.rxjava.RxBus
 import com.hkshopu.hk.widget.view.disable
@@ -64,6 +68,8 @@ class AddShippingFareActivity : AppCompatActivity(){
 
         binding = ActivityShippingFareBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.progressBar6.visibility = View.GONE
+
 
         initVM()
         initView()
@@ -98,6 +104,7 @@ class AddShippingFareActivity : AppCompatActivity(){
     }
     fun initView() {
 
+
         MMKV_shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
 
         MMKV_datas_packagesWeights = MMKV.mmkvWithID("addPro").getString("datas_packagesWeights", "").toString()
@@ -115,11 +122,6 @@ class AddShippingFareActivity : AppCompatActivity(){
 
         initRecyclerView_ShippingFareItem()
 
-        try{
-            Thread.sleep(800)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
 
         if (fare_datas_size != null && fare_datas_size.toInt() >=1 ) {
 
@@ -207,10 +209,30 @@ class AddShippingFareActivity : AppCompatActivity(){
             binding.btnEditFareOff.isVisible = true
             binding.btnEditFareOff.isEnabled = true
 
-            mAdapters_shippingFare.onOff_editStatus(true)
+
 //            generateCustomFare_editable()
 
-            RxBus.getInstance().post(EventCheckShipmentEnableBtnOrNot(false))
+            Thread(Runnable {
+
+                runOnUiThread {
+                    binding.progressBar6.visibility = View.VISIBLE
+                    mAdapters_shippingFare.onOff_editStatus(true)
+                }
+
+                try{
+                    Thread.sleep(200)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+
+                RxBus.getInstance().post(EventCheckShipmentEnableBtnOrNot(false))
+
+                runOnUiThread {
+                    binding.progressBar6.visibility = View.GONE
+                }
+
+            }).start()
+
 
 
         }
@@ -460,7 +482,6 @@ class AddShippingFareActivity : AppCompatActivity(){
 
     fun initRecyclerView_ShippingFareItem() {
 
-        initFareDatas()
 
         //自訂layoutManager
         binding.rViewFareItemSpec.setLayoutManager(MyLinearLayoutManager(this,false))
@@ -470,11 +491,7 @@ class AddShippingFareActivity : AppCompatActivity(){
         mAdapters_shippingFare.notifyDataSetChanged()
     }
 
-    fun initFareDatas() {
 
-
-
-    }
 
     //自訂費用項目(不可編輯狀態)
     fun generateCustomFare_uneditable() {
@@ -565,6 +582,8 @@ class AddShippingFareActivity : AppCompatActivity(){
 
                         boolean = it.boolean
 
+
+
                         if(boolean){
 
                             var check_onOff= 0
@@ -589,7 +608,7 @@ class AddShippingFareActivity : AppCompatActivity(){
                             }
 
                         }else{
-                            
+
                             binding.btnShippingFareStore.isEnabled = false
                             binding.btnShippingFareStore.setImageResource(R.mipmap.btn_shippingfarestore_disable)
 

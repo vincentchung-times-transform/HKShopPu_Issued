@@ -8,6 +8,15 @@
     tools:context=".ui.main.store.activity.ShippingFareActivity">
 
 
+    <ProgressBar
+        android:id="@+id/progressBar6"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
     <RelativeLayout
         android:id="@+id/titleBar"
         android:layout_alignParentTop="true"
@@ -414,6 +423,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:textSize="14sp" />
+
 
         </LinearLayout>
     </ScrollView>

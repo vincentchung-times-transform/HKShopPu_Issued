@@ -305,9 +305,15 @@ class ShippingFareAdapter(var activity: Activity): RecyclerView.Adapter<Shipping
 
             if(item.onoff == "on"){
 
-                textView_HKdolors.setTextColor(itemView.context.resources.getColor(R.color.hkshop_color))
-                editText_shipping_fare.setTextColor(itemView.context.resources.getColor(R.color.hkshop_color))
-                editText_shipping_fare.setHintTextColor(itemView.context.resources.getColor(R.color.hkshop_color))
+                if(editText_shipping_fare.text.toString().isNullOrEmpty()){
+                    textView_HKdolors.setTextColor(itemView.context.resources.getColor(R.color.gray_txt))
+                    editText_shipping_fare.setTextColor(itemView.context.resources.getColor(R.color.gray_txt))
+                    editText_shipping_fare.setHintTextColor(itemView.context.resources.getColor(R.color.gray_txt))
+                }else{
+                    textView_HKdolors.setTextColor(itemView.context.resources.getColor(R.color.hkshop_color))
+                    editText_shipping_fare.setTextColor(itemView.context.resources.getColor(R.color.hkshop_color))
+                    editText_shipping_fare.setHintTextColor(itemView.context.resources.getColor(R.color.hkshop_color))
+                }
 
             }else{
 

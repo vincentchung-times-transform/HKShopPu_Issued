@@ -15,6 +15,7 @@ import com.hkshopu.hk.R
 import com.hkshopu.hk.component.EventCheckFirstSpecEnableBtnOrNot
 
 import com.hkshopu.hk.component.EventCheckSecondSpecEnableBtnOrNot
+import com.hkshopu.hk.component.EventInvenSpecDatasRebuild
 import com.hkshopu.hk.data.bean.ItemSpecification
 import com.hkshopu.hk.ui.main.store.adapter.ITHelperInterface
 import com.hkshopu.hk.utils.rxjava.RxBus
@@ -163,6 +164,7 @@ class SpecificationSizeAdapter: RecyclerView.Adapter<SpecificationSizeAdapter.mV
         unAssignList.removeAt(position)
         notifyItemRemoved(position)
 
+        RxBus.getInstance().post(EventInvenSpecDatasRebuild(true))
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {

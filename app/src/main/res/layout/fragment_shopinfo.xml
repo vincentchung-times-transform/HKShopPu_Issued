@@ -6,6 +6,29 @@
     android:layout_height="match_parent"
     android:background="@color/color_shopbg">
 
+
+    <ProgressBar
+        android:id="@+id/progressBar5"
+        style="?android:attr/progressBarStyle"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:elevation="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/iv_addmerchant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="36dp"
+        android:src="@mipmap/ic_addmerchant"
+        android:elevation="20dp"
+        android:visibility="visible" />
+
+
     <RelativeLayout
         android:id="@+id/layout_shopTitle"
         android:layout_width="match_parent"
@@ -274,12 +297,14 @@
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/mviewPager"
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:elevation="10dp"
-                    android:outlineSpotShadowColor="@color/hkshop_color"
-                    android:layout_height="match_parent" />
+                    android:outlineSpotShadowColor="@color/hkshop_color" />
 
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
+
+
 </RelativeLayout>

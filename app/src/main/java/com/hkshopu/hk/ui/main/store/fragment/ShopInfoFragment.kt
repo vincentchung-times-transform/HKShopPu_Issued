@@ -14,12 +14,16 @@ import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.hkshopu.hk.R
 import com.hkshopu.hk.component.CommonVariable
 import com.hkshopu.hk.component.EventGetShopCatSuccess
+import com.hkshopu.hk.component.EventTransferToFragmentAfterUpdate
+import com.hkshopu.hk.component.EventdeleverFragmentAfterUpdateStatus
 import com.hkshopu.hk.data.bean.ShopAddressBean
 import com.hkshopu.hk.data.bean.ShopInfoBean
 import com.hkshopu.hk.databinding.FragmentShopinfoBinding
@@ -64,11 +68,10 @@ class ShopInfoFragment : Fragment(R.layout.fragment_shopinfo) {
             "ShopId",
             shopId
         )
-
-
         var url = ApiConstants.API_HOST + "/shop/" + shopId + "/show/"
         binding = FragmentShopinfoBinding.bind(view)
         fragmentShopInfoBinding = binding
+
         initView()
         getShopInfo(url)
         getView()!!.isFocusableInTouchMode = true
@@ -92,6 +95,9 @@ class ShopInfoFragment : Fragment(R.layout.fragment_shopinfo) {
 
 
     fun initView() {
+
+        binding!!.progressBar5.visibility = View.GONE
+        binding!!.ivAddmerchant.visibility = View.GONE
 
         initClick()
         initVM()
@@ -119,6 +125,26 @@ class ShopInfoFragment : Fragment(R.layout.fragment_shopinfo) {
         }.attach()
         binding!!.mviewPager.setUserInputEnabled(false);
 
+
+        binding!!.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when(tab!!.position){
+                    0->{
+                        binding!!.ivAddmerchant.visibility = View.GONE
+                    }
+                    1->{
+                        binding!!.ivAddmerchant.visibility = View.VISIBLE
+                    }
+                }
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
 //        binding.setViewPager(binding.mviewPager, arrayOf(getString(R.string.product),getString(R.string.info)))
     }
 
@@ -129,10 +155,42 @@ class ShopInfoFragment : Fragment(R.layout.fragment_shopinfo) {
 
     @SuppressLint("CheckResult")
     fun initEvent() {
+        var index: Int
+
+        RxBus.getInstance().toMainThreadObservable(this, Lifecycle.Event.ON_DESTROY)
+            .subscribe({
+                when (it) {
+                    is EventdeleverFragmentAfterUpdateStatus -> {
+                        var action = it.action
+
+
+//                        Thread(Runnable {
+//
+//                            activity?.runOnUiThread {
+//
+//                                val shopId = arguments!!.getInt("shop_id", 0)
+//                                var url = ApiConstants.API_HOST + "/shop/" + shopId + "/show/"
+//                                getShopInfo(url)
+//                            }
+//
+//                        }).start()
+
+                    }
+
+                }
+            }, {
+                it.printStackTrace()
+            })
 
     }
 
     fun initClick() {
+
+
+        binding!!.ivAddmerchant.setOnClickListener {
+            val intent = Intent(activity, AddNewProductActivity::class.java)
+            activity!!.startActivity(intent)
+        }
 
         binding!!.ivBack.setOnClickListener {
             getActivity()!!.supportFragmentManager.beginTransaction().remove(this@ShopInfoFragment).commit()
@@ -192,6 +250,11 @@ class ShopInfoFragment : Fragment(R.layout.fragment_shopinfo) {
                 val shop_category_id_list = ArrayList<String>()
                 shop_category_id_list.clear()
                 try {
+                    activity!!.runOnUiThread {
+                        binding!!.progressBar5.visibility = View.VISIBLE
+
+                    }
+
                     resStr = response.body()!!.string()
                     val json = JSONObject(resStr)
                     Log.d("ShopInfoFragment", "返回資料 resStr：" + resStr)
@@ -260,6 +323,12 @@ class ShopInfoFragment : Fragment(R.layout.fragment_shopinfo) {
                     }
 //                        initRecyclerView()
 
+                    activity!!.runOnUiThread {
+                        binding!!.progressBar5.visibility = View.GONE
+
+                    }
+
+
                 } catch (e: JSONException) {
 
                 } catch (e: IOException) {
@@ -285,5 +354,8 @@ class ShopInfoFragment : Fragment(R.layout.fragment_shopinfo) {
             binding!!.ivShopImg.setImageURI(imageUri)
         }
     }
+
+
+
 
 }

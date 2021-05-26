@@ -24,6 +24,7 @@ import com.google.gson.GsonBuilder
 import com.hkshopu.hk.Base.BaseActivity
 import com.hkshopu.hk.Base.response.Status
 import com.hkshopu.hk.R
+import com.hkshopu.hk.component.EventTransferToFragmentAfterUpdate
 import com.hkshopu.hk.component.EventdeleverFragmentAfterUpdateStatus
 
 import com.hkshopu.hk.data.bean.*
@@ -101,6 +102,9 @@ class EditProductActivity : BaseActivity() {
     var mutableList_itemShipingFare_filtered = mutableListOf<ItemShippingFare_Filtered>()
     var mutableList_itemShipingFare_certained = mutableListOf<ItemShippingFare_Certained>()
 
+
+    var mutableList_InvenDatas = mutableListOf<InventoryItemDatas>()
+
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,6 +117,7 @@ class EditProductActivity : BaseActivity() {
         MMKV_product_id = MMKV.mmkvWithID("http").getInt("ProductId", 0)
 
         product_edit_session = MMKV.mmkvWithID("editPro").getBoolean("product_edit_session", false)
+
         Log.d("product_edit_session_log", product_edit_session.toString())
         if(product_edit_session){
             Thread(Runnable {
@@ -148,10 +153,10 @@ class EditProductActivity : BaseActivity() {
             binding.rViewFareItem.adapter = mAdapters_shippingFareChecked
         }
 
-        MMKV_product_status = MMKV.mmkvWithID("addPro").getString("product_status",  "").toString()
+        MMKV_product_status = MMKV.mmkvWithID("editPro").getString("product_status",  "").toString()
 
         //商品圖片
-        var pics_list_size = MMKV.mmkvWithID("addPro").getInt("value_pics_size", 0)
+        var pics_list_size = MMKV.mmkvWithID("editPro").getInt("value_pics_size", 0)
 
 
         //從API以載入過一次，所以重新仔入必須清除，才不會重複
@@ -160,7 +165,7 @@ class EditProductActivity : BaseActivity() {
         for (i in 0..pics_list_size - 1) {
 
             var previouslyEncodedImage: String? =
-                MMKV.mmkvWithID("addPro").getString("value_pic${i}", "")
+                MMKV.mmkvWithID("editPro").getString("value_pic${i}", "")
 
             if (i == 0) {
 
@@ -196,7 +201,7 @@ class EditProductActivity : BaseActivity() {
             mAdapter.notifyDataSetChanged()
         }
 
-        MMKV_editTextEntryProductName = MMKV.mmkvWithID("addPro").getString(
+        MMKV_editTextEntryProductName = MMKV.mmkvWithID("editPro").getString(
             "value_editTextEntryProductName",
             MMKV_editTextEntryProductName
         ).toString()
@@ -206,7 +211,7 @@ class EditProductActivity : BaseActivity() {
         }
 
         //商品描述
-        MMKV_editTextEntryProductDiscription = MMKV.mmkvWithID("addPro").getString(
+        MMKV_editTextEntryProductDiscription = MMKV.mmkvWithID("editPro").getString(
             "value_editTextEntryProductDiscription",
             MMKV_editTextEntryProductDiscription
         ).toString()
@@ -224,7 +229,7 @@ class EditProductActivity : BaseActivity() {
 
 
         //商品保存狀況
-        MMKV_checked_brandNew = MMKV.mmkvWithID("addPro").getString(
+        MMKV_checked_brandNew = MMKV.mmkvWithID("editPro").getString(
             "value_checked_brandNew",
             MMKV_checked_brandNew
         ).toString()
@@ -265,7 +270,7 @@ class EditProductActivity : BaseActivity() {
         runOnUiThread {
             binding.needMoreTimeToStockUp.text = getString(R.string.textView_more_time_to_stock)
         }
-        MMKV_boolean_needMoreTimeToStockUp = MMKV.mmkvWithID("addPro").getString(
+        MMKV_boolean_needMoreTimeToStockUp = MMKV.mmkvWithID("editPro").getString(
             "boolean_needMoreTimeToStockUp",
             "n"
         ).toString()
@@ -295,7 +300,7 @@ class EditProductActivity : BaseActivity() {
             }
 
         }
-        MMKV_editMoreTimeInput = MMKV.mmkvWithID("addPro").getString("value_editMoreTimeInput", "").toString()
+        MMKV_editMoreTimeInput = MMKV.mmkvWithID("editPro").getString("value_editMoreTimeInput", "").toString()
         runOnUiThread {
             binding.editMoreTimeInput.setText(MMKV_editMoreTimeInput)
         }
@@ -333,7 +338,7 @@ class EditProductActivity : BaseActivity() {
 
                     MMKV_editTextEntryProductName =
                         binding.editTextEntryProductName.text.toString()
-                    MMKV.mmkvWithID("addPro").putString(
+                    MMKV.mmkvWithID("editPro").putString(
                         "value_editTextEntryProductName",
                         MMKV_editTextEntryProductName
                     )
@@ -357,7 +362,7 @@ class EditProductActivity : BaseActivity() {
             override fun afterTextChanged(s: Editable?) {
                 MMKV_editTextEntryProductName =
                     binding.editTextEntryProductName.text.toString()
-                MMKV.mmkvWithID("addPro").putString(
+                MMKV.mmkvWithID("editPro").putString(
                     "value_editTextEntryProductName",
                     MMKV_editTextEntryProductName
                 )
@@ -372,7 +377,7 @@ class EditProductActivity : BaseActivity() {
 
                     MMKV_editTextEntryProductDiscription =
                         binding.editTextEntryProductDiscription.text.toString()
-                    MMKV.mmkvWithID("addPro").putString(
+                    MMKV.mmkvWithID("editPro").putString(
                         "value_editTextEntryProductDiscription",
                         MMKV_editTextEntryProductDiscription
                     )
@@ -396,7 +401,7 @@ class EditProductActivity : BaseActivity() {
             override fun afterTextChanged(s: Editable?) {
                 MMKV_editTextEntryProductDiscription =
                     binding.editTextEntryProductDiscription.text.toString()
-                MMKV.mmkvWithID("addPro").putString(
+                MMKV.mmkvWithID("editPro").putString(
                     "value_editTextEntryProductDiscription",
                     MMKV_editTextEntryProductDiscription
                 )
@@ -429,7 +434,7 @@ class EditProductActivity : BaseActivity() {
 
                         binding.editTextMerchanPrice.setText("HKD$ ${binding.editTextMerchanPrice.text.toString()}")
                         MMKV_editTextMerchanPrice = binding.editTextMerchanPrice.text.toString().substring(5)
-                        MMKV.mmkvWithID("addPro").putString(
+                        MMKV.mmkvWithID("editPro").putString(
                             "value_editTextMerchanPrice",
                             MMKV_editTextMerchanPrice
                         )
@@ -438,7 +443,7 @@ class EditProductActivity : BaseActivity() {
 
                         binding.editTextMerchanPrice.setText("")
                         MMKV_editTextMerchanPrice = binding.editTextMerchanPrice.text.toString()
-                        MMKV.mmkvWithID("addPro").putString(
+                        MMKV.mmkvWithID("editPro").putString(
                             "value_editTextMerchanPrice",
                             MMKV_editTextMerchanPrice
                         )
@@ -469,7 +474,7 @@ class EditProductActivity : BaseActivity() {
 
                     MMKV_editTextMerchanPrice =
                         binding.editTextMerchanPrice.text.toString().substring(5)
-                    MMKV.mmkvWithID("addPro").putString(
+                    MMKV.mmkvWithID("editPro").putString(
                         "value_editTextMerchanPrice",
                         MMKV_editTextMerchanPrice
                     )
@@ -493,7 +498,7 @@ class EditProductActivity : BaseActivity() {
                 EditorInfo.IME_ACTION_DONE -> {
 
                     MMKV_editTextMerchanQunt = binding.editTextMerchanQunt.text.toString()
-                    MMKV.mmkvWithID("addPro").putString(
+                    MMKV.mmkvWithID("editPro").putString(
                         "value_editTextMerchanQunt",
                         MMKV_editTextMerchanQunt
                     )
@@ -522,7 +527,7 @@ class EditProductActivity : BaseActivity() {
                 }
 
                 MMKV_editTextMerchanQunt = binding.editTextMerchanQunt.text.toString()
-                MMKV.mmkvWithID("addPro").putString(
+                MMKV.mmkvWithID("editPro").putString(
                     "value_editTextMerchanQunt",
                     MMKV_editTextMerchanQunt
                 )
@@ -540,7 +545,7 @@ class EditProductActivity : BaseActivity() {
                 EditorInfo.IME_ACTION_DONE -> {
 
                     MMKV_editMoreTimeInput = binding.editMoreTimeInput.text.toString()
-                    MMKV.mmkvWithID("addPro").putString(
+                    MMKV.mmkvWithID("editPro").putString(
                         "value_editMoreTimeInput",
                         MMKV_editMoreTimeInput
                     )
@@ -562,7 +567,7 @@ class EditProductActivity : BaseActivity() {
             }
             override fun afterTextChanged(s: Editable?) {
                 MMKV_editMoreTimeInput = binding.editMoreTimeInput.text.toString()
-                MMKV.mmkvWithID("addPro").putString(
+                MMKV.mmkvWithID("editPro").putString(
                     "value_editMoreTimeInput",
                     MMKV_editMoreTimeInput
                 )
@@ -592,14 +597,14 @@ class EditProductActivity : BaseActivity() {
         binding.needMoreTimeToStockUp.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 binding.editMoreTimeInput.isVisible = true
-                MMKV.mmkvWithID("addPro").putString(
+                MMKV.mmkvWithID("editPro").putString(
                     "boolean_needMoreTimeToStockUp",
                     "y"
                 )
 
             } else {
                 binding.editMoreTimeInput.isVisible = false
-                MMKV.mmkvWithID("addPro").putString(
+                MMKV.mmkvWithID("editPro").putString(
                     "boolean_needMoreTimeToStockUp",
                     "n"
                 )
@@ -647,8 +652,8 @@ class EditProductActivity : BaseActivity() {
                     binding.containerProductSpecQuant.setElevation(e.toFloat())
                     binding.containerProductSpecSwitch.setElevation(e.toFloat())
 
-                    MMKV.mmkvWithID("addPro").putString("product_spec_on" , "y")
-                    MMKV_product_spec_on = MMKV.mmkvWithID("addPro").getString("product_spec_on", "n").toString()
+                    MMKV.mmkvWithID("editPro").putString("product_spec_on" , "y")
+                    MMKV_product_spec_on = MMKV.mmkvWithID("editPro").getString("product_spec_on", "n").toString()
 
 
                 } else {
@@ -670,8 +675,8 @@ class EditProductActivity : BaseActivity() {
                     binding.containerProductSpecQuant.setElevation(e.toFloat())
 
 
-                    MMKV.mmkvWithID("addPro").putString("product_spec_on" , "n")
-                    MMKV_product_spec_on = MMKV.mmkvWithID("addPro").getString("product_spec_on", "n").toString()
+                    MMKV.mmkvWithID("editPro").putString("product_spec_on" , "n")
+                    MMKV_product_spec_on = MMKV.mmkvWithID("editPro").getString("product_spec_on", "n").toString()
 
 
 
@@ -700,7 +705,7 @@ class EditProductActivity : BaseActivity() {
             binding.tvSecondhand.setBackgroundResource(R.drawable.bg_edit_login)
 
             MMKV_checked_brandNew = "new"
-            MMKV.mmkvWithID("addPro").putString("value_checked_brandNew", MMKV_checked_brandNew)
+            MMKV.mmkvWithID("editPro").putString("value_checked_brandNew", MMKV_checked_brandNew)
         }
         binding.tvSecondhand.setOnClickListener {
 
@@ -715,11 +720,14 @@ class EditProductActivity : BaseActivity() {
             binding.tvSecondhand.setBackgroundResource(R.drawable.bg_userinfo_gender)
 
             MMKV_checked_brandNew = "secondhand"
-            MMKV.mmkvWithID("addPro").putString("value_checked_brandNew", MMKV_checked_brandNew)
+            MMKV.mmkvWithID("editPro").putString("value_checked_brandNew", MMKV_checked_brandNew)
 
         }
 
         binding.containerAddSpecification.setOnClickListener {
+
+            MMKV.mmkvWithID("editPro_temp").putBoolean("get_temp", false)
+
             val intent = Intent(this, EditProductSpecificationMainActivity::class.java)
             startActivity(intent)
             finish()
@@ -993,7 +1001,7 @@ class EditProductActivity : BaseActivity() {
                         }
                     }
 
-                    MMKV.mmkvWithID("addPro").putInt(
+                    MMKV.mmkvWithID("editPro").putInt(
                         "value_pics_size",
                         mutableList_pics.size.toInt()
                     )
@@ -1004,7 +1012,7 @@ class EditProductActivity : BaseActivity() {
                         mutableList_pics[i].bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                         val b = baos.toByteArray()
                         val encodedImage: String = Base64.encodeToString(b, Base64.DEFAULT)
-                        MMKV.mmkvWithID("addPro").putString("value_pic${i}", encodedImage)
+                        MMKV.mmkvWithID("editPro").putString("value_pic${i}", encodedImage)
                     }
 
                 } else {
@@ -1024,7 +1032,7 @@ class EditProductActivity : BaseActivity() {
                             )
                         }
 
-                        MMKV.mmkvWithID("addPro").putInt("value_pics_size", mutableList_pics.size)
+                        MMKV.mmkvWithID("editPro").putInt("value_pics_size", mutableList_pics.size)
 
                         for (i in 0..mutableList_pics.size - 1) {
                             //transfer to Base64
@@ -1036,7 +1044,7 @@ class EditProductActivity : BaseActivity() {
                             )
                             val b = baos.toByteArray()
                             val encodedImage: String = Base64.encodeToString(b, Base64.DEFAULT)
-                            MMKV.mmkvWithID("addPro").putString("value_pic${i}", encodedImage)
+                            MMKV.mmkvWithID("editPro").putString("value_pic${i}", encodedImage)
                         }
                     } catch (e: FileNotFoundException) {
                         e.printStackTrace()
@@ -1057,11 +1065,11 @@ class EditProductActivity : BaseActivity() {
 
     fun initProCategoryDatas() {
 
-        MMKV_proCate_id = MMKV.mmkvWithID("addPro").getString("product_category_id", "").toString()
-        MMKV_proSubCate_id = MMKV.mmkvWithID("addPro").getString("product_sub_category_id", "").toString()
-        MMKV_c_product_category = MMKV.mmkvWithID("addPro").getString("c_product_category", "").toString()
-        MMKV_c_product_sub_category = MMKV.mmkvWithID("addPro").getString("c_product_sub_category", "").toString()
-        MMKV_textViewSeletedCategory = MMKV.mmkvWithID("addPro").getString(
+        MMKV_proCate_id = MMKV.mmkvWithID("editPro").getString("product_category_id", "").toString()
+        MMKV_proSubCate_id = MMKV.mmkvWithID("editPro").getString("product_sub_category_id", "").toString()
+        MMKV_c_product_category = MMKV.mmkvWithID("editPro").getString("c_product_category", "").toString()
+        MMKV_c_product_sub_category = MMKV.mmkvWithID("editPro").getString("c_product_sub_category", "").toString()
+        MMKV_textViewSeletedCategory = MMKV.mmkvWithID("editPro").getString(
             "value_textViewSeletedCategory",
             MMKV_textViewSeletedCategory
         ).toString()
@@ -1093,14 +1101,14 @@ class EditProductActivity : BaseActivity() {
 
     fun initProFareDatas() {
 
-        MMKV_weight = MMKV.mmkvWithID("addPro").getString("datas_packagesWeights", "").toString()
-        MMKV_length = MMKV.mmkvWithID("addPro").getString("datas_length", "").toString()
-        MMKV_width = MMKV.mmkvWithID("addPro").getString("datas_width", "").toString()
-        MMKV_height = MMKV.mmkvWithID("addPro").getString("datas_height", "").toString()
-        var fare_datas_size = MMKV.mmkvWithID("addPro").getString("fare_datas_size", "0").toString().toInt()
-        var fare_datas_filtered_size = MMKV.mmkvWithID("addPro").getString("fare_datas_filtered_size", "0").toString().toInt()
-        var fare_datas_certained_size = MMKV.mmkvWithID("addPro").getString("fare_datas_certained_size", "0").toString().toInt()
-        MMKV_value_txtViewFareRange = MMKV.mmkvWithID("addPro").getString("value_txtViewFareRange", "").toString()
+        MMKV_weight = MMKV.mmkvWithID("editPro").getString("datas_packagesWeights", "").toString()
+        MMKV_length = MMKV.mmkvWithID("editPro").getString("datas_length", "").toString()
+        MMKV_width = MMKV.mmkvWithID("editPro").getString("datas_width", "").toString()
+        MMKV_height = MMKV.mmkvWithID("editPro").getString("datas_height", "").toString()
+        var fare_datas_size = MMKV.mmkvWithID("editPro").getString("fare_datas_size", "0").toString().toInt()
+        var fare_datas_filtered_size = MMKV.mmkvWithID("editPro").getString("fare_datas_filtered_size", "0").toString().toInt()
+        var fare_datas_certained_size = MMKV.mmkvWithID("editPro").getString("fare_datas_certained_size", "0").toString().toInt()
+        MMKV_value_txtViewFareRange = MMKV.mmkvWithID("editPro").getString("value_txtViewFareRange", "").toString()
         Log.d("MMKV_weight_Edit", "MMKV_weight : ${MMKV_weight}, MMKV_length : ${MMKV_length}, MMKV_width : ${MMKV_width}, MMKV_height : ${MMKV_height}, fare_datas_size : ${fare_datas_size}, fare_datas_filtered_size : ${fare_datas_filtered_size}, MMKV_value_txtViewFareRange: ${MMKV_value_txtViewFareRange}")
 
 
@@ -1122,7 +1130,7 @@ class EditProductActivity : BaseActivity() {
                 mutableList_itemShipingFare.clear()
                 //MMKV取出 Fare Item
                 for (i in 0..fare_datas_size-1!!) {
-                    var json_invens : String? = MMKV.mmkvWithID("addPro").getString(
+                    var json_invens : String? = MMKV.mmkvWithID("editPro").getString(
                         "value_fare_item${i}",
                         ""
                     )
@@ -1134,7 +1142,7 @@ class EditProductActivity : BaseActivity() {
                 mutableList_itemShipingFare_filtered.clear()
                 //MMKV取出 Filtered Fare Item
                 for (i in 0..fare_datas_filtered_size-1!!) {
-                    var json_invens : String? = MMKV.mmkvWithID("addPro").getString(
+                    var json_invens : String? = MMKV.mmkvWithID("editPro").getString(
                         "value_fare_item_filtered${i}",
                         ""
                     )
@@ -1149,7 +1157,7 @@ class EditProductActivity : BaseActivity() {
                 mutableList_itemShipingFare_certained.clear()
                 for(i in 0..fare_datas_certained_size!!-1){
 
-                    var json_invens : String? = MMKV.mmkvWithID("addPro").getString(
+                    var json_invens : String? = MMKV.mmkvWithID("editPro").getString(
                         "value_fare_item_certained${i}",
                         ""
                     )
@@ -1160,7 +1168,7 @@ class EditProductActivity : BaseActivity() {
 
 
 
-                MMKV_jsonTutList_fare = MMKV.mmkvWithID("addPro").getString("jsonTutList_fare", MMKV_jsonTutList_fare).toString()
+                MMKV_jsonTutList_fare = MMKV.mmkvWithID("editPro").getString("jsonTutList_fare", MMKV_jsonTutList_fare).toString()
                 Log.d("MMKV_jsonTutList_fare", "MMKV_jsonTutList_fare : " + MMKV_jsonTutList_fare.toString())
 
 
@@ -1209,10 +1217,10 @@ class EditProductActivity : BaseActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
     fun initInvenDatas() {
 
-        MMKV_product_spec_on = MMKV.mmkvWithID("addPro").getString("product_spec_on", "n").toString()
+        MMKV_product_spec_on = MMKV.mmkvWithID("editPro").getString("product_spec_on", "n").toString()
 //        var inven_datas_size = MMKV.mmkvWithID("addPro").getInt("inven_datas_size", 0)
 
-        MMKV_jsonTutList_inven = MMKV.mmkvWithID("addPro").getString(
+        MMKV_jsonTutList_inven = MMKV.mmkvWithID("editPro").getString(
             "jsonTutList_inven",
             MMKV_jsonTutList_inven
         ).toString()
@@ -1222,20 +1230,20 @@ class EditProductActivity : BaseActivity() {
         )
 
         //挑選最大與最小金額，回傳價格區間
-        MMKV_inven_price_range = MMKV.mmkvWithID("addPro").getString(
+        MMKV_inven_price_range = MMKV.mmkvWithID("editPro").getString(
             "inven_price_range",
             MMKV_inven_price_range
         ).toString()
-        MMKV_inven_quant_range = MMKV.mmkvWithID("addPro").getString(
+        MMKV_inven_quant_range = MMKV.mmkvWithID("editPro").getString(
             "inven_quant_range",
             MMKV_inven_quant_range
         ).toString()
 
-        MMKV_editTextMerchanPrice = MMKV.mmkvWithID("addPro").getString(
+        MMKV_editTextMerchanPrice = MMKV.mmkvWithID("editPro").getString(
             "value_editTextMerchanPrice",
             MMKV_editTextMerchanPrice
         ).toString()
-        MMKV_editTextMerchanQunt = MMKV.mmkvWithID("addPro").getString(
+        MMKV_editTextMerchanQunt = MMKV.mmkvWithID("editPro").getString(
             "value_editTextMerchanQunt",
             MMKV_editTextMerchanQunt
         ).toString()
@@ -1340,6 +1348,8 @@ class EditProductActivity : BaseActivity() {
                                         binding.btnOnShelf.setImageResource(R.mipmap.btn_launch)
                                     }
 
+                                    RxBus.getInstance().post(EventTransferToFragmentAfterUpdate(2))
+
                                 }
                                 "draft"->{
                                     runOnUiThread {
@@ -1347,6 +1357,8 @@ class EditProductActivity : BaseActivity() {
                                         MMKV_product_status = "active"
                                         binding.btnOnShelf.setImageResource(R.mipmap.btn_draft)
                                     }
+
+                                    RxBus.getInstance().post(EventTransferToFragmentAfterUpdate(0))
 
                                 }
                             }
@@ -1450,7 +1462,7 @@ class EditProductActivity : BaseActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-
+                        RxBus.getInstance().post(EventTransferToFragmentAfterUpdate(2))
                         RxBus.getInstance().post(EventdeleverFragmentAfterUpdateStatus("action"))
                         MMKV.mmkvWithID("addPro").clear()
                         MMKV.mmkvWithID("editPro").clear()
@@ -1541,7 +1553,7 @@ class EditProductActivity : BaseActivity() {
                         Log.d("getProductInfo", "返回資料 productInfoList：" + productInfoList.toString())
 
                         //Pictures
-                        MMKV.mmkvWithID("addPro").putInt("value_pics_size", productInfoList.pic_path.size)
+                        MMKV.mmkvWithID("editPro").putInt("value_pics_size", productInfoList.pic_path.size)
 
                         for(i in 0..productInfoList.pic_path.size-1){
                             mutableList_pics.add(ItemPics(getBitmapFromURL(productInfoList.pic_path.get(i))!!, R.drawable.custom_unit_transparent))
@@ -1555,39 +1567,39 @@ class EditProductActivity : BaseActivity() {
                             val b = baos.toByteArray()
                             val encodedImage: String = Base64.encodeToString(b, Base64.DEFAULT)
 
-                            MMKV.mmkvWithID("addPro").putString("value_pic${i}", encodedImage)
+                            MMKV.mmkvWithID("editPro").putString("value_pic${i}", encodedImage)
                         }
 
 
                         //Others
-                        MMKV.mmkvWithID("addPro").putString("value_editTextEntryProductName", productInfoList.product_title.toString())
-                        MMKV.mmkvWithID("addPro").putString("value_editTextEntryProductDiscription", productInfoList.product_description.toString())
-                        MMKV.mmkvWithID("addPro").putString("product_category_id", productInfoList.product_category_id.toString())
-                        MMKV.mmkvWithID("addPro").putString("product_sub_category_id", productInfoList.product_sub_category_id.toString())
-                        MMKV.mmkvWithID("addPro").putString("c_product_category", productInfoList.c_product_category.toString())
-                        MMKV.mmkvWithID("addPro").putString("c_product_sub_category", productInfoList.c_sub_product_category.toString())
-                        MMKV.mmkvWithID("addPro").putString("value_textViewSeletedCategory", "${productInfoList.c_product_category.toString()}>${ productInfoList.c_sub_product_category.toString()}")
-                        MMKV.mmkvWithID("addPro").putString("value_checked_brandNew", productInfoList.new_secondhand.toString())
-                        MMKV.mmkvWithID("addPro").putString("product_spec_on", productInfoList.product_spec_on.toString())
-                        MMKV.mmkvWithID("addPro").putString("product_price", productInfoList.product_price.toString())
-                        MMKV.mmkvWithID("addPro").putString("quantity", productInfoList.quantity.toString())
-                        MMKV.mmkvWithID("addPro").putString("datas_packagesWeights", productInfoList.weight.toString())
-                        MMKV.mmkvWithID("addPro").putString("datas_length", productInfoList.length.toString())
-                        MMKV.mmkvWithID("addPro").putString("datas_width",  productInfoList.width.toString())
-                        MMKV.mmkvWithID("addPro").putString("datas_height", productInfoList.height.toString())
-                        MMKV.mmkvWithID("addPro").putString("value_editMoreTimeInput", productInfoList.longterm_stock_up.toString())
-                        MMKV.mmkvWithID("addPro").putString("inven_price_range", "HKD$${productInfoList.min_price}-HKD${productInfoList.max_price}")
-                        MMKV.mmkvWithID("addPro").putString("inven_quant_range", "HKD$${productInfoList.min_quantity}-HKD${productInfoList.max_quantity}")
-                        MMKV.mmkvWithID("addPro").putString("value_editTextMerchanPrice", productInfoList.product_price.toString())
-                        MMKV.mmkvWithID("addPro").putString("value_editTextMerchanQunt", productInfoList.quantity.toString())
-                        MMKV.mmkvWithID("addPro").putInt("inven_datas_size", 0)
-                        MMKV.mmkvWithID("addPro").putString("product_status",  productInfoList.product_status.toString())
+                        MMKV.mmkvWithID("editPro").putString("value_editTextEntryProductName", productInfoList.product_title.toString())
+                        MMKV.mmkvWithID("editPro").putString("value_editTextEntryProductDiscription", productInfoList.product_description.toString())
+                        MMKV.mmkvWithID("editPro").putString("product_category_id", productInfoList.product_category_id.toString())
+                        MMKV.mmkvWithID("editPro").putString("product_sub_category_id", productInfoList.product_sub_category_id.toString())
+                        MMKV.mmkvWithID("editPro").putString("c_product_category", productInfoList.c_product_category.toString())
+                        MMKV.mmkvWithID("editPro").putString("c_product_sub_category", productInfoList.c_sub_product_category.toString())
+                        MMKV.mmkvWithID("editPro").putString("value_textViewSeletedCategory", "${productInfoList.c_product_category.toString()}>${ productInfoList.c_sub_product_category.toString()}")
+                        MMKV.mmkvWithID("editPro").putString("value_checked_brandNew", productInfoList.new_secondhand.toString())
+                        MMKV.mmkvWithID("editPro").putString("product_spec_on", productInfoList.product_spec_on.toString())
+                        MMKV.mmkvWithID("editPro").putString("product_price", productInfoList.product_price.toString())
+                        MMKV.mmkvWithID("editPro").putString("quantity", productInfoList.quantity.toString())
+                        MMKV.mmkvWithID("editPro").putString("datas_packagesWeights", productInfoList.weight.toString())
+                        MMKV.mmkvWithID("editPro").putString("datas_length", productInfoList.length.toString())
+                        MMKV.mmkvWithID("editPro").putString("datas_width",  productInfoList.width.toString())
+                        MMKV.mmkvWithID("editPro").putString("datas_height", productInfoList.height.toString())
+                        MMKV.mmkvWithID("editPro").putString("value_editMoreTimeInput", productInfoList.longterm_stock_up.toString())
+                        MMKV.mmkvWithID("editPro").putString("inven_price_range", "HKD$${productInfoList.min_price}-HKD${productInfoList.max_price}")
+                        MMKV.mmkvWithID("editPro").putString("inven_quant_range", "HKD$${productInfoList.min_quantity}-HKD${productInfoList.max_quantity}")
+                        MMKV.mmkvWithID("editPro").putString("value_editTextMerchanPrice", productInfoList.product_price.toString())
+                        MMKV.mmkvWithID("editPro").putString("value_editTextMerchanQunt", productInfoList.quantity.toString())
+                        MMKV.mmkvWithID("editPro").putInt("inven_datas_size", 0)
+                        MMKV.mmkvWithID("editPro").putString("product_status",  productInfoList.product_status.toString())
 
 
                         //EditShippingFareActivity
-                        MMKV.mmkvWithID("addPro").putString("fare_datas_size", productInfoList.product_shipment_list.size.toString())
-                        MMKV.mmkvWithID("addPro").putString("fare_datas_certained_size", productInfoList.product_shipment_list.size.toString())
-                        MMKV.mmkvWithID("addPro").putString("value_txtViewFareRange", "HKD$${productInfoList.shipment_min_price.toString()}-HKD$${productInfoList.shipment_max_price.toString()}" )
+                        MMKV.mmkvWithID("editPro").putString("fare_datas_size", productInfoList.product_shipment_list.size.toString())
+                        MMKV.mmkvWithID("editPro").putString("fare_datas_certained_size", productInfoList.product_shipment_list.size.toString())
+                        MMKV.mmkvWithID("editPro").putString("value_txtViewFareRange", "HKD$${productInfoList.shipment_min_price.toString()}-HKD$${productInfoList.shipment_max_price.toString()}" )
 
 
                         when(productInfoList.product_status){
@@ -1610,12 +1622,12 @@ class EditProductActivity : BaseActivity() {
                             for (i in 0..productInfoList.product_shipment_list.size - 1) {
 
                                 var json_shippingItem = GsonProvider.gson.toJson(ItemShippingFare(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price.toString(), productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
-                                MMKV.mmkvWithID("addPro").putString("value_fare_item${i}",json_shippingItem)
+                                MMKV.mmkvWithID("editPro").putString("value_fare_item${i}",json_shippingItem)
 
                             }
                         }else{
                             var json_shippingItem = GsonProvider.gson.toJson(ItemShippingFare("", "", "off", MMKV_shop_id))
-                            MMKV.mmkvWithID("addPro").putString("value_fare_item${0}",json_shippingItem)
+                            MMKV.mmkvWithID("editPro").putString("value_fare_item${0}",json_shippingItem)
                         }
 
                         //將從API取出的資料以ItemShippingFare的形式存取並裝成mutableList_itemShipingFare_filtered
@@ -1625,12 +1637,12 @@ class EditProductActivity : BaseActivity() {
 
                             }
                         }
-                        MMKV.mmkvWithID("addPro").putString("fare_datas_filtered_size", mutableList_itemShipingFare_filtered.size.toString())
+                        MMKV.mmkvWithID("editPro").putString("fare_datas_filtered_size", mutableList_itemShipingFare_filtered.size.toString())
 
                         //mutableList_itemShipingFare_filtered一個個項目裝進mmkv，避免mmkv filtered item ID錯亂，保持以流水號型式
                         for(i in 0..mutableList_itemShipingFare_filtered.size-1){
                             var json_shippingItem = GsonProvider.gson.toJson(mutableList_itemShipingFare_filtered.get(i))
-                            MMKV.mmkvWithID("addPro").putString("value_fare_item_filtered${i}",json_shippingItem)
+                            MMKV.mmkvWithID("editPro").putString("value_fare_item_filtered${i}",json_shippingItem)
 
                         }
                         //存完後清掉，避免後來的mutableList_itemShipingFare_filtered重複裝取
@@ -1642,7 +1654,7 @@ class EditProductActivity : BaseActivity() {
                         for (i in 0..productInfoList.product_shipment_list.size - 1) {
                             mutableList_itemShipingFare_certained.add(ItemShippingFare_Certained(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price.toString(), productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
                             var json_shippingItem_certained = GsonProvider.gson.toJson(ItemShippingFare_Certained(productInfoList.product_shipment_list.get(i).shipment_desc, productInfoList.product_shipment_list.get(i).price.toString(), productInfoList.product_shipment_list.get(i).onoff, MMKV_shop_id))
-                            MMKV.mmkvWithID("addPro").putString("value_fare_item_certained${i}",json_shippingItem_certained)
+                            MMKV.mmkvWithID("editPro").putString("value_fare_item_certained${i}",json_shippingItem_certained)
                         }
 
                         val gson = Gson()
@@ -1653,88 +1665,18 @@ class EditProductActivity : BaseActivity() {
                         val jsonTutListPretty_fare: String = gsonPretty.toJson(mutableList_itemShipingFare_certained)
                         Log.d("AddNewProductActivity", mutableList_itemShipingFare_certained.toString())
 
-                        MMKV.mmkvWithID("addPro").putString("jsonTutList_fare", jsonTutList_fare)
+                        MMKV.mmkvWithID("editPro").putString("jsonTutList_fare", jsonTutList_fare)
 
 
-                        if(  productInfoList.spec_desc_1.size.equals(0) ){
-                            MMKV.mmkvWithID("addPro").putString("inven_price_range", "")
-                            MMKV.mmkvWithID("addPro").putString("inven_quant_range", "")
+                        if(  productInfoList.product_spec_on.equals("y") ){
+
 
                             //EditProductSpecificationMainActivity
-                            MMKV.mmkvWithID("addPro").putString(
-                                "value_editTextProductSpecFirst",
-                                ""
-                            )
-                            MMKV.mmkvWithID("addPro").putString(
-                                "value_editTextProductSpecSecond",
-                                ""
-                            )
-
-                            var mutableSet_spec_dec_1_items: MutableSet<String> =
-                                productInfoList.spec_dec_1_items.toMutableSet()
-                            var mutableSet_spec_dec_2_items: MutableSet<String> =
-                                productInfoList.spec_dec_2_items.toMutableSet()
-                            var mutableList_spec_dec_1_items: MutableList<String> =
-                                mutableSet_spec_dec_1_items.toMutableList()
-                            var mutableList_spec_dec_2_items: MutableList<String> =
-                                mutableSet_spec_dec_2_items.toMutableList()
-
-                            MMKV.mmkvWithID("addPro").putString(
-                                "datas_spec_size",
-                                "0"
-                            )
-                            MMKV.mmkvWithID("addPro").putString(
-                                "datas_size_size",
-                                "0"
-                            )
-
-//                            for (i in 0..mutableSet_spec_dec_1_items.size - 1) {
-//                                MMKV.mmkvWithID("addPro").putString(
-//                                    "datas_spec_item${i}",
-//                                    mutableList_spec_dec_1_items.get(i)
-//                                )
-//                            }
-//
-//
-//                            for (i in 0..mutableSet_spec_dec_2_items.size - 1) {
-//                                MMKV.mmkvWithID("addPro").putString(
-//                                    "datas_size_item${i}",
-//                                    mutableList_spec_dec_2_items.get(i)
-//                                )
-//                            }
-//
-//                            MMKV.mmkvWithID("addPro").putString(
-//                                "datas_price_size",
-//                                productInfoList.price.size.toString()
-//                            )
-//                            MMKV.mmkvWithID("addPro").putString(
-//                                "datas_quant_size",
-//                                productInfoList.spec_quantity.size.toString()
-//                            )
-//
-//
-//                            for (i in 0..productInfoList.price.size - 1) {
-//                                MMKV.mmkvWithID("addPro").putString(
-//                                    "spec_price${i}",
-//                                    productInfoList.price.get(i).toString()
-//                                )
-//                            }
-//
-//                            for (i in 0..productInfoList.spec_quantity.size - 1) {
-//                                MMKV.mmkvWithID("addPro").putString(
-//                                    "spec_quantity${i}",
-//                                    productInfoList.spec_quantity.get(i).toString()
-//                                )
-//                            }
-
-                        }else{
-
-                            //EditProductSpecificationMainActivity
-                            MMKV.mmkvWithID("addPro").putString(
+                            MMKV.mmkvWithID("editPro").putString(
                                 "value_editTextProductSpecFirst",
                                 productInfoList.spec_desc_1.get(0)
                             )
-                            MMKV.mmkvWithID("addPro").putString(
+                            MMKV.mmkvWithID("editPro").putString(
                                 "value_editTextProductSpecSecond",
                                 productInfoList.spec_desc_2.get(0)
                             )
@@ -1748,35 +1690,56 @@ class EditProductActivity : BaseActivity() {
                             var mutableList_spec_dec_2_items: MutableList<String> =
                                 mutableSet_spec_dec_2_items.toMutableList()
 
-                            MMKV.mmkvWithID("addPro").putString(
+                            MMKV.mmkvWithID("editPro").putString(
                                 "datas_spec_size",
                                 mutableSet_spec_dec_1_items.size.toString()
                             )
-                            MMKV.mmkvWithID("addPro").putString(
-                                "datas_size_size",
-                                mutableSet_spec_dec_2_items.size.toString()
-                            )
 
                             for (i in 0..mutableSet_spec_dec_1_items.size - 1) {
-                                MMKV.mmkvWithID("addPro").putString(
+                                MMKV.mmkvWithID("editPro").putString(
                                     "datas_spec_item${i}",
                                     mutableList_spec_dec_1_items.get(i)
                                 )
                             }
 
+                            if(productInfoList.spec_desc_2.get(0).isNullOrEmpty()){
 
-                            for (i in 0..mutableSet_spec_dec_2_items.size - 1) {
-                                MMKV.mmkvWithID("addPro").putString(
-                                    "datas_size_item${i}",
-                                    mutableList_spec_dec_2_items.get(i)
+                                MMKV.mmkvWithID("editPro").putString(
+                                    "datas_size_size",
+                                    "0"
                                 )
+
+                                for (i in 0..mutableSet_spec_dec_2_items.size - 1) {
+                                    MMKV.mmkvWithID("editPro").putString(
+                                        "datas_size_item${i}",
+                                        mutableList_spec_dec_2_items.get(i)
+                                    )
+                                }
+
+
+                            }else{
+
+                                MMKV.mmkvWithID("editPro").putString(
+                                    "datas_size_size",
+                                    mutableSet_spec_dec_2_items.size.toString()
+                                )
+
+                                for (i in 0..mutableSet_spec_dec_2_items.size - 1) {
+                                    MMKV.mmkvWithID("editPro").putString(
+                                        "datas_size_item${i}",
+                                        mutableList_spec_dec_2_items.get(i)
+                                    )
+                                }
+
                             }
 
-                            MMKV.mmkvWithID("addPro").putString(
+
+                            MMKV.mmkvWithID("editPro").putString(
                                 "datas_price_size",
                                 productInfoList.price.size.toString()
                             )
-                            MMKV.mmkvWithID("addPro").putString(
+
+                            MMKV.mmkvWithID("editPro").putString(
                                 "datas_quant_size",
                                 productInfoList.spec_quantity.size.toString()
                             )
@@ -1784,20 +1747,48 @@ class EditProductActivity : BaseActivity() {
 
                             for (i in 0..productInfoList.price.size - 1) {
 
-                                MMKV.mmkvWithID("addPro").putString(
+                                MMKV.mmkvWithID("editPro").putString(
                                     "spec_price${i}",
                                     productInfoList.price.get(i).toString()
                                 )
                             }
 
                             for (i in 0..productInfoList.spec_quantity.size - 1) {
-                                MMKV.mmkvWithID("addPro").putString(
+                                MMKV.mmkvWithID("editPro").putString(
                                     "spec_quantity${i}",
                                     productInfoList.spec_quantity.get(i).toString()
                                 )
                             }
-                        }
 
+
+
+                            for (i in 0.. productInfoList.spec_desc_1.size-1){
+
+                                mutableList_InvenDatas.add(
+                                    InventoryItemDatas(
+                                        productInfoList.spec_desc_1.get(i),
+                                        productInfoList.spec_desc_2.get(i),
+                                        productInfoList.spec_dec_1_items.get(i),
+                                        productInfoList.spec_dec_2_items.get(i),
+                                        productInfoList.price.get(i),
+                                        productInfoList.spec_quantity.get(i))
+                                )
+
+                            }
+
+
+                            val gson = Gson()
+                            val gsonPretty = GsonBuilder().setPrettyPrinting().create()
+
+                            val jsonTutList_inven: String = gson.toJson(mutableList_InvenDatas)
+                            Log.d("AddNewProductActivity", jsonTutList_inven.toString())
+                            val jsonTutListPretty_inven: String = gsonPretty.toJson(mutableList_InvenDatas)
+                            Log.d("AddNewProductActivity", jsonTutListPretty_inven.toString())
+
+                            MMKV.mmkvWithID("editPro").putString("jsonTutList_inven", jsonTutList_inven)
+
+
+                        }
 
                         initMMKV_and_initViewValue()
 

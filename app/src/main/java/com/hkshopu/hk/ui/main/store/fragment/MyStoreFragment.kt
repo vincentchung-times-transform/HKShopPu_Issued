@@ -55,7 +55,6 @@ class MyStoreFragment : Fragment() {
     lateinit var addShopBrief:RelativeLayout
     lateinit var newProduct_null :RelativeLayout
     lateinit var newProduct :RecyclerView
-    lateinit var btn_addNewMerchant:ImageView
     private val adapter = ShopProductAdapter(this)
 
     override fun onCreateView(
@@ -89,18 +88,8 @@ class MyStoreFragment : Fragment() {
             val intent = Intent(activity, AddShopBriefActivity::class.java)
             activity!!.startActivity(intent)
         }
-        val btn_addNewProduct = v.find<RelativeLayout>(R.id.layout_add_product)
-        btn_addNewProduct.setOnClickListener {
-            val intent = Intent(activity, AddNewProductActivity::class.java)
-            activity!!.startActivity(intent)
-        }
 
-        btn_addNewMerchant = v.find<ImageView>(R.id.iv_addmerchant)
 
-        btn_addNewMerchant.setOnClickListener {
-            val intent = Intent(activity, AddNewProductActivity::class.java)
-            activity!!.startActivity(intent)
-        }
         newProduct_null = v.find<RelativeLayout>(R.id.layout_new_product)
         newProduct = v.find<RecyclerView>(R.id.recyclerview_newproduct)
 
@@ -201,7 +190,7 @@ class MyStoreFragment : Fragment() {
                         adapter.setData(list)
                         activity!!.runOnUiThread {
                             initRecyclerView()
-                            btn_addNewMerchant.visibility = View.VISIBLE
+
                             newProduct_null.visibility = View.GONE
 
                         }

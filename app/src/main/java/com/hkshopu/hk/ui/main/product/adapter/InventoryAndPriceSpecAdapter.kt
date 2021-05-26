@@ -178,27 +178,20 @@ class InventoryAndPriceSpecAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder
                 item_spec_column_name.text = item.spec_desc_1
                 item_spec_name.setText(item.spec_dec_1_items)
                 textView_value_name.setText(item.spec_dec_1_items)
+
+                editText_value_price.setText(item.price.toString())
+                editText_value_quantity.setText(item.quantity.toString())
+
             }else{
                 item_spec_title_name.isVisible = true
                 item_spec_title_name.text = item.spec_desc_1
                 item_spec_column_name.text = item.spec_desc_2
                 item_spec_name.setText(item.spec_dec_1_items)
 
-                //second layer
-                //綁定當地變數與dataModel中的每個值
-
                 textView_value_name.setText(item.spec_dec_2_items)
                 editText_value_price.setText(item.price.toString())
                 editText_value_quantity.setText(item.quantity.toString())
             }
-
-//            var mAdapter = InventoryAndPriceSizeAdapter(position)
-//            mAdapter.updateList(mutableList_InvenSpec)
-//            r_view_inventory_spec.layoutManager =
-//                LinearLayoutManager(itemView.context, LinearLayoutManager.VERTICAL, false)
-//            r_view_inventory_spec.adapter = mAdapter
-
-
 
 
             if (!item.price.equals("")){
@@ -215,6 +208,8 @@ class InventoryAndPriceSpecAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder
                 editText_value_quantity.setTextColor(itemView.context.resources.getColor(R.color.gray_txt))
             }
 
+
+            RxBus.getInstance().post(EventCheckInvenSpecEnableBtnOrNot(true))
 
         }
 
@@ -243,13 +238,20 @@ class InventoryAndPriceSpecAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder
 //                holder.r_view_inventory_spec.setRecycledViewPool(viewPool)
 
                 if(!second_layer_size.equals(0)){
-                    if(position.equals(0) || (position+1)%second_layer_size == 1){
+
+                    if(second_layer_size.equals(1)){
                         holder.container_spec_first_layer_title.visibility = View.VISIBLE
                         holder.container_spec_second_layer_title.visibility = View.VISIBLE
                     }else{
-                        holder.container_spec_first_layer_title.visibility = View.GONE
-                        holder.container_spec_second_layer_title.visibility = View.GONE
+                        if(position.equals(0) || (position+1)%second_layer_size == 1){
+                            holder.container_spec_first_layer_title.visibility = View.VISIBLE
+                            holder.container_spec_second_layer_title.visibility = View.VISIBLE
+                        }else{
+                            holder.container_spec_first_layer_title.visibility = View.GONE
+                            holder.container_spec_second_layer_title.visibility = View.GONE
+                        }
                     }
+
                 }else{
                     if(position.equals(0)){
                         holder.container_spec_first_layer_title.visibility = View.GONE
@@ -280,7 +282,8 @@ class InventoryAndPriceSpecAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder
         mutableList_InvenSpec = list_spec
         this.second_layer_size = second_layer_size
         this.specGroup_only = specGroup_only
-//        notifyDataSetChanged()
+
+        notifyDataSetChanged()
 
     }
 

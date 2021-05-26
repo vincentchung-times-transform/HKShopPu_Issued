@@ -68,7 +68,7 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
 
 
     var specGroup_only:Boolean = false
-    var rebuild_datas = false
+
 
     //宣告頁面資料變數
     var MMKV_user_id: Int = 0
@@ -94,47 +94,49 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
 
     fun initMMKV() {
 
-        datas_spec_title_first = MMKV.mmkvWithID("addPro").getString("value_editTextProductSpecFirst", "").toString()
-        datas_spec_title_second = MMKV.mmkvWithID("addPro").getString("value_editTextProductSpecSecond", "").toString()
-        datas_spec_size = MMKV.mmkvWithID("addPro").getString("datas_spec_size", "0").toString().toInt()
-        datas_size_size = MMKV.mmkvWithID("addPro").getString("datas_size_size", "0").toString().toInt()
+        datas_spec_title_first = MMKV.mmkvWithID("editPro_temp").getString("value_editTextProductSpecFirst", "").toString()
+        datas_spec_title_second = MMKV.mmkvWithID("editPro_temp").getString("value_editTextProductSpecSecond", "").toString()
+        datas_spec_size = MMKV.mmkvWithID("editPro_temp").getString("datas_spec_size", "0").toString().toInt()
+        datas_size_size = MMKV.mmkvWithID("editPro_temp").getString("datas_size_size", "0").toString().toInt()
 
         for(i in 0..datas_spec_size-1){
-            var item_name = MMKV.mmkvWithID("addPro").getString("datas_spec_item${i}", "")
+            var item_name = MMKV.mmkvWithID("editPro_temp").getString("datas_spec_item${i}", "")
             mutableList_spec.add(ItemSpecification(item_name.toString(), R.drawable.custom_unit_transparent))
         }
 
 
         for(i in 0..datas_size_size-1){
-            var item_name = MMKV.mmkvWithID("addPro").getString("datas_size_item${i}", "")
+            var item_name = MMKV.mmkvWithID("editPro_temp").getString("datas_size_item${i}", "")
             mutableList_size.add(ItemSpecification(item_name.toString(), R.drawable.custom_unit_transparent))
         }
 
-        datas_price_size = MMKV.mmkvWithID("addPro").getString(
+        datas_price_size = MMKV.mmkvWithID("editPro").getString(
             "datas_price_size",
             "0"
         ).toString().toInt()
-        datas_quant_size = MMKV.mmkvWithID("addPro").getString(
+        datas_quant_size = MMKV.mmkvWithID("editPro").getString(
             "datas_quant_size",
             "0"
         ).toString().toInt()
 
         for (i in 0..datas_price_size - 1) {
-            var price_item = MMKV.mmkvWithID("addPro").getString("spec_price${i}", "0").toString().toInt()
+            var price_item = MMKV.mmkvWithID("editPro").getString("spec_price${i}", "0").toString().toInt()
             mutableList_price.add(price_item)
         }
 
         for (i in 0..datas_quant_size - 1) {
-            var quant_item = MMKV.mmkvWithID("addPro").getString("spec_quantity${i}", "0").toString().toInt()
+            var quant_item = MMKV.mmkvWithID("editPro").getString("spec_quantity${i}", "0").toString().toInt()
             mutableList_quant.add(quant_item)
         }
 
-        rebuild_datas = MMKV.mmkvWithID("addPro").getBoolean("rebuild_datas", false)
+        var rebuild_datas = MMKV.mmkvWithID("editPro_temp").getBoolean("rebuild_datas", false)
 
-        if(datas_spec_size>0 && datas_size_size==0 ){
+
+        if(!datas_spec_title_first.equals("") && datas_spec_title_second.equals("") ){
+
             specGroup_only = true
 
-            if((datas_spec_size == datas_price_size||datas_spec_size == datas_quant_size) &&  rebuild_datas.equals(false)){
+            if(mutableList_spec.size== datas_price_size  &&  !rebuild_datas){
 
                 for(i in 0..datas_spec_size-1){
                     mutableList_Inventory.add(ItemInventory(datas_spec_title_first, "", mutableList_spec.get(i).spec_name, "","", ""))
@@ -160,8 +162,7 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
         }else{
             specGroup_only = false
 
-            if((datas_spec_size == datas_price_size||datas_spec_size == datas_quant_size) &&  rebuild_datas.equals(false)){
-
+            if(mutableList_spec.size*mutableList_size.size  == datas_price_size &&mutableList_spec.size*mutableList_size.size   == datas_quant_size &&  rebuild_datas.equals(false)){
 
 
                 for(i in 0..datas_spec_size-1){
@@ -177,40 +178,6 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                     mutableList_Inventory.get(i).price = mutableList_price.get(i).toString()
                     mutableList_Inventory.get(i).quantity = mutableList_quant.get(i).toString()
                 }
-
-
-//                val second_size = datas_size_size
-//                val first_size: Int = datas_spec_size
-//
-//                var priceData_firstLayer: MutableList<MutableList<Int>> = mutableListOf()
-//                var priceData_secondLayer: MutableList<Int>  = mutableListOf()
-//                for(i in 0..second_size-1){
-//                    priceData_secondLayer.add(0)
-//                }
-//                for (i in 0..first_size-1){
-//                    priceData_firstLayer.add(priceData_secondLayer)
-//                }
-//
-//
-//                var quant_Data_firstLayer: MutableList<MutableList<Int>> = mutableListOf()
-//                var quant_Data_secondLayer: MutableList<Int>  = mutableListOf()
-//                for(i in 0..second_size-1){
-//                    quant_Data_secondLayer.add(0)
-//                }
-//                for (i in 0..first_size-1){
-//                    quant_Data_firstLayer.add(priceData_secondLayer)
-//                }
-//
-//
-//                for (r in 0 until first_size) {
-//                    for (c in 0 until second_size) {
-//                        for (i in 0 until first_size * second_size) {
-//                            var index = r*second_size+c
-//                            priceData_firstLayer[r][c] = mutableList_price.get(index)
-//                            quant_Data_firstLayer[r][c] = mutableList_quant.get(index)
-//                        }
-//                    }
-//                }
 
 
 
@@ -243,9 +210,7 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
     fun initView() {
 
         binding.titleInven.setText(R.string.title_editInventoryAndPrice)
-        binding.btnInvenStore.disable()
-        binding.btnInvenStore.setImageResource(R.mipmap.btn_inven_store_disable)
-//        initSpecDatas()
+
 
         initEvent()
         initClick()
@@ -255,7 +220,8 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
 
     fun initClick() {
         binding.titleBackAddshop.setOnClickListener {
-            MMKV.mmkvWithID("editPro").putBoolean("reset_spec_datas", false)
+            MMKV.mmkvWithID("editPro_temp").putBoolean("get_temp", false)
+
             val intent = Intent(this, EditProductSpecificationMainActivity::class.java)
             startActivity(intent)
             finish()
@@ -263,36 +229,42 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
 
         binding.btnInvenStore.setOnClickListener {
 
+
+                MMKV.mmkvWithID("editPro").putString("datas_spec_size", mutableList_spec.size.toString())
+                MMKV.mmkvWithID("editPro").putString("datas_size_size", mutableList_size.size.toString())
+                MMKV.mmkvWithID("editPro").putString("value_editTextProductSpecFirst", datas_spec_title_first)
+                MMKV.mmkvWithID("editPro").putString("value_editTextProductSpecSecond", datas_spec_title_second)
+
+
+                for (i in 0..datas_spec_size - 1) {
+
+                    MMKV.mmkvWithID("editPro")
+                        .putString("datas_spec_item${i}", mutableList_spec.get(i).spec_name.toString())
+                }
+
+                for (i in 0..datas_size_size - 1) {
+
+                    MMKV.mmkvWithID("editPro")
+                        .putString("datas_size_item${i}", mutableList_size.get(i).spec_name.toString())
+
+                }
+
+
+
             mutableList_Inventory = mAdapter.getDatas_invenSpec()
 
-            if(datas_spec_size>0&&datas_size_size==0){
-                for (i in 0..datas_spec_size-1){
-                    mutableList_InvenDatas.add(
-                        InventoryItemDatas(
-                            mutableList_Inventory.get(i).spec_desc_1,
-                            mutableList_Inventory.get(i).spec_desc_2,
-                            mutableList_Inventory.get(i).spec_dec_1_items,
-                            mutableList_Inventory.get(i).spec_dec_2_items,
-                            mutableList_Inventory.get(i).price.toInt(),
-                            mutableList_Inventory.get(i).quantity.toInt()))
-                }
-            }else{
-                for (i in 0..datas_spec_size-1){
-
-                    mutableList_InvenDatas.add(
-                        InventoryItemDatas(
-                            mutableList_Inventory.get(i).spec_desc_1,
-                            mutableList_Inventory.get(i).spec_desc_2,
-                            mutableList_Inventory.get(i).spec_dec_1_items,
-                            mutableList_Inventory.get(i).spec_dec_2_items,
-                            mutableList_Inventory.get(i).price.toInt(),
-                            mutableList_Inventory.get(i).quantity.toInt())
-                    )
-
-                }
+            for (i in 0..mutableList_Inventory.size-1){
+                mutableList_InvenDatas.add(
+                    InventoryItemDatas(
+                        mutableList_Inventory.get(i).spec_desc_1,
+                        mutableList_Inventory.get(i).spec_desc_2,
+                        mutableList_Inventory.get(i).spec_dec_1_items,
+                        mutableList_Inventory.get(i).spec_dec_2_items,
+                        mutableList_Inventory.get(i).price.toInt(),
+                        mutableList_Inventory.get(i).quantity.toInt()))
             }
 
-            MMKV.mmkvWithID("addPro").putInt("inven_datas_size", mutableList_InvenDatas.size)
+            MMKV.mmkvWithID("editPro").putInt("inven_datas_size", mutableList_InvenDatas.size)
 
 //            save_Price_Quant_Datas()
 
@@ -304,7 +276,7 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
             val jsonTutListPretty_inven: String = gsonPretty.toJson(mutableList_InvenDatas)
             Log.d("AddNewProductActivity", jsonTutListPretty_inven.toString())
 
-            MMKV.mmkvWithID("addPro").putString("jsonTutList_inven", jsonTutList_inven)
+            MMKV.mmkvWithID("editPro").putString("jsonTutList_inven", jsonTutList_inven)
 
             //MMKV放入mutableList_InvenDatas
             for(i in 0..mutableList_InvenDatas.size!!-1){
@@ -312,17 +284,17 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
                 val gson = Gson()
                 val jsonTutList: String = gson.toJson(mutableList_InvenDatas.indexOf(i))
 
-                MMKV.mmkvWithID("addPro").putString("value_inven${i}", jsonTutList)
+                MMKV.mmkvWithID("editPro").putString("value_inven${i}", jsonTutList)
 
             }
 
             //挑選最大與最小金額，回傳價格區間
             inven_price_range = inven_price_pick_max_and_min_num(mutableList_InvenDatas.size!!)
             inven_quant_range = inven_quant_pick_max_and_min_num(mutableList_InvenDatas.size!!)
-            MMKV.mmkvWithID("addPro").putString("inven_price_range", inven_price_range)
-            MMKV.mmkvWithID("addPro").putString("inven_quant_range", inven_quant_range)
+            MMKV.mmkvWithID("editPro").putString("inven_price_range", inven_price_range)
+            MMKV.mmkvWithID("editPro").putString("inven_quant_range", inven_quant_range)
 
-            MMKV.mmkvWithID("editPro").putBoolean("reset_spec_datas", false)
+            MMKV.mmkvWithID("editPro_temp").clear()
 
             val intent = Intent(this, EditProductActivity::class.java)
             startActivity(intent)
@@ -408,7 +380,9 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
     }
 
     override fun onBackPressed() {
-        MMKV.mmkvWithID("editPro").putBoolean("reset_spec_datas", false)
+
+        MMKV.mmkvWithID("editPro_temp").putBoolean("get_temp", true)
+
         val intent = Intent(this, EditProductSpecificationMainActivity::class.java)
         startActivity(intent)
         finish()
@@ -426,41 +400,43 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
 
                         boolean = it.boolean
 
-
-
-
-                        var empty_count = 0
-
-                        for(i in 0..mutableList_Inventory.size -1){
-
-                            if(mutableList_Inventory.get(i).price.equals("")){
-                                empty_count+=1
-
-                            }
-                            if(mutableList_Inventory.get(i).quantity.equals("")){
-                                empty_count+=1
-
-                            }
-
-                        }
-
-
-                        if(empty_count>0){
-
-                            binding.btnInvenStore.disable()
-                            binding.btnInvenStore.setImageResource(R.mipmap.btn_inven_store_disable)
-
-                        }else{
-                            binding.btnInvenStore.enable()
-                            binding.btnInvenStore.setImageResource(R.mipmap.btn_inven_store_enable)
-
-                        }
-
                         if(!boolean){
                             binding.btnInvenStore.disable()
                             binding.btnInvenStore.setImageResource(R.mipmap.btn_inven_store_disable)
 
+                        }else{
+
+
+                            var empty_count = 0
+
+                            for(i in 0..mutableList_Inventory.size -1){
+
+                                if(mutableList_Inventory.get(i).price.equals("")){
+                                    empty_count+=1
+
+                                }
+                                if(mutableList_Inventory.get(i).quantity.equals("")){
+                                    empty_count+=1
+
+                                }
+
+                            }
+
+
+                            if(empty_count>0){
+
+                                binding.btnInvenStore.disable()
+                                binding.btnInvenStore.setImageResource(R.mipmap.btn_inven_store_disable)
+
+                            }else{
+                                binding.btnInvenStore.enable()
+                                binding.btnInvenStore.setImageResource(R.mipmap.btn_inven_store_enable)
+
+                            }
+
                         }
+
+
                     }
                 }
             }, {

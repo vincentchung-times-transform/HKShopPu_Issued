@@ -23,6 +23,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.hkshopu.hk.Base.BaseActivity
 import com.hkshopu.hk.R
+import com.hkshopu.hk.component.EventTransferToFragmentAfterUpdate
 import com.hkshopu.hk.component.EventdeleverFragmentAfterUpdateStatus
 import com.hkshopu.hk.data.bean.*
 import com.hkshopu.hk.databinding.ActivityAddNewProductBinding
@@ -256,6 +257,7 @@ class AddNewProductActivity : BaseActivity() {
 
                     MMKV_editTextEntryProductName =
                         binding.editTextEntryProductName.text.toString()
+
                     MMKV.mmkvWithID("addPro").putString(
                         "value_editTextEntryProductName",
                         MMKV_editTextEntryProductName
@@ -518,8 +520,8 @@ class AddNewProductActivity : BaseActivity() {
 //                                        Log.d("inven_switch_off_json", inven_switch_off_json.toString())
                                         var inven_switch_off_json = "{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }"
 
-                                            if(MMKV_editMoreTimeInput.equals("")){
-                                                MMKV_editMoreTimeInput = "0"
+                                        if(MMKV_editMoreTimeInput.equals("")){
+                                            MMKV_editMoreTimeInput = "0"
                                         }
 
                                         //quantity and product_price is discarded
@@ -792,11 +794,11 @@ class AddNewProductActivity : BaseActivity() {
         }
 
         binding.containerAddSpecification.setOnClickListener {
+
+            MMKV.mmkvWithID("addPro_temp").putBoolean("get_temp", false)
             val intent = Intent(this, AddProductSpecificationMainActivity::class.java)
             startActivity(intent)
-
             finish()
-
         }
         binding.containerShippingFare.setOnClickListener {
             val intent = Intent(this, AddShippingFareActivity::class.java)
@@ -927,27 +929,27 @@ class AddNewProductActivity : BaseActivity() {
                                                 "draft",
                                                 MMKV_product_spec_on)
 
-                                                Log.d("MMKV_shop_id" ,
-                                                    "MMKV_shop_id: ${MMKV_shop_id} ; "
-                                                            +"MMKV_proCate_id: ${MMKV_proCate_id} ; "
-                                                            +"MMKV_proSubCate_id: ${MMKV_proSubCate_id} ; "
-                                                            +"value_editTextEntryProductName: ${MMKV_editTextEntryProductName} ; "
-                                                            +"value_editTextMerchanQunt: ${MMKV_editTextMerchanQunt} ; "
-                                                            +"value_editTextEntryProductDiscription: ${MMKV_editTextEntryProductDiscription} ; "
-                                                            +"value_editTextMerchanPrice: ${MMKV_editTextMerchanPrice} ; "
-                                                            +"MMKV_weight: ${MMKV_weight} ; "
-                                                            +"value_checked_brandNew: ${MMKV_checked_brandNew} ; "
-                                                            +"pic_list.size: ${pic_list.size} ; "
-                                                            +"pic_list: ${pic_list} ; "
-                                                            +"${"{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }"} ; "
-                                                            +"MMKV_user_id: ${MMKV_user_id} ; "
-                                                            +"MMKV_length: ${MMKV_length} ; "
-                                                            +"MMKV_width: ${MMKV_width} ; "
-                                                            +"MMKV_width: ${MMKV_width} ; "
-                                                            +"MMKV_height: ${MMKV_height} ; "
-                                                            +"jsonTutList_fare: ${MMKV_jsonTutList_fare} ; "
-                                                            +"MMKV_editMoreTimeInput: ${MMKV_editMoreTimeInput} ; "
-                                                            +"MMKV_product_spec_on: ${MMKV_product_spec_on} ; ")
+                                            Log.d("MMKV_shop_id" ,
+                                                "MMKV_shop_id: ${MMKV_shop_id} ; "
+                                                        +"MMKV_proCate_id: ${MMKV_proCate_id} ; "
+                                                        +"MMKV_proSubCate_id: ${MMKV_proSubCate_id} ; "
+                                                        +"value_editTextEntryProductName: ${MMKV_editTextEntryProductName} ; "
+                                                        +"value_editTextMerchanQunt: ${MMKV_editTextMerchanQunt} ; "
+                                                        +"value_editTextEntryProductDiscription: ${MMKV_editTextEntryProductDiscription} ; "
+                                                        +"value_editTextMerchanPrice: ${MMKV_editTextMerchanPrice} ; "
+                                                        +"MMKV_weight: ${MMKV_weight} ; "
+                                                        +"value_checked_brandNew: ${MMKV_checked_brandNew} ; "
+                                                        +"pic_list.size: ${pic_list.size} ; "
+                                                        +"pic_list: ${pic_list} ; "
+                                                        +"${"{ \"product_spec_list\" : ${MMKV_jsonTutList_inven} }"} ; "
+                                                        +"MMKV_user_id: ${MMKV_user_id} ; "
+                                                        +"MMKV_length: ${MMKV_length} ; "
+                                                        +"MMKV_width: ${MMKV_width} ; "
+                                                        +"MMKV_width: ${MMKV_width} ; "
+                                                        +"MMKV_height: ${MMKV_height} ; "
+                                                        +"jsonTutList_fare: ${MMKV_jsonTutList_fare} ; "
+                                                        +"MMKV_editMoreTimeInput: ${MMKV_editMoreTimeInput} ; "
+                                                        +"MMKV_product_spec_on: ${MMKV_product_spec_on} ; ")
                                             MMKV.mmkvWithID("addPro").clearAll()
 
 
@@ -1407,19 +1409,22 @@ class AddNewProductActivity : BaseActivity() {
                     val ret_val = json.get("ret_val")
                     if (ret_val.equals("產品新增成功!")) {
 
-                         when(which_click){
-                             "store"->{
-                                 runOnUiThread {
-                                     Toast.makeText(this@AddNewProductActivity, ret_val.toString(), Toast.LENGTH_SHORT).show()
-                                 }
-                             }
-                             "Launch"->{
-                                 runOnUiThread {
-                                     Toast.makeText(this@AddNewProductActivity, "產品上架成功!", Toast.LENGTH_SHORT).show()
-                                 }
-                             }
+                        when(which_click){
+                            "store"->{
+                                runOnUiThread {
+                                    Toast.makeText(this@AddNewProductActivity, ret_val.toString(), Toast.LENGTH_SHORT).show()
+                                }
 
-                         }
+                                RxBus.getInstance().post(EventTransferToFragmentAfterUpdate(2))
+                            }
+                            "Launch"->{
+                                runOnUiThread {
+                                    Toast.makeText(this@AddNewProductActivity, "產品上架成功!", Toast.LENGTH_SHORT).show()
+                                }
+                                RxBus.getInstance().post(EventTransferToFragmentAfterUpdate(0))
+                            }
+
+                        }
                         RxBus.getInstance().post(EventdeleverFragmentAfterUpdateStatus("action"))
 
                         MMKV.mmkvWithID("addPro").clear()

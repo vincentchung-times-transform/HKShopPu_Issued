@@ -79,7 +79,7 @@ class EditProductRemindForFragmentDialogFragment(var fragment: Fragment): Dialog
                 val intent = Intent(currentActivity, EditProductActivity::class.java)
                 startActivity(intent)
 
-                currentActivity.finish()
+                dismiss()
 
             }
         }
