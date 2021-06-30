@@ -1,4 +1,4 @@
-package com.hkshopu.hk.ui.main.productSeller.activity
+package com.HKSHOPU.hk.ui.main.productSeller.activity
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,20 +13,21 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.hkshopu.hk.Base.BaseActivity
-import com.hkshopu.hk.R
-import com.hkshopu.hk.component.EventCheckInvenSpecEnableBtnOrNot
-import com.hkshopu.hk.data.bean.*
-import com.hkshopu.hk.databinding.ActivityInventoryAndPriceBinding
-import com.hkshopu.hk.ui.main.productSeller.adapter.InventoryAndPriceSpecAdapter
-import com.hkshopu.hk.utils.rxjava.RxBus
-import com.hkshopu.hk.widget.view.disable
-import com.hkshopu.hk.widget.view.enable
+import com.HKSHOPU.hk.Base.BaseActivity
+import com.HKSHOPU.hk.R
+import com.HKSHOPU.hk.component.EventCheckInvenSpecEnableBtnOrNot
+import com.HKSHOPU.hk.data.bean.*
+import com.HKSHOPU.hk.databinding.ActivityInventoryAndPriceBinding
+import com.HKSHOPU.hk.ui.main.productSeller.adapter.InventoryAndPriceSpecAdapter
+import com.HKSHOPU.hk.utils.rxjava.RxBus
+import com.HKSHOPU.hk.widget.view.disable
+import com.HKSHOPU.hk.widget.view.enable
 import com.tencent.mmkv.MMKV
 
 class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
 
     private lateinit var binding : ActivityInventoryAndPriceBinding
+    var hkd_dollarSign = ""
 
 
     var mutableList_spec = mutableListOf<ItemSpecification>()
@@ -53,9 +54,9 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
 
 
     //宣告頁面資料變數
-    var MMKV_user_id: Int = 0
-    var MMKV_shop_id: Int = 1
-    var MMKV_product_id: Int = 1
+    var MMKV_user_id: String = ""
+    var MMKV_shop_id: String = ""
+    var MMKV_product_id: String = ""
     var MMKV_inven_datas_size=0
 
 
@@ -66,9 +67,12 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
         binding = ActivityInventoryAndPriceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        MMKV_user_id = MMKV.mmkvWithID("http").getInt("UserId", 0)
-        MMKV_shop_id = MMKV.mmkvWithID("http").getInt("ShopId", 0)
-        MMKV_product_id = MMKV.mmkvWithID("http").getInt("ProductId", 0)
+        hkd_dollarSign = getResources().getString(R.string.hkd_dollarSign)
+
+
+        MMKV_user_id = MMKV.mmkvWithID("http").getString("UserId", "").toString()
+        MMKV_shop_id = MMKV.mmkvWithID("http").getString("ShopId", "").toString()
+        MMKV_product_id = MMKV.mmkvWithID("http").getString("ProductId", "").toString()
 
         initMMKV()
         initView()
@@ -271,8 +275,8 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
             }
 
             //挑選最大與最小金額，回傳價格區間
-            inven_price_range = inven_price_pick_max_and_min_num(mutableList_InvenDatas.size!!)
-            inven_quant_range = inven_quant_pick_max_and_min_num(mutableList_InvenDatas.size!!)
+            inven_price_range = inven_price_pick_max_and_min_num()
+            inven_quant_range = inven_quant_pick_max_and_min_num()
             MMKV.mmkvWithID("editPro").putString("inven_price_range", inven_price_range)
             MMKV.mmkvWithID("editPro").putString("inven_quant_range", inven_quant_range)
 
@@ -313,6 +317,14 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
 
     }
 
+    override fun onBackPressed() {
+
+        MMKV.mmkvWithID("editPro_temp").putBoolean("get_temp", false)
+
+        val intent = Intent(this, EditProductSpecificationMainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         TODO("Not yet implemented")
@@ -334,71 +346,40 @@ class EditInventoryAndPriceActivity : BaseActivity(), TextWatcher{
     }
 
 
-    //計算庫存"費用"最大最小範圍
-    fun inven_price_pick_max_and_min_num(size: Int): String {
 
+    //計算庫存"費用"最大最小範圍
+    fun inven_price_pick_max_and_min_num(): String {
+
+        var list : MutableList<Int> = mutableListOf()
         var min: Int = 0
         var max: Int = 0
 
-        //挑出最大與最小的數字
-        if(!(mutableList_InvenDatas.size==0||mutableList_InvenDatas.size == null)){
-
-            min = mutableList_InvenDatas[0]!!.price.toInt()
-            max = mutableList_InvenDatas[0]!!.price.toInt()
-
+        for(i in 0 until mutableList_InvenDatas.size){
+            list.add(mutableList_InvenDatas.get(i).price)
         }
+        min = list.min()!!
+        max = list.max()!!
 
-        for (f in 1..size-1) {
-
-            if(mutableList_InvenDatas[f]!!.price.toInt() >= min ){
-                max = mutableList_InvenDatas[f]!!.price.toInt()
-            }else{
-                min = mutableList_InvenDatas[f]!!.price.toInt()
-            }
-
-        }
-
-        return "HKD$${min}-HKD$${max}"
-
+        return "${hkd_dollarSign}${min}-${hkd_dollarSign}${max}"
     }
 
     //計算庫存"數量"最大最小範圍
-    fun inven_quant_pick_max_and_min_num(size: Int): String {
-        //挑出最大與最小的數字
+    fun inven_quant_pick_max_and_min_num(): String {
 
-
+        var list : MutableList<Int> = mutableListOf()
         var min: Int = 0
         var max: Int = 0
 
-        //挑出最大與最小的數字
-        if(!(mutableList_InvenDatas.size==0||mutableList_InvenDatas.size == null)){
-            min = mutableList_InvenDatas[0]!!.quantity.toInt()
-            max = mutableList_InvenDatas[0]!!.quantity.toInt()
+        for(i in 0 until mutableList_InvenDatas.size){
+            list.add(mutableList_InvenDatas.get(i).quantity)
         }
+        min = list.min()!!
+        max = list.max()!!
 
-
-        for (f in 1..size-1) {
-            if(mutableList_InvenDatas[f]!!.quantity.toInt() >= min ){
-                max = mutableList_InvenDatas[f]!!.quantity.toInt()
-            }else{
-                min = mutableList_InvenDatas[f]!!.quantity.toInt()
-            }
-        }
 
         return "${min}-${max}"
 
     }
-
-    override fun onBackPressed() {
-
-        MMKV.mmkvWithID("editPro_temp").putBoolean("get_temp", true)
-
-        val intent = Intent(this, EditProductSpecificationMainActivity::class.java)
-        startActivity(intent)
-        finish()
-
-    }
-
     @SuppressLint("CheckResult")
     fun initEvent() {
         var boolean: Boolean

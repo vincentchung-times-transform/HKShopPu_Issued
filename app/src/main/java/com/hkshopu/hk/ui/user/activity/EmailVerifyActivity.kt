@@ -1,4 +1,4 @@
-package com.hkshopu.hk.ui.user.activity
+package com.HKSHOPU.hk.ui.user.activity
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -10,12 +10,13 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import com.hkshopu.hk.Base.BaseActivity
-import com.hkshopu.hk.Base.response.Status
-import com.hkshopu.hk.databinding.ActivityEmailverifyBinding
-import com.hkshopu.hk.ui.main.store.activity.ShopmenuActivity
-import com.hkshopu.hk.ui.user.vm.AuthVModel
-import com.hkshopu.hk.widget.view.KeyboardUtil
+import com.HKSHOPU.hk.Base.BaseActivity
+import com.HKSHOPU.hk.Base.response.Status
+import com.HKSHOPU.hk.databinding.ActivityEmailverifyBinding
+import com.HKSHOPU.hk.ui.main.shopProfile.activity.ShopmenuActivity
+import com.HKSHOPU.hk.ui.user.vm.AuthVModel
+import com.HKSHOPU.hk.widget.view.KeyboardUtil
+import com.tencent.mmkv.MMKV
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -38,6 +39,7 @@ class EmailVerifyActivity : BaseActivity(), TextWatcher {
         //local資料存取
         settings = this.getSharedPreferences("DATA", 0)
         email = settings.getString("email", "").toString()
+        email = MMKV.mmkvWithID("http").getString("Email", "").toString()
 
         initView()
         initVM()
@@ -79,6 +81,7 @@ class EmailVerifyActivity : BaseActivity(), TextWatcher {
                 Status.Success -> {
 
                     if (it.ret_val.toString() == "已寄出驗證碼!") {
+
                         Toast.makeText(this, it.ret_val.toString(), Toast.LENGTH_SHORT).show()
                         Toast.makeText(this, "一分鐘後才能再寄送", Toast.LENGTH_SHORT).show()
 

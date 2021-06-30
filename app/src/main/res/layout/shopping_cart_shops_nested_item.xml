@@ -36,6 +36,7 @@
                 android:id="@+id/container_first_layer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
@@ -43,7 +44,6 @@
                     android:id="@+id/checkBox_shopping_cart_shop"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="20dp"
                     android:layout_alignParentStart="true" />
 
                 <androidx.cardview.widget.CardView
@@ -67,7 +67,10 @@
                     android:layout_gravity="center_vertical"
                     android:text="shop no name"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginRight="16dp"
                     android:layout_weight="1"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 
@@ -88,7 +91,6 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:paddingBottom="8dp"/>
-
 
             <LinearLayout
                 android:id="@+id/btn_shopping_cart_shop_address_spinner"
@@ -131,9 +133,32 @@
                         android:textColor="@color/dark_gray"
                         android:text="no address"/>
 
+                    <LinearLayout
+                        android:id="@+id/layout_alert_no_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="12dp"
+                            android:src="@mipmap/alert_red"/>
+                        <TextView
+                            android:id="@+id/textView_alert_no_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:textSize="14sp"
+                            android:textColor="@color/bright_red"
+                            android:text="@string/no_address"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/ic_address_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:src="@mipmap/ic_shopping_cart_to_shop_addresss_setting"
@@ -141,47 +166,55 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:scaleType="fitXY"
-                android:src="@mipmap/description_line" />
-
             <LinearLayout
+                android:id="@+id/layout_price_total_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal">
-
-                <TextView
+                android:orientation="vertical">
+                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="14dp"
-                    android:textColor="@color/black"
-                    android:text="@string/product_price_total"/>
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/description_line" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/hkd_dollarSign"
-                    android:textColor="@color/black"
-                    android:textSize="14dp" />
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/textView_product_price_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="14dp"
-                    android:textColor="@color/black"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="14dp"
+                        android:textColor="@color/black"
+                        android:text="@string/product_price_total"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hkd_dollarSign"
+                        android:textColor="@color/black"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/textView_product_price_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="14dp"
+                        android:textColor="@color/black"/>
+
+                </LinearLayout>
 
             </LinearLayout>
+
         </LinearLayout>
 
         <ImageView
